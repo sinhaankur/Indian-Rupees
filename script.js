@@ -296,7 +296,7 @@ reelTrigger.observe(document.querySelector('.reel-card'));
 
 // ─── Smooth nav highlight ─────────────────────────────────────
 const navLinks = document.querySelectorAll('.nav-links a');
-const sections = ['#puzzle', '#timeline', '#system', '#forces', '#impact', '#printing']
+const sections = ['#puzzle', '#timeline', '#printing', '#system', '#forces', '#simulator', '#currencies', '#impact', '#references']
   .map(id => document.querySelector(id))
   .filter(Boolean);
 
@@ -312,3 +312,278 @@ const navObserver = new IntersectionObserver((entries) => {
 }, { rootMargin: '-40% 0px -55% 0px' });
 
 sections.forEach(s => navObserver.observe(s));
+
+// ─── Value simulator ───────────────────────────────────────────
+const SIM_BASE = { oil: 105, dxy: 98.3, fii: -21, fed: 5.0, rbi: 0 };
+const SIM_BASE_RATE = 95.96;
+// Sensitivities: rupees per unit delta from baseline
+const SIM_BETA = {
+  oil: 0.05,    // ₹/bbl  → $10 = ₹0.50
+  dxy: 0.25,    // ₹/point
+  fii: -0.04,   // ₹/$B  (positive FII inflow strengthens rupee, so beta negative)
+  fed: 1.20,    // ₹/percentage point
+  rbi: -0.06    // ₹/$B sold (more defense = stronger rupee)
+};
+
+const SIM_PRESETS = {
+  current: { oil: 105, dxy: 98.3, fii: -21, fed: 5.0,  rbi: 0,  label: "Current state (May 2026)" },
+  best:    { oil: 75,  dxy: 92.0, fii: 15,  fed: 3.0,  rbi: 8,  label: "Best-case recovery" },
+  hormuz:  { oil: 150, dxy: 103,  fii: -50, fed: 5.75, rbi: 25, label: "Hormuz closure" },
+  covid:   { oil: 40,  dxy: 92.5, fii: -28, fed: 0.25, rbi: 12, label: "COVID-style shock" },
+  taper:   { oil: 110, dxy: 85.0, fii: -35, fed: 2.25, rbi: 30, label: "2013 taper tantrum" }
+};
+
+function fmtSigned(n, decimals = 2, symbol = '₹') {
+  const sign = n >= 0 ? '+' : '−';
+  return sign + symbol + Math.abs(n).toFixed(decimals);
+}
+
+function fmtFii(b) {
+  if (b >= 0) return '+' + b;
+  return '−' + Math.abs(b);
+}
+
+function simContributions(v) {
+  return {
+    oil: (v.oil - SIM_BASE.oil) * SIM_BETA.oil,
+    dxy: (v.dxy - SIM_BASE.dxy) * SIM_BETA.dxy,
+    fii: (v.fii - SIM_BASE.fii) * SIM_BETA.fii,
+    fed: (v.fed - SIM_BASE.fed) * SIM_BETA.fed,
+    rbi: (v.rbi - SIM_BASE.rbi) * SIM_BETA.rbi
+  };
+}
+
+function verdictFor(rate, total) {
+  if (rate < 80) {
+    return { state: 'better', label: 'STRENGTHENING',
+      text: 'The rupee has rallied meaningfully below ₹80. Imports get cheaper, inflation eases, and the RBI can rebuild reserves rather than burn them.' };
+  }
+  if (rate < 92) {
+    return { state: 'better', label: 'SOLID',
+      text: 'Healthy territory. India\'s macro looks steady. FII flows would likely turn positive at these levels.' };
+  }
+  if (rate < 97) {
+    return { state: 'neutral', label: 'AROUND CURRENT',
+      text: 'Roughly where the rupee is today. The forces are in balance — neither pushing it sharply higher nor lower than ₹95–96.' };
+  }
+  if (rate < 102) {
+    return { state: 'worse', label: 'UNDER PRESSURE',
+      text: 'The rupee is weaker than today and pressing the psychological ₹100 mark. Expect RBI intervention to slow the slide.' };
+  }
+  if (rate < 110) {
+    return { state: 'worse', label: 'WEAK',
+      text: 'Past ₹100 in headlines and onto the front page. RBI defense will be aggressive. Inflation pressure builds quickly through fuel and imports.' };
+  }
+  if (rate < 120) {
+    return { state: 'crisis', label: 'CRISIS',
+      text: 'Severe stress. NRI bond raises, gold import restrictions, and emergency capital controls move onto the table. 2013-style measures likely.' };
+  }
+  return { state: 'crisis', label: 'BREAKING POINT',
+    text: 'A 1991-style balance of payments situation. IMF conversations begin. Deep policy intervention becomes unavoidable.' };
+}
+
+const sim = {
+  oil: document.getElementById('ctlOil'),
+  dxy: document.getElementById('ctlDxy'),
+  fii: document.getElementById('ctlFii'),
+  fed: document.getElementById('ctlFed'),
+  rbi: document.getElementById('ctlRbi')
+};
+
+function readSim() {
+  return {
+    oil: parseFloat(sim.oil.value),
+    dxy: parseFloat(sim.dxy.value),
+    fii: parseFloat(sim.fii.value),
+    fed: parseFloat(sim.fed.value),
+    rbi: parseFloat(sim.rbi.value)
+  };
+}
+
+function updateSim() {
+  const v = readSim();
+  const c = simContributions(v);
+  const total = c.oil + c.dxy + c.fii + c.fed + c.rbi;
+  const rate = SIM_BASE_RATE + total;
+
+  document.getElementById('valOil').textContent = v.oil.toFixed(0);
+  document.getElementById('valDxy').textContent = v.dxy.toFixed(1);
+  document.getElementById('valFii').textContent = fmtFii(v.fii);
+  document.getElementById('valFed').textContent = v.fed.toFixed(2);
+  document.getElementById('valRbi').textContent = v.rbi.toFixed(0);
+
+  const setBd = (id, val) => {
+    const el = document.getElementById(id);
+    el.textContent = fmtSigned(val, 2);
+    el.classList.toggle('up', val > 0.005);
+    el.classList.toggle('down', val < -0.005);
+  };
+  setBd('bdOil', c.oil);
+  setBd('bdDxy', c.dxy);
+  setBd('bdFii', c.fii);
+  setBd('bdFed', c.fed);
+  setBd('bdRbi', c.rbi);
+  setBd('bdTotal', total);
+
+  const out = document.getElementById('simOut');
+  out.textContent = '₹' + rate.toFixed(2);
+  out.classList.remove('is-better', 'is-worse', 'is-crisis');
+  if (rate < 90) out.classList.add('is-better');
+  else if (rate > 110) out.classList.add('is-crisis');
+  else if (rate > 98) out.classList.add('is-worse');
+
+  const delta = document.getElementById('simDelta');
+  if (Math.abs(total) < 0.005) {
+    delta.textContent = 'no change from current ₹95.96';
+  } else {
+    const dir = total > 0 ? 'weaker than' : 'stronger than';
+    delta.textContent = fmtSigned(total) + ' · ' + dir + ' current ₹95.96';
+  }
+
+  // Marker on meter — meter spans 65 to 125
+  const meterMin = 65, meterMax = 125;
+  const clamped = Math.max(meterMin, Math.min(meterMax, rate));
+  const pct = ((clamped - meterMin) / (meterMax - meterMin)) * 100;
+  document.getElementById('simMarker').style.left = pct + '%';
+
+  const verdict = verdictFor(rate, total);
+  const vEl = document.getElementById('simVerdict');
+  vEl.classList.remove('is-better', 'is-crisis');
+  if (verdict.state === 'better') vEl.classList.add('is-better');
+  else if (verdict.state === 'crisis') vEl.classList.add('is-crisis');
+  vEl.querySelector('.sim-verdict-label').textContent = 'VERDICT · ' + verdict.label;
+  vEl.querySelector('.sim-verdict-text').textContent = verdict.text;
+
+  // Highlight active preset if matches
+  const presetKey = Object.keys(SIM_PRESETS).find(k => {
+    const p = SIM_PRESETS[k];
+    return Math.abs(p.oil - v.oil) < 0.5 && Math.abs(p.dxy - v.dxy) < 0.05
+      && Math.abs(p.fii - v.fii) < 0.5 && Math.abs(p.fed - v.fed) < 0.05
+      && Math.abs(p.rbi - v.rbi) < 0.5;
+  });
+  document.querySelectorAll('.preset-btn').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.preset === presetKey);
+  });
+}
+
+Object.values(sim).forEach(el => el.addEventListener('input', updateSim));
+
+document.querySelectorAll('.preset-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const p = SIM_PRESETS[btn.dataset.preset];
+    if (!p) return;
+    sim.oil.value = p.oil;
+    sim.dxy.value = p.dxy;
+    sim.fii.value = p.fii;
+    sim.fed.value = p.fed;
+    sim.rbi.value = p.rbi;
+    updateSim();
+  });
+});
+
+updateSim();
+
+// ─── Currency tool ─────────────────────────────────────────────
+const CURRENCIES = {
+  EUR: { name: "Euro", code: "EUR", flag: "🇪🇺", rate: "€0.94", ytd: -2.4, since: -4.0, cat: "Reserve currency", verdict: "Resilient",
+    story: "The euro is structurally weaker than the dollar in 2026 — ECB rates sit below Fed rates and the eurozone imports more energy than the US. But because the euro is itself a reserve currency, it doesn't collapse the way emerging-market currencies do.",
+    vsInr: "Both currencies are weaker against the dollar this year — but the euro's gentle slide reflects Europe's structural buffer as a reserve issuer. India has no such cushion." },
+  JPY: { name: "Japanese yen", code: "JPY", flag: "🇯🇵", rate: "¥158.20", ytd: -8.5, since: -35.0, cat: "Reserve currency", verdict: "Weak",
+    story: "The yen is in the worst stretch of its modern history. The Bank of Japan held rates at zero for too long, and even as it now tightens, the gap with US yields remains huge. Capital piles into dollar assets via the carry trade.",
+    vsInr: "The yen has fallen even harder than the rupee year-to-date, despite Japan being one of the largest holders of dollar reserves. Reserve status alone isn't enough when the yield differential is extreme." },
+  GBP: { name: "British pound", code: "GBP", flag: "🇬🇧", rate: "£0.81", ytd: -1.8, since: -22.0, cat: "Reserve currency", verdict: "Holding",
+    story: "Sterling has been one of the better-performing major currencies in 2026. The Bank of England has kept rates close to the Fed's level, narrowing the yield gap that hurts other currencies.",
+    vsInr: "The pound is holding up where the rupee is buckling — a reminder that rate parity with the Fed matters more than economic size." },
+  CNY: { name: "Chinese yuan", code: "CNY", flag: "🇨🇳", rate: "¥7.32", ytd: -2.1, since: 11.0, cat: "Managed peg", verdict: "Controlled",
+    story: "Beijing keeps the yuan in a tight band against the dollar through heavy intervention and capital controls. Movement is allowed only on the People's Bank of China's terms.",
+    vsInr: "The yuan moves on policy, not markets. China can defend any level it chooses because of $3T in reserves and a closed capital account. India, with a more open capital account, cannot." },
+  KRW: { name: "South Korean won", code: "KRW", flag: "🇰🇷", rate: "₩1,420", ytd: -4.5, since: -25.0, cat: "Asian EM", verdict: "Pressured",
+    story: "The won has weakened sharply on tech-driven export volatility and political uncertainty. Bank of Korea has the same dollar-strength problem as the RBI, but with a more open capital account.",
+    vsInr: "Korea and India are running similar playbooks — managed depreciation, occasional intervention, accepting some weakness to support exports." },
+  IDR: { name: "Indonesian rupiah", code: "IDR", flag: "🇮🇩", rate: "Rp16,800", ytd: -3.8, since: -78.0, cat: "Asian EM", verdict: "Pressured",
+    story: "Indonesia has been one of the larger Asian losers in 2026, with foreign investors pulling out of equities. Bank Indonesia has intervened aggressively in the spot market.",
+    vsInr: "Indonesia is in a similar boat — commodity importer, capital-account opener, FII-sensitive. The rupiah and rupee tend to move together when the dollar strengthens." },
+  TRY: { name: "Turkish lira", code: "TRY", flag: "🇹🇷", rate: "₺48.50", ytd: -22.0, since: -98.0, cat: "Frontier EM", verdict: "Crisis",
+    story: "The lira has been in a multi-year free fall driven by unorthodox monetary policy and chronic inflation. Real rates have been deeply negative for years.",
+    vsInr: "The lira's collapse shows what happens when central bank credibility breaks. India has been disciplined — repo rates well above inflation — which is why the rupee is at ₹95 instead of ₹400." },
+  BRL: { name: "Brazilian real", code: "BRL", flag: "🇧🇷", rate: "R$6.30", ytd: -10.0, since: -71.0, cat: "Commodity EM", verdict: "Weak",
+    story: "The real has weakened despite commodity exporter status. Fiscal concerns and dovish central bank signals have outweighed strong terms of trade.",
+    vsInr: "Brazil shows that even commodity exporters get crushed by dollar strength and fiscal worries. India's stronger fiscal position is helping the rupee relative to peers." },
+  ZAR: { name: "South African rand", code: "ZAR", flag: "🇿🇦", rate: "R20.10", ytd: -8.5, since: -67.0, cat: "Commodity EM", verdict: "Weak",
+    story: "The rand is one of the most liquid emerging market currencies and trades as a proxy for global risk. When dollar strength hits, the rand falls fastest.",
+    vsInr: "The rand falls and rises with global sentiment. India's larger domestic economy means the rupee is less of a risk barometer — but it gets hit by the same dollar wave." },
+  ARS: { name: "Argentine peso", code: "ARS", flag: "🇦🇷", rate: "ARS$1,850", ytd: -38.0, since: -99.9, cat: "Frontier EM", verdict: "Crisis",
+    story: "The peso is in a perpetual currency crisis driven by chronic fiscal deficits, hyperinflation, and political instability. Multiple parallel exchange rates exist.",
+    vsInr: "Argentina is the cautionary tale. India's macro discipline — primary fiscal balance, inflation targeting, building reserves — is exactly the playbook that keeps the rupee from becoming the peso." },
+  RUB: { name: "Russian ruble", code: "RUB", flag: "🇷🇺", rate: "₽103", ytd: -5.0, since: -73.0, cat: "Sanctioned", verdict: "Distorted",
+    story: "The ruble price is shaped by sanctions, capital controls, oil revenue, and limited dollar liquidity. The market price doesn't reflect normal supply-demand.",
+    vsInr: "The ruble doesn't trade in a normal market anymore. The rupee, despite pressure, remains fully convertible on the current account — a feature India is keen to preserve." },
+  CAD: { name: "Canadian dollar", code: "CAD", flag: "🇨🇦", rate: "C$1.42", ytd: -2.8, since: -1.0, cat: "Commodity G10", verdict: "Steady",
+    story: "The Canadian dollar has held up because Canada's economy is closely linked to the US, and energy exports benefit from oil strength.",
+    vsInr: "Canada has the rare advantage of being a major oil exporter — exactly the opposite of India. The CAD strengthens with oil. The rupee weakens." },
+  AUD: { name: "Australian dollar", code: "AUD", flag: "🇦🇺", rate: "A$1.55", ytd: -3.5, since: -19.0, cat: "Commodity G10", verdict: "Soft",
+    story: "The Aussie has weakened on China-growth concerns and a wider rate differential with the Fed. Iron ore prices have softened.",
+    vsInr: "Australia is a commodity exporter to China and a Fed-rate taker. It's caught between the same forces hitting India, just with a different commodity profile." },
+  CHF: { name: "Swiss franc", code: "CHF", flag: "🇨🇭", rate: "CHF 0.91", ytd: 0.5, since: 47.0, cat: "Safe haven", verdict: "Strong",
+    story: "The franc is the world's purest safe haven. When global risk rises, capital piles into Swiss francs and Swiss government bonds. The SNB even runs negative rates to slow appreciation.",
+    vsInr: "The franc and the rupee are at opposite poles. The franc benefits from risk-off. The rupee gets crushed by it. This is the asymmetry of being a reserve issuer versus an importer." },
+  MXN: { name: "Mexican peso", code: "MXN", flag: "🇲🇽", rate: "$20.50", ytd: -5.8, since: -45.0, cat: "Commodity EM", verdict: "Soft",
+    story: "The peso was a star performer of the 2020s carry trade but has weakened in 2026 on political reform concerns and a narrower Banxico-Fed spread.",
+    vsInr: "Mexico is geographically and commercially next to the US — usually a stabilizer. Even that hasn't been enough in 2026, showing how dominant the dollar story has been." }
+};
+
+function buildScoreboard() {
+  const rows = Object.values(CURRENCIES)
+    .map(c => ({ ...c }))
+    .sort((a, b) => b.ytd - a.ytd);
+
+  const target = document.getElementById('ccyScoreboard');
+  if (!target) return;
+  target.innerHTML = '';
+  rows.forEach(c => {
+    const row = document.createElement('div');
+    row.className = 'ccy-row';
+    row.dataset.code = c.code;
+    const ytdClass = c.ytd >= 0 ? 'pos' : 'neg';
+    const ytdStr = (c.ytd >= 0 ? '+' : '−') + Math.abs(c.ytd).toFixed(1) + '%';
+    row.innerHTML = `
+      <span class="ccy-row-flag">${c.flag}</span>
+      <span class="ccy-row-name">${c.name}</span>
+      <span class="ccy-row-pct ${ytdClass}">${ytdStr}</span>
+    `;
+    row.addEventListener('click', () => {
+      const dd = document.getElementById('ccyPick');
+      dd.value = c.code;
+      renderCcy(c.code);
+    });
+    target.appendChild(row);
+  });
+}
+
+function renderCcy(code) {
+  const c = CURRENCIES[code];
+  if (!c) return;
+  document.getElementById('ccyFlag').textContent = c.flag;
+  document.getElementById('ccyName').textContent = c.name;
+  document.getElementById('ccyCode').textContent = c.code + ' · vs USD';
+  document.getElementById('ccyRate').textContent = c.rate;
+
+  const fmtPct = (n) => (n >= 0 ? '+' : '−') + Math.abs(n).toFixed(1) + '%';
+  document.getElementById('ccyYtd').textContent = fmtPct(c.ytd);
+  document.getElementById('ccySince').textContent = fmtPct(c.since);
+  document.getElementById('ccyCat').textContent = c.cat;
+  document.getElementById('ccyVerdict').textContent = c.verdict;
+  document.getElementById('ccyStory').textContent = c.story;
+  document.getElementById('ccyVsInr').textContent = c.vsInr;
+
+  document.querySelectorAll('.ccy-row').forEach(r => {
+    r.classList.toggle('is-selected', r.dataset.code === code);
+  });
+}
+
+const ccyPick = document.getElementById('ccyPick');
+if (ccyPick) {
+  ccyPick.addEventListener('change', () => renderCcy(ccyPick.value));
+  buildScoreboard();
+  renderCcy(ccyPick.value);
+}

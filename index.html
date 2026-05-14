@@ -19,27 +19,34 @@
       <span class="logo-text">The Petrodollar Paradox</span>
     </a>
     <ul class="nav-links">
-      <li><a href="#puzzle">Puzzle</a></li>
-      <li><a href="#timeline">Timeline</a></li>
-      <li><a href="#printing">USD Printing</a></li>
-      <li><a href="#system">The System</a></li>
-      <li><a href="#forces">Forces</a></li>
-      <li><a href="#impact">Impact</a></li>
+      <li><a href="#puzzle" data-i18n="nav.puzzle">Puzzle</a></li>
+      <li><a href="#timeline" data-i18n="nav.timeline">Timeline</a></li>
+      <li><a href="#printing" data-i18n="nav.printing">USD Printing</a></li>
+      <li><a href="#system" data-i18n="nav.system">The System</a></li>
+      <li><a href="#forces" data-i18n="nav.forces">Forces</a></li>
+      <li><a href="#simulator" data-i18n="nav.simulator">Simulator</a></li>
+      <li><a href="#currencies" data-i18n="nav.currencies">Currencies</a></li>
+      <li><a href="#impact" data-i18n="nav.impact">Impact</a></li>
+      <li><a href="#references" data-i18n="nav.data">Data</a></li>
     </ul>
+    <div class="lang-toggle" role="group" aria-label="Language">
+      <button class="lang-btn active" data-lang="en" aria-pressed="true">EN</button>
+      <button class="lang-btn" data-lang="hi" aria-pressed="false">हिन्दी</button>
+    </div>
   </div>
 </nav>
 
 <header id="top" class="hero">
   <div class="hero-inner">
-    <div class="hero-tag">MAY 14, 2026</div>
+    <div class="hero-tag" data-i18n="hero.date">MAY 14, 2026</div>
     <h1 class="hero-rate"><span class="rupee-symbol">₹</span><span data-counter="95.96" data-decimals="2">0.00</span></h1>
-    <p class="hero-sub">All-time low against the dollar</p>
+    <p class="hero-sub" data-i18n="hero.sub">All-time low against the dollar</p>
     <div class="hero-puzzle">
-      <div class="puzzle-label">THE PUZZLE</div>
-      <p>The US has been printing dollars for decades.<br>So why is the rupee falling, not the dollar?</p>
+      <div class="puzzle-label" data-i18n="hero.puzzleLabel">THE PUZZLE</div>
+      <p data-i18n="hero.puzzle" data-i18n-html="1">The US has been printing dollars for decades.<br>So why is the rupee falling, not the dollar?</p>
     </div>
     <a href="#puzzle" class="hero-scroll">
-      <span>Read the story</span>
+      <span data-i18n="hero.cta">Read the story</span>
       <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
         <path d="M12 5v14M5 12l7 7 7-7" stroke-linecap="round" stroke-linejoin="round"/>
       </svg>
@@ -390,6 +397,136 @@
   </div>
 </section>
 
+<section id="simulator" class="section section--soft">
+  <div class="container">
+    <div class="section-label">VALUE SIMULATOR</div>
+    <h2 class="section-title">Move the sliders. Watch the rupee respond.</h2>
+    <p class="section-lede">A simplified linear model of the five major forces — oil, dollar strength, capital flows, Fed policy, and RBI defense. Adjust any input and the projected USD/INR updates instantly.</p>
+
+    <div class="sim">
+      <div class="sim-controls">
+        <div class="sim-control">
+          <div class="sim-control-head">
+            <label for="ctlOil">Brent crude oil</label>
+            <span class="sim-val"><span id="valOil">105</span><span class="sim-unit"> $/bbl</span></span>
+          </div>
+          <input type="range" id="ctlOil" min="30" max="180" step="1" value="105">
+          <div class="sim-scale">
+            <span>$30</span><span class="sim-anchor">$105 today</span><span>$180</span>
+          </div>
+          <p class="sim-note">Each $10/barrel above today adds ~₹0.50 of weakness. India imports 85% of its crude.</p>
+        </div>
+
+        <div class="sim-control">
+          <div class="sim-control-head">
+            <label for="ctlDxy">Dollar Index (DXY)</label>
+            <span class="sim-val"><span id="valDxy">98.3</span></span>
+          </div>
+          <input type="range" id="ctlDxy" min="80" max="120" step="0.1" value="98.3">
+          <div class="sim-scale">
+            <span>80</span><span class="sim-anchor">98.3 today</span><span>120</span>
+          </div>
+          <p class="sim-note">Each 1-point rise in DXY pulls the rupee ~₹0.25 weaker. Measures dollar strength globally.</p>
+        </div>
+
+        <div class="sim-control">
+          <div class="sim-control-head">
+            <label for="ctlFii">FII flows YTD</label>
+            <span class="sim-val"><span id="valFii">−21</span><span class="sim-unit"> $B</span></span>
+          </div>
+          <input type="range" id="ctlFii" min="-60" max="40" step="1" value="-21">
+          <div class="sim-scale">
+            <span>−$60B</span><span class="sim-anchor">−$21B today</span><span>+$40B</span>
+          </div>
+          <p class="sim-note">Each $5B of additional outflow weakens the rupee by ~₹0.20. Inflows do the reverse.</p>
+        </div>
+
+        <div class="sim-control">
+          <div class="sim-control-head">
+            <label for="ctlFed">Fed funds rate</label>
+            <span class="sim-val"><span id="valFed">5.00</span><span class="sim-unit">%</span></span>
+          </div>
+          <input type="range" id="ctlFed" min="0" max="8" step="0.25" value="5">
+          <div class="sim-scale">
+            <span>0%</span><span class="sim-anchor">5.00% today</span><span>8%</span>
+          </div>
+          <p class="sim-note">Each +0.25% from the Fed adds ~₹0.30 of pressure. Higher US yields pull capital to dollars.</p>
+        </div>
+
+        <div class="sim-control">
+          <div class="sim-control-head">
+            <label for="ctlRbi">RBI defense</label>
+            <span class="sim-val"><span id="valRbi">0</span><span class="sim-unit"> $B sold</span></span>
+          </div>
+          <input type="range" id="ctlRbi" min="0" max="80" step="1" value="0">
+          <div class="sim-scale">
+            <span>$0B</span><span class="sim-anchor">no defense</span><span>$80B</span>
+          </div>
+          <p class="sim-note">Each $5B of dollars sold by RBI strengthens the rupee by ~₹0.30. But reserves are finite.</p>
+        </div>
+
+        <div class="sim-presets">
+          <div class="sim-presets-label">PRESET SCENARIOS</div>
+          <div class="sim-preset-buttons">
+            <button class="preset-btn" data-preset="current">Current state (May 2026)</button>
+            <button class="preset-btn" data-preset="best">Best-case recovery</button>
+            <button class="preset-btn" data-preset="hormuz">Hormuz closure</button>
+            <button class="preset-btn" data-preset="covid">COVID-style shock</button>
+            <button class="preset-btn" data-preset="taper">2013 taper tantrum</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="sim-result">
+        <div class="sim-result-label">PROJECTED USD / INR</div>
+        <div class="sim-result-big" id="simOut">₹95.96</div>
+        <div class="sim-result-sub" id="simDelta">no change from current</div>
+        <div class="sim-meter">
+          <div class="sim-meter-track">
+            <div class="sim-meter-band sim-meter-band--strong"></div>
+            <div class="sim-meter-band sim-meter-band--steady"></div>
+            <div class="sim-meter-band sim-meter-band--weak"></div>
+            <div class="sim-meter-band sim-meter-band--crisis"></div>
+            <div class="sim-meter-marker" id="simMarker"></div>
+          </div>
+          <div class="sim-meter-labels">
+            <span>₹65</span>
+            <span>₹80</span>
+            <span>₹95</span>
+            <span>₹110</span>
+            <span>₹125</span>
+          </div>
+          <div class="sim-meter-bands">
+            <span>STRONG</span>
+            <span>STEADY</span>
+            <span>WEAK</span>
+            <span>CRISIS</span>
+          </div>
+        </div>
+
+        <div class="sim-breakdown">
+          <div class="sim-bd-title">Contribution breakdown</div>
+          <div class="sim-bd-row"><span>Oil price</span><span class="sim-bd-val" id="bdOil">+₹0.00</span></div>
+          <div class="sim-bd-row"><span>Dollar Index</span><span class="sim-bd-val" id="bdDxy">+₹0.00</span></div>
+          <div class="sim-bd-row"><span>FII flows</span><span class="sim-bd-val" id="bdFii">+₹0.00</span></div>
+          <div class="sim-bd-row"><span>Fed rate</span><span class="sim-bd-val" id="bdFed">+₹0.00</span></div>
+          <div class="sim-bd-row"><span>RBI defense</span><span class="sim-bd-val" id="bdRbi">+₹0.00</span></div>
+          <div class="sim-bd-row sim-bd-total"><span>Total move</span><span class="sim-bd-val" id="bdTotal">+₹0.00</span></div>
+        </div>
+
+        <div class="sim-verdict" id="simVerdict">
+          <div class="sim-verdict-label">VERDICT</div>
+          <div class="sim-verdict-text">The rupee is at its current level — neither force pushing it higher nor lower than today.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="sim-disclaimer">
+      <strong>How the model works.</strong> Starting from today's ₹95.96, each slider applies a calibrated sensitivity: $10 in oil moves the rupee ₹0.50, one DXY point moves it ₹0.25, $5B in FII flows moves it ₹0.20, 0.25% in Fed rate moves it ₹0.30, and $5B in RBI dollar sales moves it −₹0.30. Coefficients are derived from historical regressions but the real world has nonlinearities, interactions, and shocks no linear model captures. Use this to build intuition — not to make trades.
+    </div>
+  </div>
+</section>
+
 <section id="impact" class="section">
   <div class="container">
     <div class="section-label">THE IMPACT CHAIN</div>
@@ -437,6 +574,225 @@
       <div class="upside-tag">THE ONE UPSIDE</div>
       <h3>IT and pharma exporters quietly gain.</h3>
       <p>TCS, Infosys, Wipro, Sun Pharma earn most of their revenue in dollars. When they convert back to rupees, they get <strong>more rupees per dollar</strong>. Their reported earnings rise mechanically with rupee weakness — which is why the Nifty can hold up even when the currency slides. It doesn't help households. But it's why India tolerates gradual depreciation.</p>
+    </div>
+  </div>
+</section>
+
+<section id="currencies" class="section">
+  <div class="container">
+    <div class="section-label">CROSS-CURRENCY IMPACT</div>
+    <h2 class="section-title">India isn't alone. The dollar is moving everyone.</h2>
+    <p class="section-lede">Pick any currency below to see how it's responding to the same forces hitting the rupee — and why some are holding up while others are buckling.</p>
+
+    <div class="ccy-tool">
+      <div class="ccy-selector">
+        <label for="ccyPick">SELECT CURRENCY</label>
+        <select id="ccyPick" class="ccy-dropdown">
+          <option value="EUR">Euro · EUR</option>
+          <option value="JPY">Japanese yen · JPY</option>
+          <option value="GBP">British pound · GBP</option>
+          <option value="CNY">Chinese yuan · CNY</option>
+          <option value="KRW">South Korean won · KRW</option>
+          <option value="IDR">Indonesian rupiah · IDR</option>
+          <option value="TRY">Turkish lira · TRY</option>
+          <option value="BRL">Brazilian real · BRL</option>
+          <option value="ZAR">South African rand · ZAR</option>
+          <option value="ARS">Argentine peso · ARS</option>
+          <option value="RUB">Russian ruble · RUB</option>
+          <option value="CAD">Canadian dollar · CAD</option>
+          <option value="AUD">Australian dollar · AUD</option>
+          <option value="CHF">Swiss franc · CHF</option>
+          <option value="MXN">Mexican peso · MXN</option>
+        </select>
+      </div>
+
+      <div class="ccy-card">
+        <div class="ccy-head">
+          <div class="ccy-flag" id="ccyFlag">🇪🇺</div>
+          <div class="ccy-id">
+            <div class="ccy-name" id="ccyName">Euro</div>
+            <div class="ccy-code" id="ccyCode">EUR · vs USD</div>
+          </div>
+          <div class="ccy-rate-block">
+            <div class="ccy-rate-label">USD = </div>
+            <div class="ccy-rate" id="ccyRate">€0.94</div>
+          </div>
+        </div>
+
+        <div class="ccy-metrics">
+          <div class="ccy-metric">
+            <div class="ccy-metric-label">YTD vs USD</div>
+            <div class="ccy-metric-value" id="ccyYtd">−2.4%</div>
+          </div>
+          <div class="ccy-metric">
+            <div class="ccy-metric-label">SINCE 2000</div>
+            <div class="ccy-metric-value" id="ccySince">−6.1%</div>
+          </div>
+          <div class="ccy-metric">
+            <div class="ccy-metric-label">CATEGORY</div>
+            <div class="ccy-metric-value ccy-metric-value--tag" id="ccyCat">Reserve currency</div>
+          </div>
+          <div class="ccy-metric">
+            <div class="ccy-metric-label">VERDICT</div>
+            <div class="ccy-metric-value ccy-metric-value--tag" id="ccyVerdict">Resilient</div>
+          </div>
+        </div>
+
+        <div class="ccy-story">
+          <div class="ccy-story-label">WHY IT'S MOVING THIS WAY</div>
+          <p id="ccyStory">The euro is structurally weaker than the dollar in 2026 — ECB rates are below Fed rates, and the eurozone imports more energy than the US. But because the euro is itself a reserve currency, it doesn't collapse the way EM currencies do.</p>
+        </div>
+
+        <div class="ccy-vs-inr">
+          <div class="ccy-vs-label">Versus the rupee story</div>
+          <p id="ccyVsInr">Both currencies are weaker against the dollar this year — but the euro's −2.4% slide is gentler than the rupee's −6.0%, because Europe has the structural buffer of being a reserve issuer.</p>
+        </div>
+      </div>
+
+      <div class="ccy-grid">
+        <div class="ccy-grid-head">SCOREBOARD · YTD VS USD</div>
+        <div class="ccy-grid-rows" id="ccyScoreboard"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="references" class="section section--soft">
+  <div class="container">
+    <div class="section-label">REFERENCES &amp; DATA</div>
+    <h2 class="section-title">The numbers, and where they come from.</h2>
+    <p class="section-lede">Every figure cited on this page, with its source and the date it was last verified. The data is a snapshot in time — exchange rates and yields move every minute.</p>
+
+    <div class="ref-grid">
+      <div class="ref-block">
+        <div class="ref-block-tag">EXCHANGE RATE</div>
+        <table class="ref-table">
+          <tbody>
+            <tr><td>USD/INR (May 14, 2026)</td><td class="ref-val">₹95.96</td><td class="ref-src">RBI Reference Rate</td></tr>
+            <tr><td>USD/INR (Jan 1, 2026)</td><td class="ref-val">₹90.51</td><td class="ref-src">RBI Reference Rate</td></tr>
+            <tr><td>YTD depreciation</td><td class="ref-val">−6.02%</td><td class="ref-src">Calculated</td></tr>
+            <tr><td>USD/INR (Jan 2000)</td><td class="ref-val">₹44.90</td><td class="ref-src">RBI historical series</td></tr>
+            <tr><td>Cumulative move 2000→2026</td><td class="ref-val">+113%</td><td class="ref-src">Calculated</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="ref-block">
+        <div class="ref-block-tag">US MONEY SUPPLY</div>
+        <table class="ref-table">
+          <tbody>
+            <tr><td>M2 (Jan 2000)</td><td class="ref-val">$4.9T</td><td class="ref-src">Federal Reserve H.6</td></tr>
+            <tr><td>M2 (pre-GFC, 2008)</td><td class="ref-val">$8.2T</td><td class="ref-src">Federal Reserve H.6</td></tr>
+            <tr><td>M2 (post-COVID, 2022)</td><td class="ref-val">$21.9T</td><td class="ref-src">Federal Reserve H.6</td></tr>
+            <tr><td>M2 (May 2026)</td><td class="ref-val">$22.7T</td><td class="ref-src">FRED · M2SL</td></tr>
+            <tr><td>Cumulative growth</td><td class="ref-val">+360%</td><td class="ref-src">Calculated</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="ref-block">
+        <div class="ref-block-tag">CAPITAL FLOWS</div>
+        <table class="ref-table">
+          <tbody>
+            <tr><td>FPI outflows YTD 2026</td><td class="ref-val">$21B+</td><td class="ref-src">NSDL / CDSL data</td></tr>
+            <tr><td>FPI outflows full 2025</td><td class="ref-val">$15B</td><td class="ref-src">NSDL / CDSL data</td></tr>
+            <tr><td>FPI holdings (equities)</td><td class="ref-val">~$700B</td><td class="ref-src">SEBI reports</td></tr>
+            <tr><td>NRI remittances FY25</td><td class="ref-val">$129B</td><td class="ref-src">RBI / World Bank</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="ref-block">
+        <div class="ref-block-tag">OIL &amp; COMMODITIES</div>
+        <table class="ref-table">
+          <tbody>
+            <tr><td>Brent crude (May 2026)</td><td class="ref-val">$105/bbl</td><td class="ref-src">ICE Futures</td></tr>
+            <tr><td>India oil import share</td><td class="ref-val">85%</td><td class="ref-src">PPAC, Ministry of Petroleum</td></tr>
+            <tr><td>Annual crude import bill</td><td class="ref-val">~$160B</td><td class="ref-src">DGCI&amp;S, FY25</td></tr>
+            <tr><td>Strait of Hormuz oil flow</td><td class="ref-val">~20% global</td><td class="ref-src">US EIA</td></tr>
+            <tr><td>Sensitivity to $10 crude</td><td class="ref-val">~$15B / yr</td><td class="ref-src">Calculated</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="ref-block">
+        <div class="ref-block-tag">DOLLAR &amp; FED</div>
+        <table class="ref-table">
+          <tbody>
+            <tr><td>Dollar Index (DXY)</td><td class="ref-val">98.3</td><td class="ref-src">ICE</td></tr>
+            <tr><td>Share of global FX trades</td><td class="ref-val">~90%</td><td class="ref-src">BIS Triennial Survey 2022</td></tr>
+            <tr><td>Share of central bank reserves</td><td class="ref-val">~58%</td><td class="ref-src">IMF COFER, Q4 2025</td></tr>
+            <tr><td>Fed balance sheet (May 2026)</td><td class="ref-val">$7.0T</td><td class="ref-src">Federal Reserve H.4.1</td></tr>
+            <tr><td>2022 Fed hiking cycle</td><td class="ref-val">+525 bps</td><td class="ref-src">FOMC statements</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="ref-block">
+        <div class="ref-block-tag">INDIA RESERVES &amp; RBI</div>
+        <table class="ref-table">
+          <tbody>
+            <tr><td>Forex reserves peak</td><td class="ref-val">$728B</td><td class="ref-src">RBI Weekly Statistical Supplement</td></tr>
+            <tr><td>2022 defense spend</td><td class="ref-val">~$100B</td><td class="ref-src">RBI</td></tr>
+            <tr><td>Current account deficit FY25</td><td class="ref-val">~1.2% of GDP</td><td class="ref-src">RBI Bulletin</td></tr>
+            <tr><td>India repo rate (May 2026)</td><td class="ref-val">5.50%</td><td class="ref-src">RBI MPC</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="ref-notes">
+      <h3>Methodology &amp; notes</h3>
+      <ul>
+        <li><strong>Exchange rates</strong> use the RBI Reference Rate (FBIL) rounded to two decimals. Intraday market rates may differ.</li>
+        <li><strong>M2 figures</strong> are seasonally adjusted, drawn from the FRED series M2SL maintained by the St. Louis Fed.</li>
+        <li><strong>FPI / FII data</strong> aggregates equity and debt flows reported by NSDL and CDSL through May 14, 2026.</li>
+        <li><strong>Crude prices</strong> reference Brent front-month ICE futures, used because India sources crude from a basket benchmarked to Brent and Dubai.</li>
+        <li><strong>Historical milestones</strong> (2008 QE1, 2013 taper, 2020 COVID, 2022 hikes) are sourced from Federal Reserve press releases and FOMC minutes.</li>
+        <li>All percentage moves are computed from underlying series, not rounded inputs, then displayed to one or two decimals.</li>
+      </ul>
+    </div>
+
+    <div class="ref-sources">
+      <h3>Primary sources</h3>
+      <div class="ref-sources-grid">
+        <a href="https://www.rbi.org.in/" target="_blank" rel="noopener" class="ref-link">
+          <span class="ref-link-name">Reserve Bank of India</span>
+          <span class="ref-link-detail">FX reference rates · reserves · MPC decisions</span>
+        </a>
+        <a href="https://fred.stlouisfed.org/series/M2SL" target="_blank" rel="noopener" class="ref-link">
+          <span class="ref-link-name">FRED · St. Louis Fed</span>
+          <span class="ref-link-detail">M2 series · Fed balance sheet</span>
+        </a>
+        <a href="https://www.federalreserve.gov/" target="_blank" rel="noopener" class="ref-link">
+          <span class="ref-link-name">Federal Reserve</span>
+          <span class="ref-link-detail">H.6 money stock · H.4.1 balance sheet · FOMC</span>
+        </a>
+        <a href="https://www.nsdl.co.in/" target="_blank" rel="noopener" class="ref-link">
+          <span class="ref-link-name">NSDL</span>
+          <span class="ref-link-detail">Foreign portfolio investment flows</span>
+        </a>
+        <a href="https://www.eia.gov/" target="_blank" rel="noopener" class="ref-link">
+          <span class="ref-link-name">US EIA</span>
+          <span class="ref-link-detail">Global oil flows · Hormuz statistics</span>
+        </a>
+        <a href="https://data.imf.org/cofer" target="_blank" rel="noopener" class="ref-link">
+          <span class="ref-link-name">IMF COFER</span>
+          <span class="ref-link-detail">Currency composition of reserves</span>
+        </a>
+        <a href="https://www.bis.org/statistics/rpfx22.htm" target="_blank" rel="noopener" class="ref-link">
+          <span class="ref-link-name">BIS Triennial Survey</span>
+          <span class="ref-link-detail">Global FX market structure</span>
+        </a>
+        <a href="https://ppac.gov.in/" target="_blank" rel="noopener" class="ref-link">
+          <span class="ref-link-name">PPAC · India</span>
+          <span class="ref-link-detail">Crude import share · pricing</span>
+        </a>
+      </div>
+    </div>
+
+    <div class="ref-disclaimer">
+      <strong>Disclaimer.</strong> This page is an educational explainer. It is not investment advice. Data is sourced from public statistics and is accurate to the best of available reporting as of May 14, 2026, but currencies and yields move continuously. For any decision involving capital, consult primary sources directly and a qualified advisor.
     </div>
   </div>
 </section>
