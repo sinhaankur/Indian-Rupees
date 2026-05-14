@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Rupee &amp; The Dollar — Why ₹95.96 = $1</title>
+<meta name="description" content="An interactive explainer on why the Indian rupee keeps falling even as the US prints trillions of dollars. The petrodollar system, the four forces, and the impact on India.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<nav class="navbar">
+  <div class="nav-inner">
+    <a href="#top" class="nav-logo">
+      <span class="logo-mark">₹/$</span>
+      <span class="logo-text">The Petrodollar Paradox</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="#puzzle">Puzzle</a></li>
+      <li><a href="#timeline">Timeline</a></li>
+      <li><a href="#printing">USD Printing</a></li>
+      <li><a href="#system">The System</a></li>
+      <li><a href="#forces">Forces</a></li>
+      <li><a href="#impact">Impact</a></li>
+    </ul>
+  </div>
+</nav>
+
+<header id="top" class="hero">
+  <div class="hero-inner">
+    <div class="hero-tag">MAY 14, 2026</div>
+    <h1 class="hero-rate"><span class="rupee-symbol">₹</span><span data-counter="95.96" data-decimals="2">0.00</span></h1>
+    <p class="hero-sub">All-time low against the dollar</p>
+    <div class="hero-puzzle">
+      <div class="puzzle-label">THE PUZZLE</div>
+      <p>The US has been printing dollars for decades.<br>So why is the rupee falling, not the dollar?</p>
+    </div>
+    <a href="#puzzle" class="hero-scroll">
+      <span>Read the story</span>
+      <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M12 5v14M5 12l7 7 7-7" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </a>
+  </div>
+  <div class="hero-bg" aria-hidden="true"></div>
+</header>
+
+<section id="puzzle" class="section">
+  <div class="container">
+    <div class="section-label">THE INTUITION FAILS</div>
+    <h2 class="section-title">More dollars in the world should mean a cheaper dollar.</h2>
+    <p class="section-lede">For any normal currency, that's exactly what happens. But the dollar isn't normal. It's the world's plumbing — and when the world gets anxious, every importing country needs more dollars, faster than the Fed can print them.</p>
+
+    <div class="compare-grid">
+      <div class="compare-card compare-card--blue">
+        <div class="compare-tag">NORMAL CURRENCY</div>
+        <div class="compare-formula">Print <span class="arrow">→</span> Weaken</div>
+        <p>Supply rises, value falls. Simple supply and demand.</p>
+      </div>
+      <div class="compare-card compare-card--amber">
+        <div class="compare-tag">THE DOLLAR</div>
+        <div class="compare-formula">Print <span class="arrow">→</span> Absorbed</div>
+        <p>Global demand soaks up the extra supply. Strength persists.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="timeline" class="section section--dark">
+  <div class="container">
+    <div class="section-label">26 YEARS, TWO LINES</div>
+    <h2 class="section-title">The US printed. The rupee fell. They moved together — not apart.</h2>
+
+    <div class="timeline-stats">
+      <div class="stat-block stat-block--blue">
+        <div class="stat-label">US MONEY SUPPLY (M2)</div>
+        <div class="stat-flow"><span>$4.9T</span><span class="stat-arrow">→</span><span class="stat-final">$22.7T</span></div>
+        <div class="stat-delta">+360%</div>
+      </div>
+      <div class="stat-block stat-block--coral">
+        <div class="stat-label">USD / INR</div>
+        <div class="stat-flow"><span>₹44.9</span><span class="stat-arrow">→</span><span class="stat-final">₹95.96</span></div>
+        <div class="stat-delta">+113%</div>
+      </div>
+    </div>
+
+    <div class="reel-card">
+      <div class="reel-head">
+        <div class="reel-year-block">
+          <div class="reel-eyebrow">YEAR</div>
+          <div class="reel-year" id="reelYear">2000</div>
+        </div>
+        <div class="reel-figures">
+          <div class="reel-fig reel-fig--blue">
+            <div class="reel-fig-label">US M2</div>
+            <div class="reel-fig-value" id="reelM2">$4.9T</div>
+            <div class="reel-fig-delta" id="reelM2Delta">starting point</div>
+          </div>
+          <div class="reel-fig reel-fig--coral">
+            <div class="reel-fig-label">USD / INR</div>
+            <div class="reel-fig-value" id="reelInr">₹44.9</div>
+            <div class="reel-fig-delta" id="reelInrDelta">starting point</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="reel-chart-wrap">
+        <canvas id="reelChart"></canvas>
+      </div>
+
+      <div class="reel-event" id="reelEvent">
+        <div class="reel-event-head">
+          <div class="reel-event-title" id="reelTitle">The calm before</div>
+          <div class="reel-event-tag" id="reelTag">BASELINE</div>
+        </div>
+        <p class="reel-event-desc" id="reelDesc">Fed balance sheet small. Oil at $30 per barrel. India just beginning to rise.</p>
+      </div>
+
+      <div class="reel-controls">
+        <button class="btn btn--primary" id="reelPlay">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+          <span id="reelPlayLabel">Start reel</span>
+        </button>
+        <button class="btn btn--ghost" id="reelReset" aria-label="Reset">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 1 0 3-6.7L3 8" stroke-linecap="round" stroke-linejoin="round"/><path d="M3 3v5h5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <div class="reel-speed">
+          <label for="reelSpeed">SPEED</label>
+          <select id="reelSpeed">
+            <option value="1500">Slow</option>
+            <option value="1000" selected>Normal</option>
+            <option value="600">Fast</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="reel-progress">
+        <div class="reel-progress-bar" id="reelProgress"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="printing" class="section section--soft">
+  <div class="container">
+    <div class="section-label">HOW USD PRINTING WORKS</div>
+    <h2 class="section-title">When the Fed "prints," it doesn't run physical presses.</h2>
+    <p class="section-lede">The dollar supply expands through the banking system — and the way it expands determines whether the rupee gets a boost or a beating.</p>
+
+    <div class="printing-grid">
+      <article class="printing-card">
+        <div class="printing-step">STEP 1</div>
+        <h3>The Fed creates reserves</h3>
+        <p>The Federal Reserve buys US Treasuries or mortgage-backed securities from banks. To pay for them, it credits those banks' reserve accounts. New dollars exist that didn't before — this is "quantitative easing" or QE.</p>
+        <div class="printing-meta">
+          <span class="meta-key">2008–2014:</span>
+          <span class="meta-val">~$3.6 trillion added via QE1, QE2, QE3</span>
+        </div>
+        <div class="printing-meta">
+          <span class="meta-key">2020–2022:</span>
+          <span class="meta-val">~$4.8 trillion added in COVID response</span>
+        </div>
+      </article>
+
+      <article class="printing-card">
+        <div class="printing-step">STEP 2</div>
+        <h3>Banks lend it out</h3>
+        <p>With more reserves, banks can issue more loans. Each loan creates a new deposit — which is broad money (M2). One dollar of central bank money supports many dollars of credit money. The supply multiplies.</p>
+        <div class="printing-meta">
+          <span class="meta-key">M2 in 2000:</span>
+          <span class="meta-val">$4.9 trillion</span>
+        </div>
+        <div class="printing-meta">
+          <span class="meta-key">M2 in 2026:</span>
+          <span class="meta-val">$22.7 trillion (<strong>+360%</strong>)</span>
+        </div>
+      </article>
+
+      <article class="printing-card">
+        <div class="printing-step">STEP 3</div>
+        <h3>Dollars search for yield</h3>
+        <p>Cheap dollars flow toward higher returns — Indian equities, Indian bonds, emerging market debt. This is the "carry trade." Rupee strengthens temporarily as foreign capital floods in.</p>
+        <div class="printing-meta">
+          <span class="meta-key">2003–2008:</span>
+          <span class="meta-val">Sensex up 6×, rupee strengthens to ₹39</span>
+        </div>
+        <div class="printing-meta">
+          <span class="meta-key">2010–2013:</span>
+          <span class="meta-val">EM bond inflows hit record highs</span>
+        </div>
+      </article>
+
+      <article class="printing-card">
+        <div class="printing-step">STEP 4</div>
+        <h3>Then the music stops</h3>
+        <p>When the Fed signals tightening — or when global risk rises — that same capital reverses. Investors sell rupee assets, buy dollars, wire money home. The rupee collapses harder than it had risen.</p>
+        <div class="printing-meta">
+          <span class="meta-key">2013 taper tantrum:</span>
+          <span class="meta-val">Rupee crashed from ₹54 to ₹68 in months</span>
+        </div>
+        <div class="printing-meta">
+          <span class="meta-key">2022 hiking cycle:</span>
+          <span class="meta-val">Fed +525bps, rupee broke ₹80 first time</span>
+        </div>
+      </article>
+    </div>
+
+    <div class="factors">
+      <div class="factors-head">
+        <div class="section-label" style="margin-bottom:8px">FACTORS AT PLAY</div>
+        <h3 class="factors-title">Six variables that decide whether the rupee bends or breaks.</h3>
+      </div>
+
+      <div class="factor-list">
+        <div class="factor-row">
+          <div class="factor-num">1</div>
+          <div class="factor-body">
+            <div class="factor-head">
+              <h4>US monetary policy</h4>
+              <span class="factor-direction factor-direction--neg">QE → rupee strengthens · QT → rupee weakens</span>
+            </div>
+            <p>The Fed's balance sheet is the single biggest driver. When it expands, dollars flood emerging markets. When it shrinks, dollars retreat to safety. Indian rates can't compete with US rates on a risk-adjusted basis.</p>
+          </div>
+        </div>
+
+        <div class="factor-row">
+          <div class="factor-num">2</div>
+          <div class="factor-body">
+            <div class="factor-head">
+              <h4>Crude oil prices</h4>
+              <span class="factor-direction factor-direction--neg">+$10/barrel → ~₹0.50 rupee weakness</span>
+            </div>
+            <p>India imports 85% of its crude. Every barrel must be paid in dollars. A $10 rise in Brent adds roughly $15 billion to the annual import bill — all sourced from the rupee market.</p>
+          </div>
+        </div>
+
+        <div class="factor-row">
+          <div class="factor-num">3</div>
+          <div class="factor-body">
+            <div class="factor-head">
+              <h4>FII / FPI flows</h4>
+              <span class="factor-direction factor-direction--neg">$1B outflow → ~₹0.10 weakness</span>
+            </div>
+            <p>Foreign portfolio investors hold $700B+ in Indian equities. Their buying-selling decisions move the rupee in real time. In 2026, $21B has already flown out.</p>
+          </div>
+        </div>
+
+        <div class="factor-row">
+          <div class="factor-num">4</div>
+          <div class="factor-body">
+            <div class="factor-head">
+              <h4>Dollar Index (DXY)</h4>
+              <span class="factor-direction factor-direction--neg">DXY up → rupee down</span>
+            </div>
+            <p>The DXY measures the dollar against six major currencies. When the dollar is strong globally, the rupee weakens regardless of India's own fundamentals. Currently at ~98.3.</p>
+          </div>
+        </div>
+
+        <div class="factor-row">
+          <div class="factor-num">5</div>
+          <div class="factor-body">
+            <div class="factor-head">
+              <h4>India's current account deficit</h4>
+              <span class="factor-direction factor-direction--neg">Wider deficit → more dollar demand</span>
+            </div>
+            <p>India imports more than it exports — the gap must be financed in dollars. A widening current account deficit means more structural dollar buying every month, regardless of news flow.</p>
+          </div>
+        </div>
+
+        <div class="factor-row">
+          <div class="factor-num">6</div>
+          <div class="factor-body">
+            <div class="factor-head">
+              <h4>RBI intervention</h4>
+              <span class="factor-direction factor-direction--pos">Sells dollars → slows rupee fall</span>
+            </div>
+            <p>The Reserve Bank doesn't target a fixed rate but smooths volatility. It sells dollars from $728B in reserves. Effective short-term, but every dollar spent is a dollar not available for a future crisis.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="system" class="section">
+  <div class="container">
+    <div class="section-label">THE SYSTEM</div>
+    <h2 class="section-title">The puzzle resolves in three layers.</h2>
+
+    <div class="layer-cards">
+      <article class="layer-card layer-card--purple">
+        <div class="layer-number">01</div>
+        <h3>The dollar is the world's plumbing</h3>
+        <p>Every cross-border transaction, every barrel of oil, every central bank reserve — the dollar is the default rail. Demand is structural, not optional.</p>
+        <ul class="layer-stats">
+          <li><span class="layer-stat-value">~90%</span><span class="layer-stat-text">of global FX trades involve the dollar</span></li>
+          <li><span class="layer-stat-value">~58%</span><span class="layer-stat-text">of central bank reserves held in dollars</span></li>
+          <li><span class="layer-stat-value">Most</span><span class="layer-stat-text">cross-border debt is dollar-denominated</span></li>
+        </ul>
+      </article>
+
+      <article class="layer-card layer-card--teal">
+        <div class="layer-number">02</div>
+        <h3>The petrodollar engine</h3>
+        <p>Oil is priced in dollars. Always. Everywhere. Every barrel forces importers to source dollars and exporters to recycle their surplus back into US Treasuries.</p>
+        <div class="petro-loop">
+          <div class="petro-node petro-node--blue">
+            <div class="petro-label">US</div>
+            <div class="petro-sub">Prints dollars</div>
+          </div>
+          <div class="petro-arrow">→</div>
+          <div class="petro-node petro-node--amber">
+            <div class="petro-label">Importers</div>
+            <div class="petro-sub">India, EU, China</div>
+          </div>
+          <div class="petro-arrow">→</div>
+          <div class="petro-node petro-node--coral">
+            <div class="petro-label">Exporters</div>
+            <div class="petro-sub">Saudi, UAE</div>
+          </div>
+          <div class="petro-recycle">
+            <span>↻ recycled into US Treasuries</span>
+          </div>
+        </div>
+      </article>
+
+      <article class="layer-card layer-card--coral">
+        <div class="layer-number">03</div>
+        <h3>India sits at the wrong end</h3>
+        <p>Inside this system, India is uniquely exposed. It earns rupees but must buy dollars — for oil, for debt, for everything imported. Four forces are firing at once.</p>
+        <div class="layer-foot">
+          <div class="layer-foot-rate">₹95.96</div>
+          <div class="layer-foot-text">Asia's weakest currency · May 2026</div>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section id="forces" class="section section--soft">
+  <div class="container">
+    <div class="section-label">THE FOUR FORCES</div>
+    <h2 class="section-title">Every dollar-demand stream is firing at once.</h2>
+    <p class="section-lede">No single factor explains the slide. Four forces are stacking on top of each other in 2026 — and the rupee has nowhere to hide.</p>
+
+    <div class="force-grid">
+      <article class="force-card">
+        <div class="force-icon">
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.5c0 0-6 7-6 12a6 6 0 0 0 12 0c0-5-6-12-6-12z"/></svg>
+        </div>
+        <div class="force-tag">FORCE 1</div>
+        <h3>Crude oil dependency</h3>
+        <p>Every barrel must be paid for in dollars. India imports 85% of its crude. Bigger oil bill = bigger rupee selling pressure.</p>
+        <div class="force-stat"><span class="force-stat-value">$105</span><span class="force-stat-label">per barrel (Brent)</span></div>
+      </article>
+
+      <article class="force-card">
+        <div class="force-icon">
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l10 18H2L12 3z"/><line x1="12" y1="10" x2="12" y2="14"/><circle cx="12" cy="17" r="0.6" fill="currentColor"/></svg>
+        </div>
+        <div class="force-tag">FORCE 2</div>
+        <h3>Iran–US conflict</h3>
+        <p>~20% of global oil flows through the Strait of Hormuz. The 10-week-old conflict has added a risk premium to every barrel.</p>
+        <div class="force-stat"><span class="force-stat-value">~5%</span><span class="force-stat-label">rupee slide since February</span></div>
+      </article>
+
+      <article class="force-card">
+        <div class="force-icon">
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 17 9 11 13 15 21 7"/><polyline points="14 7 21 7 21 14"/></svg>
+        </div>
+        <div class="force-tag">FORCE 3</div>
+        <h3>Foreign investors fleeing</h3>
+        <p>FIIs sell Indian assets, convert rupees back to dollars, wire money home. Each wave weakens the rupee — which scares the next wave out.</p>
+        <div class="force-stat"><span class="force-stat-value">$21B+</span><span class="force-stat-label">FPI outflows YTD 2026</span></div>
+      </article>
+
+      <article class="force-card">
+        <div class="force-icon">
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 17 9 11 13 15 21 7"/></svg>
+        </div>
+        <div class="force-tag">FORCE 4</div>
+        <h3>Globally strong dollar</h3>
+        <p>High US Treasury yields keep capital parked in dollar assets. The Fed staying tight means the dollar gets stronger against almost everything.</p>
+        <div class="force-stat"><span class="force-stat-value">98.3</span><span class="force-stat-label">Dollar Index (DXY)</span></div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section id="impact" class="section">
+  <div class="container">
+    <div class="section-label">THE IMPACT CHAIN</div>
+    <h2 class="section-title">How rupee weakness reaches your wallet.</h2>
+    <p class="section-lede">A weaker rupee triggers three first-order effects — and each one cascades into something the household, the firm, or the central bank feels directly.</p>
+
+    <div class="chain">
+      <div class="chain-top">
+        <div class="chain-node chain-node--root">
+          <div class="chain-label">WEAKER RUPEE</div>
+          <div class="chain-value">₹95.96 / $1</div>
+        </div>
+      </div>
+      <div class="chain-mid">
+        <div class="chain-node chain-node--amber">
+          <h4>Import inflation</h4>
+          <p>Oil, electronics, gold all cost more in rupees.</p>
+        </div>
+        <div class="chain-node chain-node--amber">
+          <h4>Dollar debt burden</h4>
+          <p>Indian firms owe more rupees per dollar borrowed.</p>
+        </div>
+        <div class="chain-node chain-node--amber">
+          <h4>RBI burns reserves</h4>
+          <p>State banks sell dollars to absorb excess demand.</p>
+        </div>
+      </div>
+      <div class="chain-bottom">
+        <div class="chain-node chain-node--pink">
+          <h4>Households pay more</h4>
+          <p>Fuel, food, iPhones, foreign tuition.</p>
+        </div>
+        <div class="chain-node chain-node--pink">
+          <h4>Profits squeezed</h4>
+          <p>Importers, airlines, oil marketers absorb cost spikes.</p>
+        </div>
+        <div class="chain-node chain-node--pink">
+          <h4>Forex cushion shrinks</h4>
+          <p>$728B peak reserves, slowly eroding.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="upside">
+      <div class="upside-tag">THE ONE UPSIDE</div>
+      <h3>IT and pharma exporters quietly gain.</h3>
+      <p>TCS, Infosys, Wipro, Sun Pharma earn most of their revenue in dollars. When they convert back to rupees, they get <strong>more rupees per dollar</strong>. Their reported earnings rise mechanically with rupee weakness — which is why the Nifty can hold up even when the currency slides. It doesn't help households. But it's why India tolerates gradual depreciation.</p>
+    </div>
+  </div>
+</section>
+
+<section class="section section--dark closer">
+  <div class="container closer-container">
+    <div class="closer-label">THE BOTTOM LINE</div>
+    <h2 class="closer-title">
+      The dollar isn't just a currency.<br>
+      <span class="closer-accent">It's the world's plumbing.</span>
+    </h2>
+    <p class="closer-and">And India sits downstream.</p>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="container footer-inner">
+    <div>
+      <div class="footer-logo">₹/$</div>
+      <div class="footer-title">The Petrodollar Paradox</div>
+    </div>
+    <div class="footer-meta">
+      <div>Data referenced as of May 14, 2026</div>
+      <div>An educational explainer · Not investment advice</div>
+    </div>
+  </div>
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>
