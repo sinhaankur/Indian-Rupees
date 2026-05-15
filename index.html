@@ -675,10 +675,45 @@
 
               <!-- Final: Rupee weakens -->
               <g class="lflow-fade d4" transform="translate(360, 450)">
-                <rect x="-150" y="-32" width="300" height="64" rx="8" fill="#712B13" stroke="#D85A30" stroke-width="2"/>
+                <rect x="-150" y="-32" width="300" height="64" rx="8" fill="#712B13" stroke="#D85A30" stroke-width="2">
+                  <animate attributeName="stroke-width" values="2;3.2;2" dur="2.2s" repeatCount="indefinite"/>
+                </rect>
                 <text x="0" y="-7" text-anchor="middle" font-size="16" font-weight="700" fill="#FAECE7" font-family="Inter, sans-serif">Rupee weakens</text>
                 <text x="0" y="13" text-anchor="middle" font-size="11" fill="#FAECE7" opacity="0.85" font-family="Inter, sans-serif">Inflation ↑ · debt burden ↑ · imports ↑</text>
               </g>
+
+              <!-- Dollar dots flowing along the three sourcing branches (amber) -->
+              <circle r="4" fill="#854F0B">
+                <animateMotion dur="2.2s" repeatCount="indefinite" path="M360,120 L170,160"/>
+              </circle>
+              <circle r="4" fill="#854F0B">
+                <animateMotion dur="2.2s" begin="-0.7s" repeatCount="indefinite" path="M360,120 L360,160"/>
+              </circle>
+              <circle r="4" fill="#854F0B">
+                <animateMotion dur="2.2s" begin="-1.4s" repeatCount="indefinite" path="M360,120 L550,160"/>
+              </circle>
+
+              <!-- Stress dots cascading down through failure modes (coral) -->
+              <circle r="3" fill="#D85A30">
+                <animateMotion dur="2s" repeatCount="indefinite" path="M120,232 L120,282"/>
+              </circle>
+              <circle r="3" fill="#D85A30">
+                <animateMotion dur="2s" begin="-0.66s" repeatCount="indefinite" path="M360,232 L360,282"/>
+              </circle>
+              <circle r="3" fill="#D85A30">
+                <animateMotion dur="2s" begin="-1.32s" repeatCount="indefinite" path="M600,232 L600,282"/>
+              </circle>
+
+              <!-- Final converging stress dots into the rupee-weakens bar -->
+              <circle r="4" fill="#D85A30">
+                <animateMotion dur="2.4s" repeatCount="indefinite" path="M120,348 L320,412"/>
+              </circle>
+              <circle r="4" fill="#D85A30">
+                <animateMotion dur="2.4s" begin="-0.8s" repeatCount="indefinite" path="M360,348 L360,412"/>
+              </circle>
+              <circle r="4" fill="#D85A30">
+                <animateMotion dur="2.4s" begin="-1.6s" repeatCount="indefinite" path="M600,348 L400,412"/>
+              </circle>
             </svg>
           </div>
 
