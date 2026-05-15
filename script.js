@@ -1127,13 +1127,19 @@ function checkVoice() {
     if (reelVoiceStatus) reelVoiceStatus.textContent = 'Not supported in this browser';
     return null;
   }
-  const target = REEL_BCP47[rgLang()] || 'en-US';
-  const voices = speechSynthesis.getVoices();
-  const match = voices.find(v => v.lang.toLowerCase().startsWith(target.toLowerCase().split('-')[0]));
+  const lang = rgLang();
+  let match = null;
+  if (lang === 'en') {
+    match = pickEnglishMaleVoice();
+  } else {
+    const target = REEL_BCP47[lang] || 'en-GB';
+    const voices = speechSynthesis.getVoices();
+    match = voices.find(v => v.lang.toLowerCase().startsWith(target.toLowerCase().split('-')[0]));
+  }
   if (reelVoiceStatus) {
     reelVoiceStatus.textContent = match
       ? `${match.name} (${match.lang})`
-      : `Default (no ${target} voice installed)`;
+      : `Default voice`;
   }
   return match;
 }
@@ -1179,9 +1185,9 @@ function rgChrome(slide, progress) {
 
   // Footer watermark
   reelCtx.fillStyle = 'rgba(255,255,255,0.55)';
-  reelCtx.font = '500 14px Inter, sans-serif';
+  reelCtx.font = '500 13px Inter, sans-serif';
   reelCtx.textAlign = 'center';
-  reelCtx.fillText('sinhaankur.github.io/Indian-Rupees', W / 2, H - 36);
+  reelCtx.fillText('sinhaankur.github.io/Petrodollar-Paradox', W / 2, H - 36);
 
   // Progress dots
   const slides = rgSlides();
@@ -1242,31 +1248,41 @@ function rgRoundRect(x, y, w, h, r) {
 // ─── slide-type renderers ─────────────────────────────────────
 function rgRenderHero(slide, p) {
   const W = reelCanvas.width, H = reelCanvas.height;
-  // Big symbol up top
-  reelCtx.fillStyle = slide.accent;
-  reelCtx.font = '600 220px Inter, sans-serif';
-  reelCtx.textAlign = 'center';
-  reelCtx.fillText('₹', W / 2 - 130, 380);
-  // Big rate
-  reelCtx.font = '700 150px Inter, sans-serif';
-  reelCtx.fillText('95.96', W / 2 + 40, 380);
-  // Tag
-  reelCtx.fillStyle = 'rgba(255,255,255,0.7)';
-  reelCtx.font = '600 22px Inter, sans-serif';
-  reelCtx.fillText(slide.sub.toUpperCase(), W / 2, 450);
-  // Asterisk note
-  reelCtx.fillStyle = 'rgba(255,255,255,0.5)';
-  reelCtx.font = '500 18px Inter, sans-serif';
-  reelCtx.fillText('Asia\'s weakest currency · YTD −6%', W / 2, 540);
+  const cy = H / 2 - 40;
+  const safeW = W - 80;
 
-  // Decorative ring expanding
+  // Expanding ring behind
   reelCtx.strokeStyle = slide.accent;
   reelCtx.lineWidth = 2;
-  reelCtx.globalAlpha = Math.max(0, 0.6 - p * 0.6);
+  reelCtx.globalAlpha = Math.max(0, 0.45 - p * 0.45);
   reelCtx.beginPath();
-  reelCtx.arc(W / 2, 350, 60 + p * 200, 0, Math.PI * 2);
+  reelCtx.arc(W / 2, cy, 80 + p * 160, 0, Math.PI * 2);
   reelCtx.stroke();
   reelCtx.globalAlpha = 1;
+
+  // Single "₹95.96" string sized to fit safe width
+  const text = '₹95.96';
+  let fontSize = 180;
+  reelCtx.font = `700 ${fontSize}px Inter, sans-serif`;
+  while (reelCtx.measureText(text).width > safeW && fontSize > 60) {
+    fontSize -= 4;
+    reelCtx.font = `700 ${fontSize}px Inter, sans-serif`;
+  }
+  reelCtx.fillStyle = slide.accent;
+  reelCtx.textAlign = 'center';
+  reelCtx.textBaseline = 'middle';
+  reelCtx.fillText(text, W / 2, cy);
+  reelCtx.textBaseline = 'alphabetic';
+
+  // Tag below
+  reelCtx.fillStyle = 'rgba(255,255,255,0.78)';
+  reelCtx.font = '600 18px Inter, sans-serif';
+  reelCtx.fillText(slide.sub.toUpperCase(), W / 2, cy + fontSize / 2 + 50);
+
+  // Sub-note
+  reelCtx.fillStyle = 'rgba(255,255,255,0.55)';
+  reelCtx.font = '500 16px Inter, sans-serif';
+  reelCtx.fillText("Asia's weakest currency · YTD −6%", W / 2, cy + fontSize / 2 + 82);
 }
 
 function rgRenderPuzzle(slide, p) {
@@ -1427,50 +1443,63 @@ function rgRenderBigStats(slide, p) {
 function rgRenderLayer1(slide, p) {
   const W = reelCanvas.width;
   rgTitle(slide, 200);
-  const cx = W / 2, cy = 460;
+  const cx = W / 2, cy = 540;
+
+  // Surrounding facts in a 2x2 grid below the hub
+  const facts = slide.data.facts;
+  const pillW = 200, pillH = 80;
+  // Left column / right column positioning that stays inside the canvas
+  const positions = [
+    { x: cx - 110, y: cy - 130 }, // top-left
+    { x: cx + 110, y: cy - 130 }, // top-right
+    { x: cx - 110, y: cy + 130 }, // bottom-left
+    { x: cx + 110, y: cy + 130 }, // bottom-right
+  ];
 
   // Center hub
-  reelCtx.fillStyle = 'rgba(94, 234, 212, 0.18)';
+  reelCtx.fillStyle = 'rgba(196, 181, 253, 0.18)';
   reelCtx.beginPath();
-  reelCtx.arc(cx, cy, 80 + Math.sin(p * Math.PI * 2) * 4, 0, Math.PI * 2);
+  reelCtx.arc(cx, cy, 70 + Math.sin(p * Math.PI * 2) * 3, 0, Math.PI * 2);
   reelCtx.fill();
   reelCtx.strokeStyle = slide.accent;
   reelCtx.lineWidth = 2;
-  reelCtx.beginPath(); reelCtx.arc(cx, cy, 80, 0, Math.PI * 2); reelCtx.stroke();
+  reelCtx.beginPath(); reelCtx.arc(cx, cy, 70, 0, Math.PI * 2); reelCtx.stroke();
   reelCtx.fillStyle = '#fff';
-  reelCtx.font = '700 40px Inter, sans-serif';
+  reelCtx.font = '700 32px Inter, sans-serif';
   reelCtx.textAlign = 'center';
-  reelCtx.fillText('USD', cx, cy + 14);
+  reelCtx.textBaseline = 'middle';
+  reelCtx.fillText('USD', cx, cy);
+  reelCtx.textBaseline = 'alphabetic';
 
-  // Surrounding facts
-  const positions = [
-    { x: cx, y: cy - 200 },
-    { x: cx + 200, y: cy },
-    { x: cx, y: cy + 200 },
-    { x: cx - 200, y: cy },
-  ];
-  const facts = slide.data.facts;
   for (let i = 0; i < facts.length; i++) {
     const pos = positions[i];
     const reveal = Math.max(0, Math.min(1, p * 2 - i * 0.15));
     if (reveal <= 0) continue;
     reelCtx.globalAlpha = reveal;
-    // connector
-    reelCtx.strokeStyle = 'rgba(255,255,255,0.25)';
+
+    // connector line from hub to pill
+    reelCtx.strokeStyle = 'rgba(255,255,255,0.18)';
     reelCtx.lineWidth = 1.5;
     reelCtx.beginPath();
     reelCtx.moveTo(cx, cy); reelCtx.lineTo(pos.x, pos.y);
     reelCtx.stroke();
-    // pill
-    reelCtx.fillStyle = 'rgba(94, 234, 212, 0.15)';
-    rgRoundRect(pos.x - 95, pos.y - 36, 190, 72, 10); reelCtx.fill();
+
+    // pill (clipped to canvas safe area)
+    const px = Math.max(40, Math.min(W - 40 - pillW, pos.x - pillW / 2));
+    const py = pos.y - pillH / 2;
+    reelCtx.fillStyle = 'rgba(196, 181, 253, 0.18)';
+    rgRoundRect(px, py, pillW, pillH, 10); reelCtx.fill();
+    reelCtx.strokeStyle = 'rgba(196, 181, 253, 0.4)';
+    reelCtx.lineWidth = 1;
+    rgRoundRect(px, py, pillW, pillH, 10); reelCtx.stroke();
+
     reelCtx.fillStyle = '#fff';
-    reelCtx.font = '700 28px Inter, sans-serif';
+    reelCtx.font = '700 26px Inter, sans-serif';
     reelCtx.textAlign = 'center';
-    reelCtx.fillText(facts[i].val, pos.x, pos.y - 4);
-    reelCtx.fillStyle = 'rgba(255,255,255,0.75)';
-    reelCtx.font = '500 13px Inter, sans-serif';
-    reelCtx.fillText(facts[i].sub, pos.x, pos.y + 20);
+    reelCtx.fillText(facts[i].val, px + pillW / 2, py + 34);
+    reelCtx.fillStyle = 'rgba(255,255,255,0.72)';
+    reelCtx.font = '500 12px Inter, sans-serif';
+    reelCtx.fillText(facts[i].sub, px + pillW / 2, py + 58);
   }
   reelCtx.globalAlpha = 1;
 }
@@ -1755,12 +1784,59 @@ function wrapText(ctx, text, x, y, maxWidth, lineHeight) {
   lines.forEach(l => { ctx.fillText(l, x, startY); startY += lineHeight; });
 }
 
+// Preferred male English voice names (in order). Picked across macOS / iOS /
+// Windows / Chrome / Android — first match wins. For non-English languages
+// we just trust the OS to pick a sensible voice for that BCP-47 tag.
+const MALE_EN_VOICES = [
+  'Daniel',                          // macOS / iOS UK male
+  'Daniel (Enhanced)',
+  'Oliver',                          // macOS UK male
+  'Arthur',                          // macOS UK male (newer)
+  'Alex',                            // macOS US male
+  'Google UK English Male',          // Chrome / Android
+  'Microsoft Ryan Online (Natural)', // Windows Edge UK male
+  'Microsoft George',                // Windows UK male
+  'Microsoft Mark',                  // Windows US male
+  'Microsoft David Desktop',         // Windows US male (legacy)
+];
+
+function pickEnglishMaleVoice() {
+  if (!('speechSynthesis' in window)) return null;
+  const voices = speechSynthesis.getVoices();
+  // 1) Exact name match from preferred list
+  for (const name of MALE_EN_VOICES) {
+    const v = voices.find(v => v.name === name || v.name.startsWith(name));
+    if (v) return v;
+  }
+  // 2) Any en-GB voice whose name suggests male
+  const maleHints = /(male|david|daniel|oliver|arthur|james|ryan|george|alex|mark|guy|sam|tom|aaron|jamie)/i;
+  let v = voices.find(v => v.lang.toLowerCase().startsWith('en-gb') && maleHints.test(v.name));
+  if (v) return v;
+  // 3) Any en-GB voice at all
+  v = voices.find(v => v.lang.toLowerCase().startsWith('en-gb'));
+  if (v) return v;
+  // 4) Any en-* male-hinted voice
+  v = voices.find(v => v.lang.toLowerCase().startsWith('en') && maleHints.test(v.name));
+  if (v) return v;
+  // 5) Any en-* voice
+  return voices.find(v => v.lang.toLowerCase().startsWith('en')) || null;
+}
+
 function speak(text, lang) {
   if (!('speechSynthesis' in window)) return Promise.resolve();
   return new Promise(resolve => {
     const u = new SpeechSynthesisUtterance(text);
-    u.lang = REEL_BCP47[lang] || 'en-US';
-    u.rate = 0.95;
+    if (lang === 'en') {
+      // Pin to a British male voice when narrating English.
+      const v = pickEnglishMaleVoice();
+      if (v) { u.voice = v; u.lang = v.lang; }
+      else { u.lang = 'en-GB'; }
+      u.pitch = 0.92;     // slightly lower
+      u.rate = 0.94;
+    } else {
+      u.lang = REEL_BCP47[lang] || 'en-GB';
+      u.rate = 0.95;
+    }
     u.onend = resolve;
     u.onerror = resolve;
     speechSynthesis.speak(u);
