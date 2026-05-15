@@ -1370,29 +1370,74 @@
       <div class="reel-panel">
         <div class="reel-meta">
           <div class="reel-meta-row">
-            <span class="reel-meta-key" data-i18n="reel.language">Language</span>
+            <span class="reel-meta-key">Language</span>
             <span class="reel-meta-val" id="reelLangName">English</span>
           </div>
           <div class="reel-meta-row">
-            <span class="reel-meta-key" data-i18n="reel.format">Format</span>
-            <span class="reel-meta-val">9:16 · 30s · .webm</span>
+            <span class="reel-meta-key">Format</span>
+            <span class="reel-meta-val" id="reelDuration">9:16 · 30s · .webm</span>
           </div>
           <div class="reel-meta-row">
-            <span class="reel-meta-key" data-i18n="reel.voice">Voice</span>
-            <span class="reel-meta-val" id="reelVoiceStatus">Detecting…</span>
+            <span class="reel-meta-key">Voice</span>
+            <span class="reel-meta-val" id="reelVoiceStatus">Browser TTS</span>
           </div>
+        </div>
+
+        <details class="reel-sarvam" id="reelSarvam">
+          <summary>
+            <span class="reel-sarvam-title">Use Sarvam AI for natural voice</span>
+            <span class="reel-sarvam-state" id="reelSarvamState">not configured</span>
+          </summary>
+          <div class="reel-sarvam-body">
+            <p>Plug in a <a href="https://www.sarvam.ai/" target="_blank" rel="noopener">Sarvam AI</a> API key for high-quality Indian-language narration that gets baked into the recorded video. The key stays in your browser's localStorage — never sent anywhere except Sarvam.</p>
+            <label class="reel-sarvam-input">
+              <span>API key</span>
+              <input type="password" id="reelSarvamKey" placeholder="sk_…" autocomplete="off">
+            </label>
+            <div class="reel-sarvam-row">
+              <label>
+                <span>Voice</span>
+                <select id="reelSarvamSpeaker">
+                  <option value="meera">Meera (female)</option>
+                  <option value="pavithra">Pavithra (female)</option>
+                  <option value="maitreyi">Maitreyi (female)</option>
+                  <option value="arvind">Arvind (male)</option>
+                  <option value="amol">Amol (male)</option>
+                  <option value="amartya">Amartya (male)</option>
+                </select>
+              </label>
+              <label>
+                <span>Model</span>
+                <select id="reelSarvamModel">
+                  <option value="bulbul:v2">bulbul v2</option>
+                  <option value="bulbul:v1">bulbul v1</option>
+                </select>
+              </label>
+            </div>
+            <button class="btn btn--ghost" id="reelSarvamSave">Save</button>
+            <button class="btn btn--ghost" id="reelSarvamClear">Clear</button>
+            <p class="reel-sarvam-note" id="reelSarvamNote">Without a key, the reel uses your browser's built-in speech engine for preview only.</p>
+          </div>
+        </details>
+
+        <div class="reel-pick">
+          <div class="reel-pick-head">
+            <span class="reel-pick-title">Sections to include</span>
+            <button class="reel-pick-toggle" id="reelPickAll" type="button">Toggle all</button>
+          </div>
+          <div class="reel-pick-grid" id="reelPickGrid"></div>
         </div>
 
         <div class="reel-actions">
-          <button class="btn btn--primary" id="reelPlayBtn" data-i18n="reel.preview">▶ Preview with narration</button>
-          <button class="btn btn--secondary" id="reelDownloadBtn" data-i18n="reel.generate">⬇ Generate &amp; download</button>
-          <button class="btn btn--ghost" id="reelStopBtn" disabled data-i18n="reel.stop">Stop</button>
+          <button class="btn btn--primary" id="reelPlayBtn">▶ Preview</button>
+          <button class="btn btn--secondary" id="reelDownloadBtn">⬇ Generate &amp; download</button>
+          <button class="btn btn--ghost" id="reelStopBtn" disabled>Stop</button>
         </div>
 
-        <div class="reel-status" id="reelStatus" data-i18n="reel.ready">Ready. Pick a language above, hit preview to hear the narration, then generate to download.</div>
+        <div class="reel-status" id="reelStatus">Ready. Pick sections, choose your language, then preview or generate.</div>
 
-        <div class="reel-tip">
-          <strong data-i18n="reel.tipLabel">A note on audio.</strong> <span data-i18n="reel.tip">Browsers won't let JavaScript bake speech-synthesis audio into a video file. The downloaded reel has slides only. For voice, play the preview while screen-recording on your phone, or use Reels' built-in voice-over.</span>
+        <div class="reel-tip" id="reelTip">
+          <strong>The reel stands alone.</strong> 11 infographic slides walk through every section of this page — hero rate, the puzzle, the 26-year M2-vs-rupee chart, the petrodollar loop, the four forces, the cascade to households, a global currency scoreboard, the world-order math, and the bottom line. With a Sarvam key, narration is fetched from Sarvam, played live, and baked into the downloaded video. Without a key, browser TTS plays during preview only — the download is a silent .webm (the browser blocks capturing speech-synthesis audio).
         </div>
       </div>
     </div>

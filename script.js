@@ -928,22 +928,166 @@ function calcWorldOrder() {
 if (document.getElementById('woOil')) calcWorldOrder();
 
 // ─── REEL GENERATOR ───────────────────────────────────────────
+// Each slide has a `type` that selects an infographic renderer.
+// Slide cycles through everything on the site so the reel stands alone.
 const REEL_SLIDES_BY_LANG = {
   en: [
-    { title: '₹95.96 = $1', sub: 'All-time low against the dollar', narration: 'The Indian rupee just hit an all-time low. Ninety-five rupees ninety-six paise per dollar.', color: '#712B13', accent: '#FAECE7' },
-    { title: 'The puzzle', sub: 'The US printed trillions. The rupee fell anyway.', narration: 'The US printed trillions of dollars. So why is the rupee falling, not the dollar?', color: '#412402', accent: '#FAEEDA' },
-    { title: 'Layer 1', sub: "The dollar = world's plumbing.", narration: 'Ninety percent of global trades involve the dollar. Fifty-eight percent of central bank reserves are dollars. Demand is structural.', color: '#3C3489', accent: '#EEEDFE' },
-    { title: 'Layer 2', sub: 'Oil locks in dollar demand.', narration: 'Oil is priced in dollars, always. India earns rupees but must buy dollars for every barrel of crude.', color: '#04342C', accent: '#E1F5EE' },
-    { title: 'Layer 3', sub: 'India sits downstream.', narration: 'Eighty-five percent imported oil. Twenty-one billion dollars in capital outflows. A strong dollar globally. The rupee has nowhere to hide.', color: '#4A1B0C', accent: '#FAECE7' },
-    { title: 'The bottom line', sub: "Not just a currency. It's the world's plumbing.", narration: "The dollar isn't just a currency. It's the world's plumbing. And India sits downstream.", color: '#0a0a0a', accent: '#FAECE7' },
+    { type: 'hero',      title: '₹95.96', sub: 'USD / INR · all-time low · May 2026',
+      narration: 'The Indian rupee just hit an all-time low. Ninety-five rupees ninety-six paise per dollar.',
+      bg: '#712B13', accent: '#FAECE7' },
+    { type: 'puzzle',    title: 'The puzzle', sub: 'Print trillions. Dollar still wins.',
+      narration: 'The US printed trillions of dollars. So why is the rupee falling, not the dollar?',
+      bg: '#412402', accent: '#FAEEDA',
+      data: { left: { tag: 'NORMAL CURRENCY', text: 'Print → Weaken' }, right: { tag: 'THE DOLLAR', text: 'Print → Absorbed' } } },
+    { type: 'lineChart', title: '26 years', sub: 'M2 up +360% · Rupee weakened +113%',
+      narration: 'US money supply grew three hundred sixty percent. The rupee weakened a hundred and thirteen percent. They moved together, not apart.',
+      bg: '#0C447C', accent: '#E6F1FB',
+      data: {
+        m2:  [4.9, 5.4, 6.0, 6.6, 8.2, 8.8, 11.0, 12.4, 14.4, 19.1, 21.9, 22.4, 22.7],
+        inr: [44.9, 47.2, 45.6, 44.1, 48.4, 45.6, 61.9, 66.3, 70.1, 74.1, 82.8, 88.4, 95.96],
+        years: [2000, 2001, 2003, 2005, 2008, 2010, 2013, 2015, 2018, 2020, 2022, 2025, 2026]
+      } },
+    { type: 'bigStats',  title: 'The numbers', sub: '2000 → 2026',
+      narration: 'US money supply went from four point nine trillion to twenty-two point seven trillion. The rupee went from forty-four ninety to ninety-five ninety-six.',
+      bg: '#3C3489', accent: '#EEEDFE',
+      data: { items: [
+        { val: '$4.9T', sub: 'M2 in 2000', side: 'left' },
+        { val: '$22.7T', sub: 'M2 in 2026', side: 'right' },
+        { val: '₹44.90', sub: '$1 in 2000', side: 'left' },
+        { val: '₹95.96', sub: '$1 in 2026', side: 'right' },
+      ] } },
+    { type: 'layer1',    title: 'Layer 1', sub: "Dollar = world's plumbing",
+      narration: 'Ninety percent of global trades involve the dollar. Fifty-eight percent of central bank reserves are dollars. All commodities priced in it.',
+      bg: '#3C3489', accent: '#EEEDFE',
+      data: { facts: [
+        { val: '~90%', sub: 'global FX trades' },
+        { val: '~58%', sub: 'central bank reserves' },
+        { val: 'All', sub: 'commodities priced in $' },
+        { val: 'Most', sub: 'cross-border debt' },
+      ] } },
+    { type: 'loop',      title: 'Layer 2', sub: 'Petrodollar engine',
+      narration: 'Oil is priced in dollars. The US prints. Importers buy oil with dollars. Exporters recycle the surplus into US Treasuries. The loop closes.',
+      bg: '#04342C', accent: '#E1F5EE',
+      data: { nodes: ['United States', 'Oil importers', 'Oil exporters', 'US Treasuries'] } },
+    { type: 'pressure',  title: 'Layer 3', sub: 'India sits downstream',
+      narration: 'Eighty-five percent imported oil. Twenty-one billion in capital outflows. A strong dollar. The rupee has nowhere to hide.',
+      bg: '#4A1B0C', accent: '#FAECE7',
+      data: { items: [
+        { tag: 'OIL', val: '$105', sub: '85% imported' },
+        { tag: 'IRAN', val: '~5%', sub: 'rupee since Feb' },
+        { tag: 'FII', val: '$21B', sub: 'outflow YTD' },
+        { tag: 'DXY', val: '98.3', sub: 'strong dollar' },
+      ] } },
+    { type: 'cascade',   title: 'How it hits you', sub: 'A weaker rupee cascades',
+      narration: 'A weaker rupee reaches households through fuel, gold, electronics. Dollar-debt firms struggle. The RBI burns reserves to slow the fall.',
+      bg: '#72243E', accent: '#FBEAF0',
+      data: { rows: [
+        { head: 'Households pay more', sub: 'Fuel · gold · imported goods' },
+        { head: 'Firms with $ debt suffer', sub: 'More rupees per dollar owed' },
+        { head: 'RBI burns reserves', sub: '$728B peak, slowly draining' },
+      ] } },
+    { type: 'currencies', title: 'India isn\'t alone', sub: 'YTD vs USD · 2026',
+      narration: 'India is not alone. The lira collapsed. The yen and real fell harder. Only the franc gained.',
+      bg: '#042C53', accent: '#E6F1FB',
+      data: { rows: [
+        { code: 'TRY · Lira',  ytd: -22 },
+        { code: 'BRL · Real',  ytd: -10 },
+        { code: 'JPY · Yen',   ytd: -8.5 },
+        { code: 'INR · Rupee', ytd: -6.0, highlight: true },
+        { code: 'KRW · Won',   ytd: -4.5 },
+        { code: 'EUR · Euro',  ytd: -2.4 },
+        { code: 'CHF · Franc', ytd: 0.5 },
+      ] } },
+    { type: 'world',     title: 'What could change it?', sub: 'Three slow forces',
+      narration: 'Three slow forces could shift it. Oil priced outside the dollar. Central banks diversifying reserves. New payment rails like BRICS Pay and UPI.',
+      bg: '#3C3489', accent: '#EEEDFE',
+      data: { items: [
+        { tag: '01', head: 'Non-USD oil pricing', sub: 'Yuan, rupee, ruble deals · ~5% today' },
+        { tag: '02', head: 'Reserve diversification', sub: 'Gold + yuan + euro · 42% today' },
+        { tag: '03', head: 'Alternative rails', sub: 'BRICS Pay · UPI cross-border · CBDC bridges' },
+      ] } },
+    { type: 'closing',   title: "The dollar isn't just a currency.", sub: "It's the world's plumbing. India sits downstream.",
+      narration: "The dollar isn't just a currency. It's the world's plumbing. And India sits downstream.",
+      bg: '#0a0a0a', accent: '#FAECE7' },
   ],
   hi: [
-    { title: '₹95.96 = $1', sub: 'डॉलर के मुकाबले अब तक का सबसे कम', narration: 'भारतीय रुपया अब तक के सबसे कम स्तर पर है। एक डॉलर के लिए पंचानवे रुपये छियानवे पैसे।', color: '#712B13', accent: '#FAECE7' },
-    { title: 'पहेली', sub: 'अमेरिका ने खरबों छापे। रुपया फिर भी गिरा।', narration: 'अमेरिका ने खरबों डॉलर छापे। तो रुपया क्यों गिर रहा है, डॉलर क्यों नहीं?', color: '#412402', accent: '#FAEEDA' },
-    { title: 'परत एक', sub: 'डॉलर दुनिया की पाइपलाइन है', narration: 'दुनिया के नब्बे प्रतिशत व्यापार में डॉलर शामिल है। केंद्रीय बैंकों के अट्ठावन प्रतिशत भंडार डॉलर में हैं।', color: '#3C3489', accent: '#EEEDFE' },
-    { title: 'परत दो', sub: 'तेल डॉलर की माँग को बाँधे रखता है', narration: 'तेल हमेशा डॉलर में बिकता है। भारत रुपये कमाता है पर हर बैरल तेल के लिए डॉलर खरीदना पड़ता है।', color: '#04342C', accent: '#E1F5EE' },
-    { title: 'परत तीन', sub: 'भारत पाइप के दूसरे छोर पर बैठा है', narration: 'पचासी प्रतिशत आयातित तेल। इक्कीस अरब डॉलर का पूँजी बहिर्वाह। डॉलर की वैश्विक मज़बूती। रुपये के पास छुपने की जगह नहीं।', color: '#4A1B0C', accent: '#FAECE7' },
-    { title: 'निष्कर्ष', sub: 'डॉलर सिर्फ़ मुद्रा नहीं है। यह दुनिया की पाइपलाइन है।', narration: 'डॉलर सिर्फ़ एक मुद्रा नहीं है। यह दुनिया की पाइपलाइन है। और भारत उसके निचले छोर पर है।', color: '#0a0a0a', accent: '#FAECE7' },
+    { type: 'hero',      title: '₹95.96', sub: 'USD / INR · सर्वकालिक निम्न · मई 2026',
+      narration: 'भारतीय रुपया अब तक के सबसे कम स्तर पर। पंचानवे रुपये छियानवे पैसे प्रति डॉलर।',
+      bg: '#712B13', accent: '#FAECE7' },
+    { type: 'puzzle',    title: 'पहेली', sub: 'खरबों छापे। डॉलर फिर भी जीतता है।',
+      narration: 'अमेरिका ने खरबों डॉलर छापे। तो रुपया क्यों गिर रहा है, डॉलर क्यों नहीं?',
+      bg: '#412402', accent: '#FAEEDA',
+      data: { left: { tag: 'सामान्य मुद्रा', text: 'छपाई → कमज़ोरी' }, right: { tag: 'डॉलर', text: 'छपाई → सोख ली' } } },
+    { type: 'lineChart', title: '26 वर्ष', sub: 'M2 +360% · रुपया कमज़ोर +113%',
+      narration: 'अमेरिकी मुद्रा आपूर्ति तीन सौ साठ प्रतिशत बढ़ी। रुपया एक सौ तेरह प्रतिशत कमज़ोर हुआ।',
+      bg: '#0C447C', accent: '#E6F1FB',
+      data: {
+        m2:  [4.9, 5.4, 6.0, 6.6, 8.2, 8.8, 11.0, 12.4, 14.4, 19.1, 21.9, 22.4, 22.7],
+        inr: [44.9, 47.2, 45.6, 44.1, 48.4, 45.6, 61.9, 66.3, 70.1, 74.1, 82.8, 88.4, 95.96],
+        years: [2000, 2001, 2003, 2005, 2008, 2010, 2013, 2015, 2018, 2020, 2022, 2025, 2026]
+      } },
+    { type: 'bigStats',  title: 'आँकड़े', sub: '2000 → 2026',
+      narration: 'अमेरिकी मुद्रा आपूर्ति 4.9 खरब से 22.7 खरब डॉलर हो गई। रुपया 44.90 से 95.96 तक।',
+      bg: '#3C3489', accent: '#EEEDFE',
+      data: { items: [
+        { val: '$4.9T', sub: '2000 में M2', side: 'left' },
+        { val: '$22.7T', sub: '2026 में M2', side: 'right' },
+        { val: '₹44.90', sub: '2000 में $1', side: 'left' },
+        { val: '₹95.96', sub: '2026 में $1', side: 'right' },
+      ] } },
+    { type: 'layer1',    title: 'परत एक', sub: 'डॉलर = दुनिया की पाइपलाइन',
+      narration: 'नब्बे प्रतिशत वैश्विक व्यापार डॉलर में। अट्ठावन प्रतिशत भंडार डॉलर में। सभी जिंस डॉलर में।',
+      bg: '#3C3489', accent: '#EEEDFE',
+      data: { facts: [
+        { val: '~90%', sub: 'वैश्विक व्यापार' },
+        { val: '~58%', sub: 'केंद्रीय बैंक भंडार' },
+        { val: 'सब', sub: 'जिंस डॉलर में' },
+        { val: 'अधिकांश', sub: 'सीमा-पार ऋण' },
+      ] } },
+    { type: 'loop',      title: 'परत दो', sub: 'पेट्रोडॉलर इंजन',
+      narration: 'तेल डॉलर में बिकता है। अमेरिका छापता है। आयातक डॉलर देते हैं। निर्यातक उन्हें ट्रेज़री में लगाते हैं।',
+      bg: '#04342C', accent: '#E1F5EE',
+      data: { nodes: ['अमेरिका', 'तेल आयातक', 'तेल निर्यातक', 'अमेरिकी ट्रेज़री'] } },
+    { type: 'pressure',  title: 'परत तीन', sub: 'भारत पाइप के दूसरे छोर पर',
+      narration: 'पचासी प्रतिशत तेल आयात। इक्कीस अरब का बहिर्वाह। मज़बूत डॉलर। रुपये के पास छुपने की जगह नहीं।',
+      bg: '#4A1B0C', accent: '#FAECE7',
+      data: { items: [
+        { tag: 'तेल', val: '$105', sub: '85% आयातित' },
+        { tag: 'ईरान', val: '~5%', sub: 'फरवरी से रुपया' },
+        { tag: 'FII', val: '$21B', sub: 'बहिर्वाह YTD' },
+        { tag: 'DXY', val: '98.3', sub: 'मज़बूत डॉलर' },
+      ] } },
+    { type: 'cascade',   title: 'आप तक कैसे पहुँचता है', sub: 'कमज़ोर रुपये का असर',
+      narration: 'कमज़ोर रुपया घरों तक पहुँचता है। डॉलर-कर्ज़दार कंपनियाँ परेशान। RBI भंडार जलाता है।',
+      bg: '#72243E', accent: '#FBEAF0',
+      data: { rows: [
+        { head: 'घर ज़्यादा भुगतान करते हैं', sub: 'ईंधन · सोना · आयातित सामान' },
+        { head: 'डॉलर-कर्ज़दार कंपनियाँ', sub: 'हर डॉलर के लिए ज़्यादा रुपये' },
+        { head: 'RBI भंडार जलाता है', sub: '$728 अरब चरम, धीरे-धीरे घटता' },
+      ] } },
+    { type: 'currencies', title: 'भारत अकेला नहीं', sub: 'YTD डॉलर के मुकाबले · 2026',
+      narration: 'भारत अकेला नहीं है। लीरा गिरा। येन और रियाल और अधिक गिरे। केवल फ्रैंक मज़बूत हुआ।',
+      bg: '#042C53', accent: '#E6F1FB',
+      data: { rows: [
+        { code: 'TRY · लीरा', ytd: -22 },
+        { code: 'BRL · रियाल', ytd: -10 },
+        { code: 'JPY · येन', ytd: -8.5 },
+        { code: 'INR · रुपया', ytd: -6.0, highlight: true },
+        { code: 'KRW · वोन', ytd: -4.5 },
+        { code: 'EUR · यूरो', ytd: -2.4 },
+        { code: 'CHF · फ्रैंक', ytd: 0.5 },
+      ] } },
+    { type: 'world',     title: 'क्या बदल सकता है?', sub: 'तीन धीमे बल',
+      narration: 'तीन धीमे बल इसे बदल सकते हैं। गैर-डॉलर तेल मूल्य। भंडार विविधीकरण। नई भुगतान प्रणालियाँ।',
+      bg: '#3C3489', accent: '#EEEDFE',
+      data: { items: [
+        { tag: '01', head: 'गैर-USD तेल मूल्य', sub: 'युआन, रुपया, रूबल सौदे · ~5% आज' },
+        { tag: '02', head: 'भंडार विविधीकरण', sub: 'सोना + युआन + यूरो · 42% आज' },
+        { tag: '03', head: 'वैकल्पिक रेल', sub: 'BRICS Pay · UPI · CBDC' },
+      ] } },
+    { type: 'closing',   title: 'डॉलर सिर्फ़ मुद्रा नहीं है।', sub: 'यह दुनिया की पाइपलाइन है। भारत निचले छोर पर है।',
+      narration: 'डॉलर सिर्फ़ एक मुद्रा नहीं है। यह दुनिया की पाइपलाइन है। और भारत उसके निचले छोर पर है।',
+      bg: '#0a0a0a', accent: '#FAECE7' },
   ],
 };
 
@@ -999,64 +1143,599 @@ if ('speechSynthesis' in window) {
   checkVoice();
 }
 
-function drawRgFrame(slide, progress) {
-  if (!reelCtx) return;
-  const W = reelCanvas.width;
-  const H = reelCanvas.height;
-
-  // Background
+// ─── reel infographic helpers ─────────────────────────────────
+function rgClear(slide) {
+  const W = reelCanvas.width, H = reelCanvas.height;
   const grad = reelCtx.createLinearGradient(0, 0, 0, H);
-  grad.addColorStop(0, slide.color);
+  grad.addColorStop(0, slide.bg);
   grad.addColorStop(1, '#050505');
   reelCtx.fillStyle = grad;
   reelCtx.fillRect(0, 0, W, H);
+}
 
-  // Accent bar at top
+function rgChrome(slide, progress) {
+  const W = reelCanvas.width, H = reelCanvas.height;
+
+  // Top accent bar (grows)
   reelCtx.fillStyle = slide.accent;
-  reelCtx.fillRect(0, 0, W * Math.min(1, progress * 1.4), 8);
+  reelCtx.fillRect(0, 0, W * Math.min(1, progress * 1.4), 6);
 
-  // Top label
-  reelCtx.fillStyle = 'rgba(255,255,255,0.6)';
-  reelCtx.font = '600 18px Inter, sans-serif';
+  // Brand
+  reelCtx.fillStyle = 'rgba(255,255,255,0.7)';
+  reelCtx.font = '700 16px Inter, sans-serif';
   reelCtx.textAlign = 'left';
-  reelCtx.fillText('THE PETRODOLLAR PARADOX', 36, 70);
-  reelCtx.fillStyle = 'rgba(255,255,255,0.4)';
-  reelCtx.font = '500 14px monospace';
-  reelCtx.fillText('₹/$ · May 2026', 36, 96);
+  reelCtx.fillText('THE PETRODOLLAR PARADOX', 32, 56);
+  reelCtx.fillStyle = 'rgba(255,255,255,0.45)';
+  reelCtx.font = '500 12px monospace';
+  reelCtx.fillText('₹/$ · May 2026', 32, 78);
 
-  // Title (large)
+  // Slide section eyebrow
   reelCtx.fillStyle = slide.accent;
-  const titleFontSize = Math.min(96, Math.max(64, 1100 / Math.max(8, slide.title.length)));
-  reelCtx.font = `600 ${titleFontSize}px Inter, sans-serif`;
-  reelCtx.textAlign = 'center';
-  wrapText(reelCtx, slide.title, W / 2, H / 2 - 80, W - 80, titleFontSize * 1.1);
+  reelCtx.font = '600 13px Inter, sans-serif';
+  const idx = rgSlides().indexOf(slide);
+  const idxLabel = String(idx + 1).padStart(2, '0') + ' / ' + String(rgSlides().length).padStart(2, '0');
+  reelCtx.textAlign = 'right';
+  reelCtx.fillText(idxLabel, W - 32, 56);
 
-  // Subtitle
-  reelCtx.fillStyle = 'rgba(255,255,255,0.85)';
-  reelCtx.font = '500 30px Inter, sans-serif';
+  // Footer watermark
+  reelCtx.fillStyle = 'rgba(255,255,255,0.55)';
+  reelCtx.font = '500 14px Inter, sans-serif';
   reelCtx.textAlign = 'center';
-  wrapText(reelCtx, slide.sub, W / 2, H / 2 + 100, W - 100, 38);
-
-  // Bottom watermark
-  reelCtx.fillStyle = 'rgba(255,255,255,0.5)';
-  reelCtx.font = '500 16px Inter, sans-serif';
-  reelCtx.textAlign = 'center';
-  reelCtx.fillText('sinhaankur.github.io/Indian-Rupees', W / 2, H - 60);
+  reelCtx.fillText('sinhaankur.github.io/Indian-Rupees', W / 2, H - 36);
 
   // Progress dots
   const slides = rgSlides();
-  const totalDots = slides.length;
-  const dotY = H - 110;
-  const dotGap = 20;
-  const dotsW = (totalDots - 1) * dotGap;
-  const startX = W / 2 - dotsW / 2;
-  const currentIdx = slides.indexOf(slide);
-  for (let i = 0; i < totalDots; i++) {
-    reelCtx.fillStyle = i <= currentIdx ? slide.accent : 'rgba(255,255,255,0.2)';
+  const dotY = H - 70;
+  const dotGap = 16;
+  const totalW = (slides.length - 1) * dotGap;
+  const startX = W / 2 - totalW / 2;
+  for (let i = 0; i < slides.length; i++) {
+    reelCtx.fillStyle = i <= idx ? slide.accent : 'rgba(255,255,255,0.18)';
     reelCtx.beginPath();
-    reelCtx.arc(startX + i * dotGap, dotY, 4, 0, Math.PI * 2);
+    reelCtx.arc(startX + i * dotGap, dotY, 3, 0, Math.PI * 2);
     reelCtx.fill();
   }
+}
+
+function rgTitle(slide, yTop) {
+  const W = reelCanvas.width;
+  // Title
+  reelCtx.fillStyle = slide.accent;
+  reelCtx.font = '700 42px Inter, sans-serif';
+  reelCtx.textAlign = 'center';
+  reelCtx.fillText(slide.title, W / 2, yTop);
+  // Subtitle
+  reelCtx.fillStyle = 'rgba(255,255,255,0.78)';
+  reelCtx.font = '500 20px Inter, sans-serif';
+  rgWrap(slide.sub, W / 2, yTop + 38, W - 80, 26);
+}
+
+function rgWrap(text, x, y, maxWidth, lineHeight) {
+  const ctx = reelCtx;
+  const words = String(text).split(' ');
+  const lines = [];
+  let line = '';
+  words.forEach(word => {
+    const test = line ? line + ' ' + word : word;
+    if (ctx.measureText(test).width > maxWidth && line) {
+      lines.push(line); line = word;
+    } else line = test;
+  });
+  if (line) lines.push(line);
+  lines.forEach((l, i) => ctx.fillText(l, x, y + i * lineHeight));
+}
+
+function rgRoundRect(x, y, w, h, r) {
+  reelCtx.beginPath();
+  reelCtx.moveTo(x + r, y);
+  reelCtx.lineTo(x + w - r, y);
+  reelCtx.quadraticCurveTo(x + w, y, x + w, y + r);
+  reelCtx.lineTo(x + w, y + h - r);
+  reelCtx.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
+  reelCtx.lineTo(x + r, y + h);
+  reelCtx.quadraticCurveTo(x, y + h, x, y + h - r);
+  reelCtx.lineTo(x, y + r);
+  reelCtx.quadraticCurveTo(x, y, x + r, y);
+  reelCtx.closePath();
+}
+
+// ─── slide-type renderers ─────────────────────────────────────
+function rgRenderHero(slide, p) {
+  const W = reelCanvas.width, H = reelCanvas.height;
+  // Big symbol up top
+  reelCtx.fillStyle = slide.accent;
+  reelCtx.font = '600 220px Inter, sans-serif';
+  reelCtx.textAlign = 'center';
+  reelCtx.fillText('₹', W / 2 - 130, 380);
+  // Big rate
+  reelCtx.font = '700 150px Inter, sans-serif';
+  reelCtx.fillText('95.96', W / 2 + 40, 380);
+  // Tag
+  reelCtx.fillStyle = 'rgba(255,255,255,0.7)';
+  reelCtx.font = '600 22px Inter, sans-serif';
+  reelCtx.fillText(slide.sub.toUpperCase(), W / 2, 450);
+  // Asterisk note
+  reelCtx.fillStyle = 'rgba(255,255,255,0.5)';
+  reelCtx.font = '500 18px Inter, sans-serif';
+  reelCtx.fillText('Asia\'s weakest currency · YTD −6%', W / 2, 540);
+
+  // Decorative ring expanding
+  reelCtx.strokeStyle = slide.accent;
+  reelCtx.lineWidth = 2;
+  reelCtx.globalAlpha = Math.max(0, 0.6 - p * 0.6);
+  reelCtx.beginPath();
+  reelCtx.arc(W / 2, 350, 60 + p * 200, 0, Math.PI * 2);
+  reelCtx.stroke();
+  reelCtx.globalAlpha = 1;
+}
+
+function rgRenderPuzzle(slide, p) {
+  const W = reelCanvas.width;
+  rgTitle(slide, 220);
+  const cardY = 360;
+  const cardH = 180;
+  const gap = 24;
+  const cardW = W - 80;
+
+  // Card 1
+  reelCtx.fillStyle = 'rgba(125, 211, 252, 0.18)';
+  rgRoundRect(40, cardY, cardW, cardH, 14); reelCtx.fill();
+  reelCtx.strokeStyle = '#7dd3fc';
+  reelCtx.lineWidth = 1.5;
+  rgRoundRect(40, cardY, cardW, cardH, 14); reelCtx.stroke();
+  reelCtx.fillStyle = '#7dd3fc';
+  reelCtx.font = '700 14px Inter, sans-serif';
+  reelCtx.textAlign = 'left';
+  reelCtx.fillText(slide.data.left.tag, 60, cardY + 36);
+  reelCtx.fillStyle = '#fff';
+  reelCtx.font = '700 42px Inter, sans-serif';
+  reelCtx.fillText(slide.data.left.text, 60, cardY + 110);
+
+  // Card 2
+  const c2y = cardY + cardH + gap;
+  reelCtx.fillStyle = 'rgba(251, 191, 36, 0.18)';
+  rgRoundRect(40, c2y, cardW, cardH, 14); reelCtx.fill();
+  reelCtx.strokeStyle = '#fbbf24';
+  rgRoundRect(40, c2y, cardW, cardH, 14); reelCtx.stroke();
+  reelCtx.fillStyle = '#fbbf24';
+  reelCtx.font = '700 14px Inter, sans-serif';
+  reelCtx.fillText(slide.data.right.tag, 60, c2y + 36);
+  reelCtx.fillStyle = '#fff';
+  reelCtx.font = '700 42px Inter, sans-serif';
+  reelCtx.fillText(slide.data.right.text, 60, c2y + 110);
+}
+
+function rgRenderLineChart(slide, p) {
+  const W = reelCanvas.width;
+  rgTitle(slide, 200);
+  const chartX = 50, chartY = 320, chartW = W - 100, chartH = 380;
+
+  // Frame
+  reelCtx.strokeStyle = 'rgba(255,255,255,0.08)';
+  reelCtx.lineWidth = 1;
+  for (let i = 0; i <= 4; i++) {
+    const y = chartY + (chartH / 4) * i;
+    reelCtx.beginPath();
+    reelCtx.moveTo(chartX, y); reelCtx.lineTo(chartX + chartW, y);
+    reelCtx.stroke();
+  }
+
+  const m2 = slide.data.m2, inr = slide.data.inr, years = slide.data.years;
+  const yMin = years[0], yMax = years[years.length - 1];
+  const m2Max = 24, inrMax = 100;
+  const N = m2.length;
+  const visible = Math.max(2, Math.min(N, Math.ceil(N * p * 1.4)));
+
+  // M2 fill
+  reelCtx.fillStyle = 'rgba(125, 211, 252, 0.22)';
+  reelCtx.beginPath();
+  for (let i = 0; i < visible; i++) {
+    const x = chartX + ((years[i] - yMin) / (yMax - yMin)) * chartW;
+    const y = chartY + chartH - (m2[i] / m2Max) * chartH;
+    if (i === 0) reelCtx.moveTo(x, y); else reelCtx.lineTo(x, y);
+  }
+  const lastX = chartX + ((years[visible - 1] - yMin) / (yMax - yMin)) * chartW;
+  reelCtx.lineTo(lastX, chartY + chartH);
+  reelCtx.lineTo(chartX, chartY + chartH);
+  reelCtx.closePath();
+  reelCtx.fill();
+
+  // M2 line
+  reelCtx.strokeStyle = '#7dd3fc';
+  reelCtx.lineWidth = 4;
+  reelCtx.lineCap = 'round'; reelCtx.lineJoin = 'round';
+  reelCtx.beginPath();
+  for (let i = 0; i < visible; i++) {
+    const x = chartX + ((years[i] - yMin) / (yMax - yMin)) * chartW;
+    const y = chartY + chartH - (m2[i] / m2Max) * chartH;
+    if (i === 0) reelCtx.moveTo(x, y); else reelCtx.lineTo(x, y);
+  }
+  reelCtx.stroke();
+
+  // INR line
+  reelCtx.strokeStyle = '#f97366';
+  reelCtx.beginPath();
+  for (let i = 0; i < visible; i++) {
+    const x = chartX + ((years[i] - yMin) / (yMax - yMin)) * chartW;
+    const y = chartY + chartH - (inr[i] / inrMax) * chartH;
+    if (i === 0) reelCtx.moveTo(x, y); else reelCtx.lineTo(x, y);
+  }
+  reelCtx.stroke();
+
+  // End markers
+  if (visible > 0) {
+    const last = visible - 1;
+    const xM = chartX + ((years[last] - yMin) / (yMax - yMin)) * chartW;
+    const yM = chartY + chartH - (m2[last] / m2Max) * chartH;
+    reelCtx.fillStyle = '#7dd3fc';
+    reelCtx.beginPath(); reelCtx.arc(xM, yM, 8, 0, Math.PI * 2); reelCtx.fill();
+    const yI = chartY + chartH - (inr[last] / inrMax) * chartH;
+    reelCtx.fillStyle = '#f97366';
+    reelCtx.beginPath(); reelCtx.arc(xM, yI, 8, 0, Math.PI * 2); reelCtx.fill();
+  }
+
+  // Axis labels
+  reelCtx.fillStyle = 'rgba(255,255,255,0.5)';
+  reelCtx.font = '500 13px monospace';
+  reelCtx.textAlign = 'left';
+  reelCtx.fillText('2000', chartX, chartY + chartH + 22);
+  reelCtx.textAlign = 'right';
+  reelCtx.fillText('2026', chartX + chartW, chartY + chartH + 22);
+
+  // Legend at bottom
+  const legendY = chartY + chartH + 60;
+  reelCtx.fillStyle = '#7dd3fc';
+  reelCtx.fillRect(60, legendY, 18, 4);
+  reelCtx.fillStyle = '#fff';
+  reelCtx.font = '600 16px Inter, sans-serif';
+  reelCtx.textAlign = 'left';
+  reelCtx.fillText('US M2  +360%', 88, legendY + 8);
+
+  reelCtx.fillStyle = '#f97366';
+  reelCtx.fillRect(60, legendY + 30, 18, 4);
+  reelCtx.fillStyle = '#fff';
+  reelCtx.fillText('USD/INR  +113%', 88, legendY + 38);
+}
+
+function rgRenderBigStats(slide, p) {
+  const W = reelCanvas.width;
+  rgTitle(slide, 200);
+  const startY = 340, cellH = 120, gap = 16;
+  const items = slide.data.items;
+  for (let i = 0; i < items.length; i++) {
+    const it = items[i];
+    const y = startY + i * (cellH + gap);
+    const reveal = Math.max(0, Math.min(1, p * 2 - i * 0.18));
+    if (reveal <= 0) continue;
+    reelCtx.globalAlpha = reveal;
+    reelCtx.fillStyle = i % 2 === 0 ? 'rgba(125, 211, 252, 0.15)' : 'rgba(94, 234, 212, 0.15)';
+    rgRoundRect(40, y, W - 80, cellH, 12); reelCtx.fill();
+    // value left side
+    reelCtx.textAlign = 'left';
+    reelCtx.fillStyle = '#fff';
+    reelCtx.font = '700 50px Inter, sans-serif';
+    reelCtx.fillText(it.val, 60, y + 76);
+    // label right side
+    reelCtx.textAlign = 'right';
+    reelCtx.fillStyle = 'rgba(255,255,255,0.75)';
+    reelCtx.font = '500 16px Inter, sans-serif';
+    reelCtx.fillText(it.sub, W - 60, y + 76);
+  }
+  reelCtx.globalAlpha = 1;
+}
+
+function rgRenderLayer1(slide, p) {
+  const W = reelCanvas.width;
+  rgTitle(slide, 200);
+  const cx = W / 2, cy = 460;
+
+  // Center hub
+  reelCtx.fillStyle = 'rgba(94, 234, 212, 0.18)';
+  reelCtx.beginPath();
+  reelCtx.arc(cx, cy, 80 + Math.sin(p * Math.PI * 2) * 4, 0, Math.PI * 2);
+  reelCtx.fill();
+  reelCtx.strokeStyle = slide.accent;
+  reelCtx.lineWidth = 2;
+  reelCtx.beginPath(); reelCtx.arc(cx, cy, 80, 0, Math.PI * 2); reelCtx.stroke();
+  reelCtx.fillStyle = '#fff';
+  reelCtx.font = '700 40px Inter, sans-serif';
+  reelCtx.textAlign = 'center';
+  reelCtx.fillText('USD', cx, cy + 14);
+
+  // Surrounding facts
+  const positions = [
+    { x: cx, y: cy - 200 },
+    { x: cx + 200, y: cy },
+    { x: cx, y: cy + 200 },
+    { x: cx - 200, y: cy },
+  ];
+  const facts = slide.data.facts;
+  for (let i = 0; i < facts.length; i++) {
+    const pos = positions[i];
+    const reveal = Math.max(0, Math.min(1, p * 2 - i * 0.15));
+    if (reveal <= 0) continue;
+    reelCtx.globalAlpha = reveal;
+    // connector
+    reelCtx.strokeStyle = 'rgba(255,255,255,0.25)';
+    reelCtx.lineWidth = 1.5;
+    reelCtx.beginPath();
+    reelCtx.moveTo(cx, cy); reelCtx.lineTo(pos.x, pos.y);
+    reelCtx.stroke();
+    // pill
+    reelCtx.fillStyle = 'rgba(94, 234, 212, 0.15)';
+    rgRoundRect(pos.x - 95, pos.y - 36, 190, 72, 10); reelCtx.fill();
+    reelCtx.fillStyle = '#fff';
+    reelCtx.font = '700 28px Inter, sans-serif';
+    reelCtx.textAlign = 'center';
+    reelCtx.fillText(facts[i].val, pos.x, pos.y - 4);
+    reelCtx.fillStyle = 'rgba(255,255,255,0.75)';
+    reelCtx.font = '500 13px Inter, sans-serif';
+    reelCtx.fillText(facts[i].sub, pos.x, pos.y + 20);
+  }
+  reelCtx.globalAlpha = 1;
+}
+
+function rgRenderLoop(slide, p) {
+  const W = reelCanvas.width, H = reelCanvas.height;
+  rgTitle(slide, 200);
+  // 2x2 grid of nodes
+  const cx = W / 2, cy = 540;
+  const dx = 150, dy = 130;
+  const positions = [
+    { x: cx - dx, y: cy - dy }, // US
+    { x: cx + dx, y: cy - dy }, // Importers
+    { x: cx + dx, y: cy + dy }, // Exporters
+    { x: cx - dx, y: cy + dy }, // Treasuries
+  ];
+  const nodes = slide.data.nodes;
+  const palette = ['#7dd3fc', '#fbbf24', '#f97366', '#5eead4'];
+
+  // Loop arrows (animated dash)
+  reelCtx.strokeStyle = slide.accent;
+  reelCtx.lineWidth = 2.5;
+  const dashOffset = -(p * 60) % 24;
+  reelCtx.setLineDash([8, 8]);
+  reelCtx.lineDashOffset = dashOffset;
+
+  // US → Importers
+  reelCtx.beginPath();
+  reelCtx.moveTo(positions[0].x + 75, positions[0].y);
+  reelCtx.lineTo(positions[1].x - 75, positions[1].y);
+  reelCtx.stroke();
+  // Importers → Exporters
+  reelCtx.beginPath();
+  reelCtx.moveTo(positions[1].x, positions[1].y + 55);
+  reelCtx.lineTo(positions[2].x, positions[2].y - 55);
+  reelCtx.stroke();
+  // Exporters → Treasuries
+  reelCtx.beginPath();
+  reelCtx.moveTo(positions[2].x - 75, positions[2].y);
+  reelCtx.lineTo(positions[3].x + 75, positions[3].y);
+  reelCtx.stroke();
+  // Treasuries → US
+  reelCtx.beginPath();
+  reelCtx.moveTo(positions[3].x, positions[3].y - 55);
+  reelCtx.lineTo(positions[0].x, positions[0].y + 55);
+  reelCtx.stroke();
+  reelCtx.setLineDash([]);
+
+  // Nodes on top
+  for (let i = 0; i < 4; i++) {
+    const pos = positions[i];
+    reelCtx.fillStyle = palette[i] + '33';
+    rgRoundRect(pos.x - 80, pos.y - 50, 160, 100, 12); reelCtx.fill();
+    reelCtx.strokeStyle = palette[i];
+    reelCtx.lineWidth = 2;
+    rgRoundRect(pos.x - 80, pos.y - 50, 160, 100, 12); reelCtx.stroke();
+    reelCtx.fillStyle = '#fff';
+    reelCtx.font = '700 18px Inter, sans-serif';
+    reelCtx.textAlign = 'center';
+    rgWrap(nodes[i], pos.x, pos.y + 5, 140, 22);
+  }
+}
+
+function rgRenderPressure(slide, p) {
+  const W = reelCanvas.width;
+  rgTitle(slide, 200);
+  // 2x2 grid of force tiles
+  const items = slide.data.items;
+  const cellW = (W - 100) / 2;
+  const cellH = 140;
+  const startY = 380;
+  for (let i = 0; i < items.length; i++) {
+    const col = i % 2;
+    const row = (i / 2) | 0;
+    const x = 40 + col * (cellW + 20);
+    const y = startY + row * (cellH + 18);
+    const reveal = Math.max(0, Math.min(1, p * 2 - i * 0.12));
+    reelCtx.globalAlpha = reveal;
+
+    reelCtx.fillStyle = 'rgba(249, 115, 102, 0.16)';
+    rgRoundRect(x, y, cellW, cellH, 12); reelCtx.fill();
+    reelCtx.strokeStyle = '#f97366';
+    reelCtx.lineWidth = 1.5;
+    rgRoundRect(x, y, cellW, cellH, 12); reelCtx.stroke();
+
+    reelCtx.fillStyle = '#f97366';
+    reelCtx.font = '700 12px Inter, sans-serif';
+    reelCtx.textAlign = 'left';
+    reelCtx.fillText(items[i].tag, x + 18, y + 28);
+
+    reelCtx.fillStyle = '#fff';
+    reelCtx.font = '700 38px Inter, sans-serif';
+    reelCtx.fillText(items[i].val, x + 18, y + 80);
+
+    reelCtx.fillStyle = 'rgba(255,255,255,0.7)';
+    reelCtx.font = '500 14px Inter, sans-serif';
+    reelCtx.fillText(items[i].sub, x + 18, y + 115);
+  }
+  reelCtx.globalAlpha = 1;
+}
+
+function rgRenderCascade(slide, p) {
+  const W = reelCanvas.width;
+  rgTitle(slide, 200);
+  const rows = slide.data.rows;
+  const rowH = 110, gap = 14, startY = 360;
+  for (let i = 0; i < rows.length; i++) {
+    const y = startY + i * (rowH + gap);
+    const reveal = Math.max(0, Math.min(1, p * 2 - i * 0.2));
+    reelCtx.globalAlpha = reveal;
+
+    // Numbered marker
+    reelCtx.fillStyle = slide.accent;
+    reelCtx.beginPath();
+    reelCtx.arc(80, y + rowH / 2, 24, 0, Math.PI * 2);
+    reelCtx.fill();
+    reelCtx.fillStyle = slide.bg;
+    reelCtx.font = '700 20px Inter, sans-serif';
+    reelCtx.textAlign = 'center';
+    reelCtx.fillText(String(i + 1), 80, y + rowH / 2 + 7);
+
+    // Card
+    reelCtx.fillStyle = 'rgba(255,255,255,0.06)';
+    rgRoundRect(116, y, W - 156, rowH, 12); reelCtx.fill();
+    reelCtx.fillStyle = '#fff';
+    reelCtx.font = '700 22px Inter, sans-serif';
+    reelCtx.textAlign = 'left';
+    reelCtx.fillText(rows[i].head, 138, y + 42);
+    reelCtx.fillStyle = 'rgba(255,255,255,0.65)';
+    reelCtx.font = '500 15px Inter, sans-serif';
+    reelCtx.fillText(rows[i].sub, 138, y + 72);
+
+    // Down arrow between rows
+    if (i < rows.length - 1) {
+      reelCtx.fillStyle = 'rgba(255,255,255,0.4)';
+      reelCtx.font = '600 18px Inter, sans-serif';
+      reelCtx.textAlign = 'center';
+      reelCtx.fillText('↓', W / 2, y + rowH + 10);
+    }
+  }
+  reelCtx.globalAlpha = 1;
+}
+
+function rgRenderCurrencies(slide, p) {
+  const W = reelCanvas.width;
+  rgTitle(slide, 200);
+  const rows = slide.data.rows;
+  const startY = 340, rowH = 50;
+  // determine scale: max abs value
+  const maxAbs = Math.max(...rows.map(r => Math.abs(r.ytd)));
+  const barMaxW = W - 220;
+  const center = W / 2 + 20;
+  for (let i = 0; i < rows.length; i++) {
+    const r = rows[i];
+    const y = startY + i * rowH;
+    const reveal = Math.max(0, Math.min(1, p * 2 - i * 0.1));
+    reelCtx.globalAlpha = reveal;
+
+    // Label
+    reelCtx.fillStyle = r.highlight ? slide.accent : 'rgba(255,255,255,0.85)';
+    reelCtx.font = r.highlight ? '700 16px Inter, sans-serif' : '500 14px Inter, sans-serif';
+    reelCtx.textAlign = 'right';
+    reelCtx.fillText(r.code, center - 14, y + 22);
+
+    // Bar
+    const w = (Math.abs(r.ytd) / maxAbs) * (barMaxW / 2) * Math.min(1, p * 2);
+    const color = r.ytd >= 0 ? '#4ade80' : (r.highlight ? '#f97366' : 'rgba(249,115,102,0.7)');
+    reelCtx.fillStyle = color;
+    if (r.ytd >= 0) {
+      reelCtx.fillRect(center, y + 6, w, 26);
+    } else {
+      reelCtx.fillRect(center - w, y + 6, w, 26);
+    }
+
+    // Value
+    reelCtx.fillStyle = '#fff';
+    reelCtx.font = r.highlight ? '700 14px Inter, sans-serif' : '500 13px Inter, sans-serif';
+    reelCtx.textAlign = 'left';
+    const valX = r.ytd >= 0 ? center + w + 8 : center - w - 8;
+    reelCtx.textAlign = r.ytd >= 0 ? 'left' : 'right';
+    reelCtx.fillText((r.ytd >= 0 ? '+' : '') + r.ytd.toFixed(1) + '%', valX, y + 24);
+  }
+  // Center line
+  reelCtx.globalAlpha = 1;
+  reelCtx.strokeStyle = 'rgba(255,255,255,0.25)';
+  reelCtx.lineWidth = 1;
+  reelCtx.beginPath();
+  reelCtx.moveTo(center, startY - 8);
+  reelCtx.lineTo(center, startY + rows.length * rowH);
+  reelCtx.stroke();
+}
+
+function rgRenderWorld(slide, p) {
+  const W = reelCanvas.width;
+  rgTitle(slide, 200);
+  const items = slide.data.items;
+  const startY = 380, cardH = 130, gap = 18;
+  for (let i = 0; i < items.length; i++) {
+    const y = startY + i * (cardH + gap);
+    const reveal = Math.max(0, Math.min(1, p * 2 - i * 0.15));
+    reelCtx.globalAlpha = reveal;
+    reelCtx.fillStyle = 'rgba(196, 181, 253, 0.16)';
+    rgRoundRect(40, y, W - 80, cardH, 12); reelCtx.fill();
+    reelCtx.strokeStyle = '#c4b5fd';
+    reelCtx.lineWidth = 1.5;
+    rgRoundRect(40, y, W - 80, cardH, 12); reelCtx.stroke();
+
+    // Big number
+    reelCtx.fillStyle = '#c4b5fd';
+    reelCtx.font = '700 56px Inter, sans-serif';
+    reelCtx.textAlign = 'left';
+    reelCtx.fillText(items[i].tag, 60, y + 75);
+
+    reelCtx.fillStyle = '#fff';
+    reelCtx.font = '700 22px Inter, sans-serif';
+    reelCtx.fillText(items[i].head, 170, y + 56);
+    reelCtx.fillStyle = 'rgba(255,255,255,0.72)';
+    reelCtx.font = '500 14px Inter, sans-serif';
+    reelCtx.fillText(items[i].sub, 170, y + 86);
+  }
+  reelCtx.globalAlpha = 1;
+}
+
+function rgRenderClosing(slide, p) {
+  const W = reelCanvas.width, H = reelCanvas.height;
+  // Two big lines centered
+  reelCtx.fillStyle = slide.accent;
+  reelCtx.font = '700 48px Inter, sans-serif';
+  reelCtx.textAlign = 'center';
+  rgWrap(slide.title, W / 2, H / 2 - 80, W - 80, 58);
+  reelCtx.fillStyle = '#f97366';
+  reelCtx.font = '500 italic 30px Inter, sans-serif';
+  rgWrap(slide.sub, W / 2, H / 2 + 60, W - 100, 38);
+
+  // Pulse circle
+  reelCtx.strokeStyle = slide.accent;
+  reelCtx.lineWidth = 2;
+  reelCtx.globalAlpha = Math.max(0, 0.5 - p * 0.5);
+  reelCtx.beginPath();
+  reelCtx.arc(W / 2, H / 2, 200 + p * 200, 0, Math.PI * 2);
+  reelCtx.stroke();
+  reelCtx.globalAlpha = 1;
+}
+
+// ─── dispatcher ───────────────────────────────────────────────
+const RG_RENDERERS = {
+  hero: rgRenderHero,
+  puzzle: rgRenderPuzzle,
+  lineChart: rgRenderLineChart,
+  bigStats: rgRenderBigStats,
+  layer1: rgRenderLayer1,
+  loop: rgRenderLoop,
+  pressure: rgRenderPressure,
+  cascade: rgRenderCascade,
+  currencies: rgRenderCurrencies,
+  world: rgRenderWorld,
+  closing: rgRenderClosing,
+};
+
+function drawRgFrame(slide, progress) {
+  if (!reelCtx) return;
+  rgClear(slide);
+  const renderer = RG_RENDERERS[slide.type] || rgRenderHero;
+  renderer(slide, progress);
+  rgChrome(slide, progress);
 }
 
 function wrapText(ctx, text, x, y, maxWidth, lineHeight) {
