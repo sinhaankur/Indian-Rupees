@@ -740,13 +740,30 @@
                 </marker>
               </defs>
 
-              <!-- Center: INR under pressure -->
+              <!-- Center: INR under pressure (squeezed pulse — shrinks then recovers) -->
               <g class="lflow-center lflow-center--rupee" transform="translate(360, 220)">
-                <circle r="74" fill="#FAECE7" stroke="#D85A30" stroke-width="2.5"/>
+                <circle r="74" fill="#FAECE7" stroke="#D85A30" stroke-width="2.5">
+                  <animate attributeName="r" values="74;68;74" dur="2.4s" repeatCount="indefinite"/>
+                  <animate attributeName="stroke-width" values="2.5;3.5;2.5" dur="2.4s" repeatCount="indefinite"/>
+                </circle>
                 <text text-anchor="middle" y="-12" font-size="38" font-weight="600" fill="#712B13" font-family="Inter, sans-serif">₹</text>
                 <text text-anchor="middle" y="14" font-size="18" font-weight="600" fill="#712B13" font-family="Inter, sans-serif" font-feature-settings="'tnum'">95.96</text>
                 <text text-anchor="middle" y="34" font-size="10" fill="#993C1D" font-family="Inter, sans-serif" letter-spacing="1.5">UNDER PRESSURE</text>
               </g>
+
+              <!-- Pressure pulses — small dots travelling inward repeatedly -->
+              <circle r="4" fill="#D85A30">
+                <animateMotion dur="1.8s" repeatCount="indefinite" path="M360,82 L360,142"/>
+              </circle>
+              <circle r="4" fill="#D85A30">
+                <animateMotion dur="1.8s" begin="-0.45s" repeatCount="indefinite" path="M530,220 L442,220"/>
+              </circle>
+              <circle r="4" fill="#D85A30">
+                <animateMotion dur="1.8s" begin="-0.9s" repeatCount="indefinite" path="M360,358 L360,298"/>
+              </circle>
+              <circle r="4" fill="#D85A30">
+                <animateMotion dur="1.8s" begin="-1.35s" repeatCount="indefinite" path="M190,220 L278,220"/>
+              </circle>
 
               <!-- Four pressure sources -->
               <!-- Top: Oil -->
