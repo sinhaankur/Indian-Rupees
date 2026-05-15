@@ -12,6 +12,13 @@
 </head>
 <body>
 
+<div class="read-progress" id="readProgress" aria-hidden="true"></div>
+<button class="back-to-top" id="backToTop" aria-label="Back to top">
+  <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+    <path d="M12 19V5M5 12l7-7 7 7" stroke-linecap="round" stroke-linejoin="round"/>
+  </svg>
+</button>
+
 <nav class="navbar">
   <div class="nav-inner">
     <a href="#top" class="nav-logo">
@@ -29,9 +36,24 @@
       <li><a href="#impact" data-i18n="nav.impact">Impact</a></li>
       <li><a href="#references" data-i18n="nav.data">Data</a></li>
     </ul>
-    <div class="lang-toggle" role="group" aria-label="Language">
-      <button class="lang-btn active" data-lang="en" aria-pressed="true">EN</button>
-      <button class="lang-btn" data-lang="hi" aria-pressed="false">हिन्दी</button>
+    <div class="lang-picker">
+      <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+        <circle cx="12" cy="12" r="9"/>
+        <path d="M3 12h18M12 3a14 14 0 010 18M12 3a14 14 0 000 18" stroke-linecap="round"/>
+      </svg>
+      <select id="langPick" aria-label="Choose language">
+        <option value="en">English</option>
+        <option value="hi">हिन्दी · Hindi</option>
+        <option value="bn">বাংলা · Bengali</option>
+        <option value="ta">தமிழ் · Tamil</option>
+        <option value="te">తెలుగు · Telugu</option>
+        <option value="mr">मराठी · Marathi</option>
+        <option value="gu">ગુજરાતી · Gujarati</option>
+        <option value="kn">ಕನ್ನಡ · Kannada</option>
+        <option value="ml">മലയാളം · Malayalam</option>
+        <option value="pa">ਪੰਜਾਬੀ · Punjabi</option>
+        <option value="ur">اردو · Urdu</option>
+      </select>
     </div>
   </div>
 </nav>
@@ -343,6 +365,377 @@
           <div class="layer-foot-text">Asia's weakest currency · May 2026</div>
         </div>
       </article>
+    </div>
+
+    <div class="lflow">
+      <div class="lflow-head">
+        <div class="section-label" style="margin-bottom:8px" data-i18n="lflow.label">DETAILED FLOW · ANIMATED</div>
+        <h3 class="lflow-title" data-i18n="lflow.title">Watch each layer in motion.</h3>
+        <p class="lflow-lede" data-i18n="lflow.lede">Dollars don't sit still. They circulate through specific channels that lock in their dominance. Pick a layer to see the flows.</p>
+      </div>
+
+      <div class="lflow-tabs" role="tablist">
+        <button class="lflow-tab active" data-layer="1" role="tab" aria-selected="true">
+          <span class="lflow-tab-num">01</span>
+          <span class="lflow-tab-name" data-i18n="lflow.tab1">Dollar as plumbing</span>
+        </button>
+        <button class="lflow-tab" data-layer="2" role="tab" aria-selected="false">
+          <span class="lflow-tab-num">02</span>
+          <span class="lflow-tab-name" data-i18n="lflow.tab2">Petrodollar engine</span>
+        </button>
+        <button class="lflow-tab" data-layer="3" role="tab" aria-selected="false">
+          <span class="lflow-tab-num">03</span>
+          <span class="lflow-tab-name" data-i18n="lflow.tab3">India squeezed</span>
+        </button>
+      </div>
+
+      <div class="lflow-stage">
+
+        <!-- LAYER 1: Dollar as world's plumbing — radial -->
+        <div class="lflow-panel active" data-panel="1">
+          <div class="lflow-svgwrap">
+            <svg viewBox="0 0 720 440" class="lflow-svg" aria-labelledby="l1title l1desc" role="img">
+              <title id="l1title">Layer 1 flow</title>
+              <desc id="l1desc">Dollar at the center with flows to FX trades, central bank reserves, commodity invoicing, and cross-border debt.</desc>
+              <defs>
+                <marker id="arrPurple" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+                  <path d="M2 1L8 5L2 9" fill="none" stroke="#534AB7" stroke-width="1.5" stroke-linecap="round"/>
+                </marker>
+              </defs>
+
+              <!-- Center node: USD -->
+              <g class="lflow-center" transform="translate(360, 220)">
+                <circle r="62" fill="#EEEDFE" stroke="#534AB7" stroke-width="2"/>
+                <circle r="62" fill="none" stroke="#534AB7" stroke-width="2" opacity="0.4" class="lflow-ring"/>
+                <text text-anchor="middle" y="-4" font-size="22" font-weight="700" fill="#3C3489" font-family="Inter, sans-serif">USD</text>
+                <text text-anchor="middle" y="18" font-size="11" fill="#534AB7" font-family="Inter, sans-serif">Federal Reserve</text>
+              </g>
+
+              <!-- Satellite: FX (top) -->
+              <g class="lflow-node lflow-fade d1" transform="translate(360, 60)">
+                <rect x="-110" y="-32" width="220" height="64" rx="8" fill="white" stroke="#534AB7" stroke-width="1"/>
+                <text x="0" y="-8" text-anchor="middle" font-size="13" font-weight="600" fill="#3C3489" font-family="Inter, sans-serif">Global FX trades</text>
+                <text x="0" y="10" text-anchor="middle" font-size="11" fill="#534AB7" font-family="Inter, sans-serif">~90% involve the dollar</text>
+                <text x="0" y="26" text-anchor="middle" font-size="10" fill="#534AB7" opacity="0.7" font-family="Inter, sans-serif">$7.5T daily turnover</text>
+              </g>
+
+              <!-- Satellite: Reserves (right) -->
+              <g class="lflow-node lflow-fade d2" transform="translate(620, 220)">
+                <rect x="-90" y="-32" width="180" height="64" rx="8" fill="white" stroke="#534AB7" stroke-width="1"/>
+                <text x="0" y="-8" text-anchor="middle" font-size="13" font-weight="600" fill="#3C3489" font-family="Inter, sans-serif">Central banks</text>
+                <text x="0" y="10" text-anchor="middle" font-size="11" fill="#534AB7" font-family="Inter, sans-serif">~58% reserves in USD</text>
+              </g>
+
+              <!-- Satellite: Commodities (bottom) -->
+              <g class="lflow-node lflow-fade d3" transform="translate(360, 380)">
+                <rect x="-110" y="-32" width="220" height="64" rx="8" fill="white" stroke="#534AB7" stroke-width="1"/>
+                <text x="0" y="-8" text-anchor="middle" font-size="13" font-weight="600" fill="#3C3489" font-family="Inter, sans-serif">Commodities</text>
+                <text x="0" y="10" text-anchor="middle" font-size="11" fill="#534AB7" font-family="Inter, sans-serif">Oil · Gold · Wheat · Copper</text>
+                <text x="0" y="26" text-anchor="middle" font-size="10" fill="#534AB7" opacity="0.7" font-family="Inter, sans-serif">All priced in USD</text>
+              </g>
+
+              <!-- Satellite: Debt (left) -->
+              <g class="lflow-node lflow-fade d4" transform="translate(100, 220)">
+                <rect x="-90" y="-32" width="180" height="64" rx="8" fill="white" stroke="#534AB7" stroke-width="1"/>
+                <text x="0" y="-8" text-anchor="middle" font-size="13" font-weight="600" fill="#3C3489" font-family="Inter, sans-serif">Cross-border debt</text>
+                <text x="0" y="10" text-anchor="middle" font-size="11" fill="#534AB7" font-family="Inter, sans-serif">Most issued in USD</text>
+              </g>
+
+              <!-- Flow lines (animated) -->
+              <line class="lflow-line lflow-line--out" x1="360" y1="158" x2="360" y2="94" stroke="#534AB7" stroke-width="2"/>
+              <line class="lflow-line lflow-line--in"  x1="360" y1="94"  x2="360" y2="158" stroke="#534AB7" stroke-width="2" opacity="0.55"/>
+
+              <line class="lflow-line lflow-line--out" x1="422" y1="220" x2="530" y2="220" stroke="#534AB7" stroke-width="2"/>
+              <line class="lflow-line lflow-line--in"  x1="530" y1="220" x2="422" y2="220" stroke="#534AB7" stroke-width="2" opacity="0.55"/>
+
+              <line class="lflow-line lflow-line--out" x1="360" y1="282" x2="360" y2="346" stroke="#534AB7" stroke-width="2"/>
+              <line class="lflow-line lflow-line--in"  x1="360" y1="346" x2="360" y2="282" stroke="#534AB7" stroke-width="2" opacity="0.55"/>
+
+              <line class="lflow-line lflow-line--out" x1="298" y1="220" x2="190" y2="220" stroke="#534AB7" stroke-width="2"/>
+              <line class="lflow-line lflow-line--in"  x1="190" y1="220" x2="298" y2="220" stroke="#534AB7" stroke-width="2" opacity="0.55"/>
+            </svg>
+          </div>
+          <div class="lflow-narrative">
+            <strong>How it works:</strong> Demand for dollars is structural, not optional. Every cross-border trade, every commodity contract, every emerging-market bond pulls dollars into circulation. When the Fed prints, that new supply gets absorbed by demand the world has no choice but to bring.
+          </div>
+        </div>
+
+        <!-- LAYER 2: Petrodollar engine — closed loop -->
+        <div class="lflow-panel" data-panel="2">
+          <div class="lflow-svgwrap">
+            <svg viewBox="0 0 720 440" class="lflow-svg" aria-labelledby="l2title l2desc" role="img">
+              <title id="l2title">Layer 2 flow</title>
+              <desc id="l2desc">Closed loop: US prints dollars, importers buy oil, exporters recycle dollars into US Treasuries.</desc>
+              <defs>
+                <marker id="arrTeal" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+                  <path d="M2 1L8 5L2 9" fill="none" stroke="#0F6E56" stroke-width="1.5" stroke-linecap="round"/>
+                </marker>
+                <marker id="arrCoralL2" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+                  <path d="M2 1L8 5L2 9" fill="none" stroke="#D85A30" stroke-width="1.5" stroke-linecap="round"/>
+                </marker>
+              </defs>
+
+              <!-- Four nodes of the loop -->
+              <g class="lflow-fade d1" transform="translate(120, 110)">
+                <rect x="-90" y="-36" width="180" height="72" rx="8" fill="#E1F5EE" stroke="#0F6E56" stroke-width="1.5"/>
+                <text x="0" y="-8" text-anchor="middle" font-size="14" font-weight="600" fill="#04342C" font-family="Inter, sans-serif">United States</text>
+                <text x="0" y="10" text-anchor="middle" font-size="11" fill="#0F6E56" font-family="Inter, sans-serif">Prints dollars</text>
+                <text x="0" y="26" text-anchor="middle" font-size="10" fill="#0F6E56" opacity="0.7" font-family="Inter, sans-serif">Fed balance sheet $7T</text>
+              </g>
+
+              <g class="lflow-fade d2" transform="translate(600, 110)">
+                <rect x="-90" y="-36" width="180" height="72" rx="8" fill="#FAEEDA" stroke="#854F0B" stroke-width="1.5"/>
+                <text x="0" y="-8" text-anchor="middle" font-size="14" font-weight="600" fill="#412402" font-family="Inter, sans-serif">Oil importers</text>
+                <text x="0" y="10" text-anchor="middle" font-size="11" fill="#854F0B" font-family="Inter, sans-serif">India · EU · China · Japan</text>
+                <text x="0" y="26" text-anchor="middle" font-size="10" fill="#854F0B" opacity="0.7" font-family="Inter, sans-serif">Earn dollars via trade</text>
+              </g>
+
+              <g class="lflow-fade d3" transform="translate(600, 330)">
+                <rect x="-90" y="-36" width="180" height="72" rx="8" fill="#FAECE7" stroke="#993C1D" stroke-width="1.5"/>
+                <text x="0" y="-8" text-anchor="middle" font-size="14" font-weight="600" fill="#4A1B0C" font-family="Inter, sans-serif">Oil exporters</text>
+                <text x="0" y="10" text-anchor="middle" font-size="11" fill="#993C1D" font-family="Inter, sans-serif">Saudi · UAE · Russia · Iraq</text>
+                <text x="0" y="26" text-anchor="middle" font-size="10" fill="#993C1D" opacity="0.7" font-family="Inter, sans-serif">Sit on dollar surpluses</text>
+              </g>
+
+              <g class="lflow-fade d4" transform="translate(120, 330)">
+                <rect x="-90" y="-36" width="180" height="72" rx="8" fill="#E6F1FB" stroke="#185FA5" stroke-width="1.5"/>
+                <text x="0" y="-8" text-anchor="middle" font-size="14" font-weight="600" fill="#042C53" font-family="Inter, sans-serif">US Treasuries</text>
+                <text x="0" y="10" text-anchor="middle" font-size="11" fill="#185FA5" font-family="Inter, sans-serif">Safe haven for surplus $</text>
+                <text x="0" y="26" text-anchor="middle" font-size="10" fill="#185FA5" opacity="0.7" font-family="Inter, sans-serif">$27T outstanding</text>
+              </g>
+
+              <!-- Loop flow lines -->
+              <line class="lflow-line lflow-loop" x1="210" y1="110" x2="510" y2="110" stroke="#0F6E56" stroke-width="2.5" marker-end="url(#arrTeal)"/>
+              <text x="360" y="98" text-anchor="middle" font-size="11" font-weight="500" fill="#0F6E56" font-family="Inter, sans-serif">prints &amp; exports dollars</text>
+
+              <line class="lflow-line lflow-loop" x1="600" y1="146" x2="600" y2="294" stroke="#0F6E56" stroke-width="2.5" marker-end="url(#arrTeal)"/>
+              <text x="612" y="220" text-anchor="start" font-size="11" font-weight="500" fill="#0F6E56" font-family="Inter, sans-serif">dollars for oil</text>
+
+              <line class="lflow-line lflow-loop" x1="510" y1="330" x2="210" y2="330" stroke="#0F6E56" stroke-width="2.5" marker-end="url(#arrTeal)"/>
+              <text x="360" y="352" text-anchor="middle" font-size="11" font-weight="500" fill="#0F6E56" font-family="Inter, sans-serif">recycled into Treasuries</text>
+
+              <line class="lflow-line lflow-loop" x1="120" y1="294" x2="120" y2="146" stroke="#0F6E56" stroke-width="2.5" marker-end="url(#arrTeal)"/>
+              <text x="108" y="220" text-anchor="end" font-size="11" font-weight="500" fill="#0F6E56" font-family="Inter, sans-serif">funds US deficit</text>
+
+              <!-- Counter-flow: oil (coral) -->
+              <line class="lflow-line lflow-counter" x1="510" y1="146" x2="510" y2="294" stroke="#D85A30" stroke-width="2" stroke-dasharray="4 4" marker-end="url(#arrCoralL2)"/>
+              <text x="490" y="220" text-anchor="end" font-size="10" font-style="italic" fill="#993C1D" font-family="Inter, sans-serif">oil →</text>
+            </svg>
+          </div>
+          <div class="lflow-narrative">
+            <strong>How it works:</strong> Oil is priced in dollars — always, everywhere. India and other importers earn dollars to buy oil. Saudi Arabia and other exporters can't spend all that surplus, so they park it in US Treasuries. The loop closes. Every barrel of oil sold creates demand for the dollar <em>and</em> financing for the US deficit, at the same time.
+          </div>
+
+          <div class="lflow-trap">
+            <div class="lflow-trap-tag">THE TRAP FOR IMPORTERS</div>
+            <h4 class="lflow-trap-title">India earns rupees. The world charges dollars for oil.</h4>
+            <p class="lflow-trap-text">To pay that bill, India has exactly three ways to source dollars. Each one has a failure mode. When two or three fail together — like today — the rupee has nowhere to go but down.</p>
+          </div>
+
+          <div class="lflow-india-step">
+            <span class="lflow-india-step-mark">STEP 2 · INDIA DOWNSTREAM</span>
+            <h4 class="lflow-india-step-title">How the petrodollar loop reaches the rupee.</h4>
+          </div>
+
+          <div class="lflow-svgwrap">
+            <svg viewBox="0 0 720 520" class="lflow-svg" aria-labelledby="l2btitle l2bdesc" role="img">
+              <title id="l2btitle">India dollar-sourcing flow</title>
+              <desc id="l2bdesc">India's three sources of dollars to buy oil, their failure modes, and the consequences that flow downstream when they break.</desc>
+              <defs>
+                <marker id="arrAmber" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+                  <path d="M2 1L8 5L2 9" fill="none" stroke="#854F0B" stroke-width="1.5" stroke-linecap="round"/>
+                </marker>
+                <marker id="arrCoralL2b" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+                  <path d="M2 1L8 5L2 9" fill="none" stroke="#D85A30" stroke-width="1.8" stroke-linecap="round"/>
+                </marker>
+              </defs>
+
+              <!-- Top: India earns rupees -->
+              <g class="lflow-fade d1" transform="translate(360, 32)">
+                <rect x="-130" y="-26" width="260" height="52" rx="8" fill="#FAEEDA" stroke="#854F0B" stroke-width="1.5"/>
+                <text x="0" y="-3" text-anchor="middle" font-size="14" font-weight="600" fill="#412402" font-family="Inter, sans-serif">India earns rupees</text>
+                <text x="0" y="15" text-anchor="middle" font-size="11" fill="#854F0B" font-family="Inter, sans-serif">…but must pay dollars for crude oil</text>
+              </g>
+
+              <line class="lflow-line lflow-pressure" x1="360" y1="58" x2="360" y2="92" stroke="#854F0B" stroke-width="2" marker-end="url(#arrAmber)"/>
+
+              <!-- Center label -->
+              <g class="lflow-fade d2" transform="translate(360, 110)">
+                <text text-anchor="middle" font-size="10" letter-spacing="2" font-weight="600" fill="#854F0B" font-family="Inter, sans-serif">THREE WAYS TO SOURCE $$$</text>
+              </g>
+
+              <!-- Three branches: Exports, FII, Reserves -->
+              <line class="lflow-line lflow-pressure" x1="360" y1="120" x2="170" y2="160" stroke="#854F0B" stroke-width="2" marker-end="url(#arrAmber)"/>
+              <line class="lflow-line lflow-pressure" x1="360" y1="120" x2="360" y2="160" stroke="#854F0B" stroke-width="2" marker-end="url(#arrAmber)"/>
+              <line class="lflow-line lflow-pressure" x1="360" y1="120" x2="550" y2="160" stroke="#854F0B" stroke-width="2" marker-end="url(#arrAmber)"/>
+
+              <!-- Source 1: Exports -->
+              <g class="lflow-fade d2" transform="translate(120, 200)">
+                <rect x="-100" y="-32" width="200" height="64" rx="8" fill="white" stroke="#185FA5" stroke-width="1.5"/>
+                <text x="0" y="-10" text-anchor="middle" font-size="13" font-weight="600" fill="#042C53" font-family="Inter, sans-serif">Export goods &amp; services</text>
+                <text x="0" y="8" text-anchor="middle" font-size="11" fill="#185FA5" font-family="Inter, sans-serif">IT, pharma, textiles, gems</text>
+                <text x="0" y="24" text-anchor="middle" font-size="10" fill="#185FA5" opacity="0.75" font-family="Inter, sans-serif">~$450B annual</text>
+              </g>
+
+              <!-- Source 2: FII -->
+              <g class="lflow-fade d3" transform="translate(360, 200)">
+                <rect x="-100" y="-32" width="200" height="64" rx="8" fill="white" stroke="#185FA5" stroke-width="1.5"/>
+                <text x="0" y="-10" text-anchor="middle" font-size="13" font-weight="600" fill="#042C53" font-family="Inter, sans-serif">Attract foreign capital</text>
+                <text x="0" y="8" text-anchor="middle" font-size="11" fill="#185FA5" font-family="Inter, sans-serif">FII into stocks &amp; bonds</text>
+                <text x="0" y="24" text-anchor="middle" font-size="10" fill="#185FA5" opacity="0.75" font-family="Inter, sans-serif">~$700B holdings</text>
+              </g>
+
+              <!-- Source 3: Reserves -->
+              <g class="lflow-fade d4" transform="translate(600, 200)">
+                <rect x="-100" y="-32" width="200" height="64" rx="8" fill="white" stroke="#185FA5" stroke-width="1.5"/>
+                <text x="0" y="-10" text-anchor="middle" font-size="13" font-weight="600" fill="#042C53" font-family="Inter, sans-serif">Burn forex reserves</text>
+                <text x="0" y="8" text-anchor="middle" font-size="11" fill="#185FA5" font-family="Inter, sans-serif">RBI sells dollars</text>
+                <text x="0" y="24" text-anchor="middle" font-size="10" fill="#185FA5" opacity="0.75" font-family="Inter, sans-serif">$728B peak stock</text>
+              </g>
+
+              <!-- Failure modes (red) -->
+              <line class="lflow-line lflow-counter" x1="120" y1="232" x2="120" y2="282" stroke="#D85A30" stroke-width="2" marker-end="url(#arrCoralL2b)"/>
+              <line class="lflow-line lflow-counter" x1="360" y1="232" x2="360" y2="282" stroke="#D85A30" stroke-width="2" marker-end="url(#arrCoralL2b)"/>
+              <line class="lflow-line lflow-counter" x1="600" y1="232" x2="600" y2="282" stroke="#D85A30" stroke-width="2" marker-end="url(#arrCoralL2b)"/>
+
+              <g class="lflow-fade d2" transform="translate(120, 318)">
+                <rect x="-105" y="-30" width="210" height="60" rx="8" fill="#FAECE7" stroke="#D85A30" stroke-width="1.5"/>
+                <text x="0" y="-6" text-anchor="middle" font-size="12" font-weight="600" fill="#4A1B0C" font-family="Inter, sans-serif">When exports stall</text>
+                <text x="0" y="14" text-anchor="middle" font-size="10.5" fill="#993C1D" font-family="Inter, sans-serif">Global slowdown, tariffs, IT spend cuts</text>
+              </g>
+
+              <g class="lflow-fade d3" transform="translate(360, 318)">
+                <rect x="-105" y="-30" width="210" height="60" rx="8" fill="#FAECE7" stroke="#D85A30" stroke-width="1.5"/>
+                <text x="0" y="-6" text-anchor="middle" font-size="12" font-weight="600" fill="#4A1B0C" font-family="Inter, sans-serif">When FIIs flee</text>
+                <text x="0" y="14" text-anchor="middle" font-size="10.5" fill="#993C1D" font-family="Inter, sans-serif">Risk-off, Fed tightening, geopolitics</text>
+              </g>
+
+              <g class="lflow-fade d4" transform="translate(600, 318)">
+                <rect x="-105" y="-30" width="210" height="60" rx="8" fill="#FAECE7" stroke="#D85A30" stroke-width="1.5"/>
+                <text x="0" y="-6" text-anchor="middle" font-size="12" font-weight="600" fill="#4A1B0C" font-family="Inter, sans-serif">When reserves drain</text>
+                <text x="0" y="14" text-anchor="middle" font-size="10.5" fill="#993C1D" font-family="Inter, sans-serif">Defense costs reserves, signals weakness</text>
+              </g>
+
+              <!-- Converging arrows to rupee -->
+              <line class="lflow-line lflow-pressure" x1="120" y1="348" x2="320" y2="412" stroke="#D85A30" stroke-width="2" marker-end="url(#arrCoralL2b)"/>
+              <line class="lflow-line lflow-pressure" x1="360" y1="348" x2="360" y2="412" stroke="#D85A30" stroke-width="2.5" marker-end="url(#arrCoralL2b)"/>
+              <line class="lflow-line lflow-pressure" x1="600" y1="348" x2="400" y2="412" stroke="#D85A30" stroke-width="2" marker-end="url(#arrCoralL2b)"/>
+
+              <!-- Final: Rupee weakens -->
+              <g class="lflow-fade d4" transform="translate(360, 450)">
+                <rect x="-150" y="-32" width="300" height="64" rx="8" fill="#712B13" stroke="#D85A30" stroke-width="2"/>
+                <text x="0" y="-7" text-anchor="middle" font-size="16" font-weight="700" fill="#FAECE7" font-family="Inter, sans-serif">Rupee weakens</text>
+                <text x="0" y="13" text-anchor="middle" font-size="11" fill="#FAECE7" opacity="0.85" font-family="Inter, sans-serif">Inflation ↑ · debt burden ↑ · imports ↑</text>
+              </g>
+            </svg>
+          </div>
+
+          <div class="lflow-impact-grid">
+            <div class="lflow-impact-card">
+              <div class="lflow-impact-num">01</div>
+              <div class="lflow-impact-body">
+                <h5>Households pay more</h5>
+                <p>Fuel at the pump, gold, cooking oil, mobile phones — anything sourced from abroad immediately costs more rupees. Inflation rises even when domestic demand is weak.</p>
+              </div>
+            </div>
+            <div class="lflow-impact-card">
+              <div class="lflow-impact-num">02</div>
+              <div class="lflow-impact-body">
+                <h5>Companies with dollar debt suffer</h5>
+                <p>Indian firms that borrowed in dollars must repay more rupees per dollar. Interest costs rise mechanically. Refinancing becomes expensive even if rates haven't moved.</p>
+              </div>
+            </div>
+            <div class="lflow-impact-card">
+              <div class="lflow-impact-num">03</div>
+              <div class="lflow-impact-body">
+                <h5>RBI burns the war chest</h5>
+                <p>To slow the slide, the Reserve Bank sells dollars from its reserves. Effective in the short run, but every dollar spent is a dollar not available for a future shock.</p>
+              </div>
+            </div>
+            <div class="lflow-impact-card">
+              <div class="lflow-impact-num">04</div>
+              <div class="lflow-impact-body">
+                <h5>The current account widens</h5>
+                <p>Imports get costlier in rupee terms while exports don't immediately surge. The trade gap grows, which means even more dollar demand next month. The loop reinforces itself.</p>
+              </div>
+            </div>
+            <div class="lflow-impact-card lflow-impact-card--upside">
+              <div class="lflow-impact-num">+</div>
+              <div class="lflow-impact-body">
+                <h5>One offset: dollar earners gain</h5>
+                <p>TCS, Infosys, Wipro, Sun Pharma — companies billing in dollars convert back to more rupees. Their earnings rise mechanically with rupee weakness. This is why the Nifty can hold up while households feel pain.</p>
+              </div>
+            </div>
+            <div class="lflow-impact-card lflow-impact-card--policy">
+              <div class="lflow-impact-num">→</div>
+              <div class="lflow-impact-body">
+                <h5>India's slow workaround</h5>
+                <p>Rupee invoicing with Russia and the UAE, BRICS payment experiments, and direct-rupee trade arrangements all chip at the petrodollar's edges. None reverse the system. But over a decade, they accumulate into a real alternative.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- LAYER 3: India squeezed — convergent pressure -->
+        <div class="lflow-panel" data-panel="3">
+          <div class="lflow-svgwrap">
+            <svg viewBox="0 0 720 440" class="lflow-svg" aria-labelledby="l3title l3desc" role="img">
+              <title id="l3title">Layer 3 flow</title>
+              <desc id="l3desc">Four pressures converging on the rupee from oil, Iran conflict, capital flight, and the strong dollar.</desc>
+              <defs>
+                <marker id="arrCoral" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+                  <path d="M2 1L8 5L2 9" fill="none" stroke="#D85A30" stroke-width="1.8" stroke-linecap="round"/>
+                </marker>
+              </defs>
+
+              <!-- Center: INR under pressure -->
+              <g class="lflow-center lflow-center--rupee" transform="translate(360, 220)">
+                <circle r="74" fill="#FAECE7" stroke="#D85A30" stroke-width="2.5"/>
+                <text text-anchor="middle" y="-12" font-size="38" font-weight="600" fill="#712B13" font-family="Inter, sans-serif">₹</text>
+                <text text-anchor="middle" y="14" font-size="18" font-weight="600" fill="#712B13" font-family="Inter, sans-serif" font-feature-settings="'tnum'">95.96</text>
+                <text text-anchor="middle" y="34" font-size="10" fill="#993C1D" font-family="Inter, sans-serif" letter-spacing="1.5">UNDER PRESSURE</text>
+              </g>
+
+              <!-- Four pressure sources -->
+              <!-- Top: Oil -->
+              <g class="lflow-fade d1" transform="translate(360, 50)">
+                <rect x="-105" y="-30" width="210" height="60" rx="8" fill="white" stroke="#D85A30" stroke-width="1.5"/>
+                <text x="0" y="-6" text-anchor="middle" font-size="13" font-weight="600" fill="#4A1B0C" font-family="Inter, sans-serif">Crude oil dependency</text>
+                <text x="0" y="14" text-anchor="middle" font-size="11" fill="#993C1D" font-family="Inter, sans-serif">85% imported · $105/bbl</text>
+              </g>
+              <line class="lflow-line lflow-pressure" x1="360" y1="82" x2="360" y2="142" stroke="#D85A30" stroke-width="2.5" marker-end="url(#arrCoral)"/>
+
+              <!-- Right: Iran conflict -->
+              <g class="lflow-fade d2" transform="translate(620, 220)">
+                <rect x="-90" y="-30" width="180" height="60" rx="8" fill="white" stroke="#D85A30" stroke-width="1.5"/>
+                <text x="0" y="-6" text-anchor="middle" font-size="13" font-weight="600" fill="#4A1B0C" font-family="Inter, sans-serif">Iran–US conflict</text>
+                <text x="0" y="14" text-anchor="middle" font-size="11" fill="#993C1D" font-family="Inter, sans-serif">Hormuz risk · 10 weeks</text>
+              </g>
+              <line class="lflow-line lflow-pressure" x1="530" y1="220" x2="442" y2="220" stroke="#D85A30" stroke-width="2.5" marker-end="url(#arrCoral)"/>
+
+              <!-- Bottom: FII -->
+              <g class="lflow-fade d3" transform="translate(360, 390)">
+                <rect x="-105" y="-30" width="210" height="60" rx="8" fill="white" stroke="#D85A30" stroke-width="1.5"/>
+                <text x="0" y="-6" text-anchor="middle" font-size="13" font-weight="600" fill="#4A1B0C" font-family="Inter, sans-serif">Foreign investor flight</text>
+                <text x="0" y="14" text-anchor="middle" font-size="11" fill="#993C1D" font-family="Inter, sans-serif">$21B+ outflow YTD 2026</text>
+              </g>
+              <line class="lflow-line lflow-pressure" x1="360" y1="358" x2="360" y2="298" stroke="#D85A30" stroke-width="2.5" marker-end="url(#arrCoral)"/>
+
+              <!-- Left: Strong dollar -->
+              <g class="lflow-fade d4" transform="translate(100, 220)">
+                <rect x="-90" y="-30" width="180" height="60" rx="8" fill="white" stroke="#D85A30" stroke-width="1.5"/>
+                <text x="0" y="-6" text-anchor="middle" font-size="13" font-weight="600" fill="#4A1B0C" font-family="Inter, sans-serif">Strong dollar (DXY)</text>
+                <text x="0" y="14" text-anchor="middle" font-size="11" fill="#993C1D" font-family="Inter, sans-serif">98.3 · high US yields</text>
+              </g>
+              <line class="lflow-line lflow-pressure" x1="190" y1="220" x2="278" y2="220" stroke="#D85A30" stroke-width="2.5" marker-end="url(#arrCoral)"/>
+            </svg>
+          </div>
+          <div class="lflow-narrative">
+            <strong>How it works:</strong> Inside the dollar-centric system, India sits at the wrong end of every flow. Oil drains dollars out. The Iran conflict spikes that drain. Foreign investors withdraw at the same time, and a strong dollar globally amplifies each force. The rupee has no buffer that can absorb all four at once.
+          </div>
+        </div>
+
+      </div>
     </div>
   </div>
 </section>

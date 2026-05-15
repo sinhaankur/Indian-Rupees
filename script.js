@@ -725,9 +725,11 @@ function applyLang(lang) {
   if (document.getElementById('mathAmount')) updateMath();
 }
 
-document.querySelectorAll('.lang-btn').forEach(btn => {
-  btn.addEventListener('click', () => applyLang(btn.dataset.lang));
-});
+// Dropdown picker
+const langPick = document.getElementById('langPick');
+if (langPick) {
+  langPick.addEventListener('change', () => applyLang(langPick.value));
+}
 
 // ─── Basic Math widget ─────────────────────────────────────────
 function updateMath() {
@@ -795,3 +797,39 @@ if (mathAmt) {
 
 // Apply default language on load
 applyLang('en');
+
+// ─── Layer-flow tabs ───────────────────────────────────────────
+document.querySelectorAll('.lflow-tab').forEach(tab => {
+  tab.addEventListener('click', () => {
+    const layer = tab.dataset.layer;
+    document.querySelectorAll('.lflow-tab').forEach(t => {
+      const isActive = t.dataset.layer === layer;
+      t.classList.toggle('active', isActive);
+      t.setAttribute('aria-selected', isActive ? 'true' : 'false');
+    });
+    document.querySelectorAll('.lflow-panel').forEach(p => {
+      p.classList.toggle('active', p.dataset.panel === layer);
+    });
+  });
+});
+
+// ─── Reading progress bar ──────────────────────────────────────
+const readBar = document.getElementById('readProgress');
+const backTop = document.getElementById('backToTop');
+
+function onScroll() {
+  const h = document.documentElement;
+  const max = h.scrollHeight - h.clientHeight;
+  const pct = max > 0 ? (h.scrollTop / max) * 100 : 0;
+  if (readBar) readBar.style.width = pct + '%';
+  if (backTop) backTop.classList.toggle('visible', h.scrollTop > 480);
+}
+
+window.addEventListener('scroll', onScroll, { passive: true });
+onScroll();
+
+if (backTop) {
+  backTop.addEventListener('click', () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+}
