@@ -57,9 +57,9 @@
 
 <section id="puzzle" class="section">
   <div class="container">
-    <div class="section-label">THE INTUITION FAILS</div>
-    <h2 class="section-title">More dollars in the world should mean a cheaper dollar.</h2>
-    <p class="section-lede">For any normal currency, that's exactly what happens. But the dollar isn't normal. It's the world's plumbing — and when the world gets anxious, every importing country needs more dollars, faster than the Fed can print them.</p>
+    <div class="section-label" data-i18n="puzzle.label">THE INTUITION FAILS</div>
+    <h2 class="section-title" data-i18n="puzzle.title">More dollars in the world should mean a cheaper dollar.</h2>
+    <p class="section-lede" data-i18n="puzzle.lede">For any normal currency, that's exactly what happens. But the dollar isn't normal. It's the world's plumbing — and when the world gets anxious, every importing country needs more dollars, faster than the Fed can print them.</p>
 
     <div class="compare-grid">
       <div class="compare-card compare-card--blue">
@@ -78,8 +78,8 @@
 
 <section id="timeline" class="section section--dark">
   <div class="container">
-    <div class="section-label">26 YEARS, TWO LINES</div>
-    <h2 class="section-title">The US printed. The rupee fell. They moved together — not apart.</h2>
+    <div class="section-label" data-i18n="timeline.label">26 YEARS, TWO LINES</div>
+    <h2 class="section-title" data-i18n="timeline.title">The US printed. The rupee fell. They moved together — not apart.</h2>
 
     <div class="timeline-stats">
       <div class="stat-block stat-block--blue">
@@ -153,9 +153,9 @@
 
 <section id="printing" class="section section--soft">
   <div class="container">
-    <div class="section-label">HOW USD PRINTING WORKS</div>
-    <h2 class="section-title">When the Fed "prints," it doesn't run physical presses.</h2>
-    <p class="section-lede">The dollar supply expands through the banking system — and the way it expands determines whether the rupee gets a boost or a beating.</p>
+    <div class="section-label" data-i18n="printing.label">HOW USD PRINTING WORKS</div>
+    <h2 class="section-title" data-i18n="printing.title">When the Fed "prints," it doesn't run physical presses.</h2>
+    <p class="section-lede" data-i18n="printing.lede">The dollar supply expands through the banking system — and the way it expands determines whether the rupee gets a boost or a beating.</p>
 
     <div class="printing-grid">
       <article class="printing-card">
@@ -294,8 +294,8 @@
 
 <section id="system" class="section">
   <div class="container">
-    <div class="section-label">THE SYSTEM</div>
-    <h2 class="section-title">The puzzle resolves in three layers.</h2>
+    <div class="section-label" data-i18n="system.label">THE SYSTEM</div>
+    <h2 class="section-title" data-i18n="system.title">The puzzle resolves in three layers.</h2>
 
     <div class="layer-cards">
       <article class="layer-card layer-card--purple">
@@ -349,9 +349,9 @@
 
 <section id="forces" class="section section--soft">
   <div class="container">
-    <div class="section-label">THE FOUR FORCES</div>
-    <h2 class="section-title">Every dollar-demand stream is firing at once.</h2>
-    <p class="section-lede">No single factor explains the slide. Four forces are stacking on top of each other in 2026 — and the rupee has nowhere to hide.</p>
+    <div class="section-label" data-i18n="forces.label">THE FOUR FORCES</div>
+    <h2 class="section-title" data-i18n="forces.title">Every dollar-demand stream is firing at once.</h2>
+    <p class="section-lede" data-i18n="forces.lede">No single factor explains the slide. Four forces are stacking on top of each other in 2026 — and the rupee has nowhere to hide.</p>
 
     <div class="force-grid">
       <article class="force-card">
@@ -399,9 +399,9 @@
 
 <section id="simulator" class="section section--soft">
   <div class="container">
-    <div class="section-label">VALUE SIMULATOR</div>
-    <h2 class="section-title">Move the sliders. Watch the rupee respond.</h2>
-    <p class="section-lede">A simplified linear model of the five major forces — oil, dollar strength, capital flows, Fed policy, and RBI defense. Adjust any input and the projected USD/INR updates instantly.</p>
+    <div class="section-label" data-i18n="sim.label">VALUE SIMULATOR</div>
+    <h2 class="section-title" data-i18n="sim.title">Move the sliders. Watch the rupee respond.</h2>
+    <p class="section-lede" data-i18n="sim.lede">A simplified linear model of the five major forces — oil, dollar strength, capital flows, Fed policy, and RBI defense. Adjust any input and the projected USD/INR updates instantly.</p>
 
     <div class="sim">
       <div class="sim-controls">
@@ -524,14 +524,76 @@
     <div class="sim-disclaimer">
       <strong>How the model works.</strong> Starting from today's ₹95.96, each slider applies a calibrated sensitivity: $10 in oil moves the rupee ₹0.50, one DXY point moves it ₹0.25, $5B in FII flows moves it ₹0.20, 0.25% in Fed rate moves it ₹0.30, and $5B in RBI dollar sales moves it −₹0.30. Coefficients are derived from historical regressions but the real world has nonlinearities, interactions, and shocks no linear model captures. Use this to build intuition — not to make trades.
     </div>
+
+    <div class="math-block">
+      <div class="math-head">
+        <div class="math-label" data-i18n="math.label">BASIC MATH</div>
+        <h3 class="math-title" data-i18n="math.title">See the formula behind the projection.</h3>
+        <p class="math-lede" data-i18n="math.lede">Each slider has a coefficient. Subtract today's baseline. Multiply. Add them up. That's the model — no hidden steps.</p>
+      </div>
+
+      <div class="math-formula-card">
+        <div class="math-formula-static" data-i18n="math.formula">Projected ₹/$ = ₹95.96 + Σ ( coefficient × (current value − baseline) )</div>
+        <div class="math-formula-live" id="mathFormulaLive"></div>
+      </div>
+
+      <div class="math-coef-table">
+        <div class="math-coef-row math-coef-head">
+          <span>Variable</span><span>Baseline</span><span>Coefficient</span><span>Direction</span>
+        </div>
+        <div class="math-coef-row">
+          <span>Brent oil ($/bbl)</span><span>$105</span><span>+₹0.05</span><span class="math-dir-neg">↑ oil → ↑ ₹/$</span>
+        </div>
+        <div class="math-coef-row">
+          <span>Dollar Index</span><span>98.3</span><span>+₹0.25</span><span class="math-dir-neg">↑ DXY → ↑ ₹/$</span>
+        </div>
+        <div class="math-coef-row">
+          <span>FII flows ($B)</span><span>−$21B</span><span>−₹0.04</span><span class="math-dir-pos">↑ inflow → ↓ ₹/$</span>
+        </div>
+        <div class="math-coef-row">
+          <span>Fed funds (%)</span><span>5.00%</span><span>+₹1.20</span><span class="math-dir-neg">↑ Fed → ↑ ₹/$</span>
+        </div>
+        <div class="math-coef-row">
+          <span>RBI defense ($B)</span><span>$0B</span><span>−₹0.06</span><span class="math-dir-pos">↑ defense → ↓ ₹/$</span>
+        </div>
+      </div>
+
+      <div class="math-converter">
+        <div class="math-converter-head">
+          <div class="math-converter-title" data-i18n="math.amount">Convert an amount</div>
+          <div class="math-converter-help" data-i18n="math.amountHelp">See what $1,000 costs today versus at the simulated rate.</div>
+        </div>
+        <div class="math-converter-row">
+          <div class="math-input">
+            <label for="mathAmount" data-i18n="math.usd">Dollars (USD)</label>
+            <input id="mathAmount" type="number" min="0" step="100" value="1000">
+          </div>
+          <div class="math-out-grid">
+            <div class="math-cell">
+              <div class="math-cell-label" data-i18n="math.inrToday">At today's ₹95.96</div>
+              <div class="math-cell-val" id="mathTodayVal">₹95,960.00</div>
+            </div>
+            <div class="math-cell">
+              <div class="math-cell-label" data-i18n="math.inrSim">At simulated rate</div>
+              <div class="math-cell-val" id="mathSimVal">₹95,960.00</div>
+            </div>
+            <div class="math-cell">
+              <div class="math-cell-label" data-i18n="math.diff">Difference</div>
+              <div class="math-cell-val" id="mathDiff">₹0.00</div>
+              <div class="math-cell-sublabel" id="mathDiffLabel">same as today</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </section>
 
 <section id="impact" class="section">
   <div class="container">
-    <div class="section-label">THE IMPACT CHAIN</div>
-    <h2 class="section-title">How rupee weakness reaches your wallet.</h2>
-    <p class="section-lede">A weaker rupee triggers three first-order effects — and each one cascades into something the household, the firm, or the central bank feels directly.</p>
+    <div class="section-label" data-i18n="impact.label">THE IMPACT CHAIN</div>
+    <h2 class="section-title" data-i18n="impact.title">How rupee weakness reaches your wallet.</h2>
+    <p class="section-lede" data-i18n="impact.lede">A weaker rupee triggers three first-order effects — and each one cascades into something the household, the firm, or the central bank feels directly.</p>
 
     <div class="chain">
       <div class="chain-top">
@@ -580,9 +642,9 @@
 
 <section id="currencies" class="section">
   <div class="container">
-    <div class="section-label">CROSS-CURRENCY IMPACT</div>
-    <h2 class="section-title">India isn't alone. The dollar is moving everyone.</h2>
-    <p class="section-lede">Pick any currency below to see how it's responding to the same forces hitting the rupee — and why some are holding up while others are buckling.</p>
+    <div class="section-label" data-i18n="ccy.label">CROSS-CURRENCY IMPACT</div>
+    <h2 class="section-title" data-i18n="ccy.title">India isn't alone. The dollar is moving everyone.</h2>
+    <p class="section-lede" data-i18n="ccy.lede">Pick any currency below to see how it's responding to the same forces hitting the rupee — and why some are holding up while others are buckling.</p>
 
     <div class="ccy-tool">
       <div class="ccy-selector">
@@ -659,9 +721,9 @@
 
 <section id="references" class="section section--soft">
   <div class="container">
-    <div class="section-label">REFERENCES &amp; DATA</div>
-    <h2 class="section-title">The numbers, and where they come from.</h2>
-    <p class="section-lede">Every figure cited on this page, with its source and the date it was last verified. The data is a snapshot in time — exchange rates and yields move every minute.</p>
+    <div class="section-label" data-i18n="ref.label">REFERENCES &amp; DATA</div>
+    <h2 class="section-title" data-i18n="ref.title">The numbers, and where they come from.</h2>
+    <p class="section-lede" data-i18n="ref.lede">Every figure cited on this page, with its source and the date it was last verified. The data is a snapshot in time — exchange rates and yields move every minute.</p>
 
     <div class="ref-grid">
       <div class="ref-block">

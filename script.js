@@ -587,3 +587,211 @@ if (ccyPick) {
   buildScoreboard();
   renderCcy(ccyPick.value);
 }
+
+// ─── Internationalization (EN / HI) ────────────────────────────
+const I18N = {
+  en: {
+    'nav.puzzle': 'Puzzle',
+    'nav.timeline': 'Timeline',
+    'nav.printing': 'USD Printing',
+    'nav.system': 'The System',
+    'nav.forces': 'Forces',
+    'nav.simulator': 'Simulator',
+    'nav.currencies': 'Currencies',
+    'nav.impact': 'Impact',
+    'nav.data': 'Data',
+    'hero.date': 'MAY 14, 2026',
+    'hero.sub': 'All-time low against the dollar',
+    'hero.puzzleLabel': 'THE PUZZLE',
+    'hero.puzzle': 'The US has been printing dollars for decades.<br>So why is the rupee falling, not the dollar?',
+    'hero.cta': 'Read the story',
+    'puzzle.label': 'THE INTUITION FAILS',
+    'puzzle.title': 'More dollars in the world should mean a cheaper dollar.',
+    'puzzle.lede': "For any normal currency, that's exactly what happens. But the dollar isn't normal. It's the world's plumbing — and when the world gets anxious, every importing country needs more dollars, faster than the Fed can print them.",
+    'timeline.label': '26 YEARS, TWO LINES',
+    'timeline.title': 'The US printed. The rupee fell. They moved together — not apart.',
+    'printing.label': 'HOW USD PRINTING WORKS',
+    'printing.title': 'When the Fed "prints," it doesn\'t run physical presses.',
+    'printing.lede': 'The dollar supply expands through the banking system — and the way it expands determines whether the rupee gets a boost or a beating.',
+    'system.label': 'THE SYSTEM',
+    'system.title': 'The puzzle resolves in three layers.',
+    'forces.label': 'THE FOUR FORCES',
+    'forces.title': 'Every dollar-demand stream is firing at once.',
+    'forces.lede': 'No single factor explains the slide. Four forces are stacking on top of each other in 2026 — and the rupee has nowhere to hide.',
+    'sim.label': 'VALUE SIMULATOR',
+    'sim.title': 'Move the sliders. Watch the rupee respond.',
+    'sim.lede': 'A simplified linear model of the five major forces — oil, dollar strength, capital flows, Fed policy, and RBI defense. Adjust any input and the projected USD/INR updates instantly.',
+    'ccy.label': 'CROSS-CURRENCY IMPACT',
+    'ccy.title': "India isn't alone. The dollar is moving everyone.",
+    'ccy.lede': "Pick any currency below to see how it's responding to the same forces hitting the rupee — and why some are holding up while others are buckling.",
+    'impact.label': 'THE IMPACT CHAIN',
+    'impact.title': 'How rupee weakness reaches your wallet.',
+    'impact.lede': 'A weaker rupee triggers three first-order effects — and each one cascades into something the household, the firm, or the central bank feels directly.',
+    'ref.label': 'REFERENCES & DATA',
+    'ref.title': 'The numbers, and where they come from.',
+    'ref.lede': 'Every figure cited on this page, with its source and the date it was last verified. The data is a snapshot in time — exchange rates and yields move every minute.',
+    'math.label': 'BASIC MATH',
+    'math.title': 'See the formula behind the projection.',
+    'math.lede': "Each slider has a coefficient. Subtract today's baseline. Multiply. Add them up. That's the model — no hidden steps.",
+    'math.formula': 'Projected ₹/$ = ₹95.96 + Σ ( coefficient × (current value − baseline) )',
+    'math.amount': 'Convert an amount',
+    'math.amountHelp': 'See what $1,000 costs today versus at the simulated rate.',
+    'math.usd': 'Dollars (USD)',
+    'math.inrToday': "At today's ₹95.96",
+    'math.inrSim': 'At simulated rate',
+    'math.diff': 'Difference',
+    'math.cheaper': 'cheaper',
+    'math.costlier': 'costlier',
+    'math.flat': 'same as today',
+  },
+  hi: {
+    'nav.puzzle': 'पहेली',
+    'nav.timeline': 'समयरेखा',
+    'nav.printing': 'डॉलर छपाई',
+    'nav.system': 'व्यवस्था',
+    'nav.forces': 'बल',
+    'nav.simulator': 'सिम्युलेटर',
+    'nav.currencies': 'मुद्राएँ',
+    'nav.impact': 'प्रभाव',
+    'nav.data': 'डेटा',
+    'hero.date': '14 मई, 2026',
+    'hero.sub': 'डॉलर के मुकाबले अब तक का सबसे कम स्तर',
+    'hero.puzzleLabel': 'पहेली',
+    'hero.puzzle': 'अमेरिका दशकों से डॉलर छाप रहा है।<br>तो रुपया क्यों गिर रहा है, डॉलर क्यों नहीं?',
+    'hero.cta': 'कहानी पढ़ें',
+    'puzzle.label': 'अनुमान विफल',
+    'puzzle.title': 'दुनिया में अधिक डॉलर का अर्थ है सस्ता डॉलर — होना चाहिए।',
+    'puzzle.lede': 'किसी भी सामान्य मुद्रा के साथ यही होता है। लेकिन डॉलर सामान्य नहीं है। यह दुनिया की पाइपलाइन है — और जब दुनिया घबराती है, हर आयातक देश को ज़्यादा डॉलर चाहिए, फेड के छापने की रफ़्तार से भी तेज़।',
+    'timeline.label': '26 वर्ष, दो रेखाएँ',
+    'timeline.title': 'अमेरिका ने छापा। रुपया गिरा। वे साथ-साथ चले — अलग नहीं।',
+    'printing.label': 'डॉलर छपाई कैसे काम करती है',
+    'printing.title': 'जब फेड "छापता" है, तो असली प्रिंटिंग प्रेस नहीं चलती।',
+    'printing.lede': 'डॉलर की आपूर्ति बैंकिंग सिस्टम के ज़रिए बढ़ती है — और जिस तरह यह बढ़ती है वही तय करती है कि रुपये को राहत मिलेगी या मार।',
+    'system.label': 'व्यवस्था',
+    'system.title': 'पहेली तीन परतों में सुलझती है।',
+    'forces.label': 'चार बल',
+    'forces.title': 'हर डॉलर-माँग की धारा एक साथ चल रही है।',
+    'forces.lede': 'कोई एक कारण इस गिरावट को नहीं समझाता। 2026 में चार बल एक-दूसरे के ऊपर ढेर हो रहे हैं — और रुपये के पास छिपने की जगह नहीं है।',
+    'sim.label': 'मान सिम्युलेटर',
+    'sim.title': 'स्लाइडर सरकाओ। देखो रुपया कैसे जवाब देता है।',
+    'sim.lede': 'पाँच मुख्य बलों का एक सरलीकृत रेखीय मॉडल — तेल, डॉलर की मज़बूती, पूँजी प्रवाह, फेड नीति, और RBI रक्षा। कोई भी इनपुट बदलें, अनुमानित USD/INR तुरंत अद्यतन होगा।',
+    'ccy.label': 'अंतर-मुद्रा प्रभाव',
+    'ccy.title': 'भारत अकेला नहीं है। डॉलर सबको हिला रहा है।',
+    'ccy.lede': 'नीचे से कोई भी मुद्रा चुनें यह देखने के लिए कि वह उन्हीं बलों पर कैसे प्रतिक्रिया कर रही है जो रुपये को प्रभावित कर रहे हैं — और कुछ क्यों टिकी हुई हैं जबकि अन्य गिर रही हैं।',
+    'impact.label': 'प्रभाव श्रृंखला',
+    'impact.title': 'रुपये की कमज़ोरी आपकी जेब तक कैसे पहुँचती है।',
+    'impact.lede': 'कमज़ोर रुपया तीन प्राथमिक प्रभाव पैदा करता है — और हर एक घर, फर्म, या केंद्रीय बैंक तक झरने की तरह पहुँचता है।',
+    'ref.label': 'संदर्भ और डेटा',
+    'ref.title': 'आँकड़े, और वे कहाँ से आते हैं।',
+    'ref.lede': 'इस पृष्ठ पर उद्धृत हर आँकड़ा, उसके स्रोत और अंतिम सत्यापन की तारीख के साथ।',
+    'math.label': 'बुनियादी गणित',
+    'math.title': 'अनुमान के पीछे का सूत्र देखें।',
+    'math.lede': 'हर स्लाइडर का एक गुणांक है। आज का आधार घटाओ। गुणा करो। जोड़ो। यही मॉडल है — कोई छुपा कदम नहीं।',
+    'math.formula': 'अनुमानित ₹/$ = ₹95.96 + Σ ( गुणांक × (वर्तमान मान − आधार) )',
+    'math.amount': 'राशि बदलें',
+    'math.amountHelp': 'देखें $1,000 आज और सिम्युलेटेड दर पर कितने रुपये का।',
+    'math.usd': 'डॉलर (USD)',
+    'math.inrToday': 'आज की ₹95.96 पर',
+    'math.inrSim': 'सिम्युलेटेड दर पर',
+    'math.diff': 'अंतर',
+    'math.cheaper': 'सस्ता',
+    'math.costlier': 'महँगा',
+    'math.flat': 'आज के बराबर',
+  },
+};
+
+let currentLang = 'en';
+
+function t(key) {
+  return (I18N[currentLang] && I18N[currentLang][key]) || I18N.en[key] || key;
+}
+
+function applyLang(lang) {
+  if (!I18N[lang]) return;
+  currentLang = lang;
+  document.documentElement.lang = lang;
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const key = el.dataset.i18n;
+    const val = I18N[lang][key];
+    if (val === undefined) return;
+    if (el.dataset.i18nHtml) el.innerHTML = val;
+    else el.textContent = val;
+  });
+  document.querySelectorAll('.lang-btn').forEach(b => {
+    const active = b.dataset.lang === lang;
+    b.classList.toggle('active', active);
+    b.setAttribute('aria-pressed', active ? 'true' : 'false');
+  });
+  if (document.getElementById('mathAmount')) updateMath();
+}
+
+document.querySelectorAll('.lang-btn').forEach(btn => {
+  btn.addEventListener('click', () => applyLang(btn.dataset.lang));
+});
+
+// ─── Basic Math widget ─────────────────────────────────────────
+function updateMath() {
+  const amtEl = document.getElementById('mathAmount');
+  if (!amtEl) return;
+  const usd = parseFloat(amtEl.value) || 0;
+  const todayRate = 95.96;
+  const simRate = parseFloat(document.getElementById('simOut').textContent.replace(/[^\d.]/g, '')) || todayRate;
+
+  const inrToday = usd * todayRate;
+  const inrSim = usd * simRate;
+  const diff = inrSim - inrToday;
+
+  const fmtINR = (v) => '₹' + v.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+
+  document.getElementById('mathTodayVal').textContent = fmtINR(inrToday);
+  document.getElementById('mathSimVal').textContent = fmtINR(inrSim);
+
+  const diffEl = document.getElementById('mathDiff');
+  const diffLabel = document.getElementById('mathDiffLabel');
+  if (Math.abs(diff) < 0.01) {
+    diffEl.textContent = fmtINR(0);
+    diffEl.className = 'math-cell-val';
+    diffLabel.textContent = t('math.flat');
+  } else if (diff > 0) {
+    diffEl.textContent = '+' + fmtINR(diff);
+    diffEl.className = 'math-cell-val math-up';
+    diffLabel.textContent = t('math.costlier');
+  } else {
+    diffEl.textContent = '−' + fmtINR(Math.abs(diff));
+    diffEl.className = 'math-cell-val math-down';
+    diffLabel.textContent = t('math.cheaper');
+  }
+
+  // Plug current slider values into a readable formula
+  const v = readSim();
+  const c = simContributions(v);
+  const fEl = document.getElementById('mathFormulaLive');
+  if (fEl) {
+    const fmt = (n) => (n >= 0 ? '+' : '−') + '₹' + Math.abs(n).toFixed(2);
+    fEl.innerHTML =
+      '₹95.96 ' +
+      '<span class="formula-token">' + fmt(c.oil) + '</span> oil ' +
+      '<span class="formula-token">' + fmt(c.dxy) + '</span> dxy ' +
+      '<span class="formula-token">' + fmt(c.fii) + '</span> fii ' +
+      '<span class="formula-token">' + fmt(c.fed) + '</span> fed ' +
+      '<span class="formula-token">' + fmt(c.rbi) + '</span> rbi ' +
+      '= <strong>₹' + (95.96 + c.oil + c.dxy + c.fii + c.fed + c.rbi).toFixed(2) + '</strong>';
+  }
+}
+
+const mathAmt = document.getElementById('mathAmount');
+if (mathAmt) {
+  mathAmt.addEventListener('input', updateMath);
+  // re-run whenever sim updates
+  const origUpdateSim = updateSim;
+  window.updateSim = function () {
+    origUpdateSim();
+    updateMath();
+  };
+  Object.values(sim).forEach(el => el.addEventListener('input', updateMath));
+  document.querySelectorAll('.preset-btn').forEach(btn => btn.addEventListener('click', () => setTimeout(updateMath, 0)));
+  updateMath();
+}
+
+// Apply default language on load
+applyLang('en');
