@@ -1244,80 +1244,39 @@ applyLang(currentLang);
   });
 })();
 
-// ─── L1 nav: sliding pill + active-section tracking ────────────
+// ─── L1 nav: active-section underline tracking ─────────────────
 (function setupL1Nav() {
   const list = document.getElementById('navL1');
-  const pill = document.getElementById('navL1Pill');
-  if (!list || !pill) return;
-
+  if (!list) return;
   const links = Array.from(list.querySelectorAll('a'));
-  let activeLink = null;
 
-  function movePill(targetLink) {
-    if (!targetLink) {
-      pill.classList.remove('is-ready');
-      return;
-    }
-    const listRect = list.getBoundingClientRect();
-    const r = targetLink.getBoundingClientRect();
-    const x = r.left - listRect.left;
-    const w = r.width;
-    pill.style.transform = `translate3d(${x}px, 0, 0)`;
-    pill.style.width = w + 'px';
-    pill.classList.add('is-ready');
-  }
+  // A nav link points at the *starting* section of a content group.
+  // Each link is active while the user is anywhere from its target
+  // section through the next link's target — we use the ordered list
+  // of section starts to figure that out from scroll position.
+  const anchors = links
+    .map(a => ({ link: a, el: document.querySelector(a.getAttribute('href')) }))
+    .filter(x => x.el);
 
   function setActive(link) {
-    if (link === activeLink) return;
-    activeLink = link;
     links.forEach(a => a.classList.toggle('is-active', a === link));
-    movePill(link);
   }
 
-  // Hover preview — pill follows hover, snaps back to active on leave
-  links.forEach(a => {
-    a.addEventListener('mouseenter', () => movePill(a));
-    a.addEventListener('focus', () => movePill(a));
-  });
-  list.addEventListener('mouseleave', () => movePill(activeLink));
-
-  // Scroll-spy: highlight nav item for whichever section is in view
-  const sectionMap = new Map();
-  links.forEach(a => {
-    const id = a.getAttribute('href');
-    if (id && id.startsWith('#')) {
-      const sec = document.querySelector(id);
-      if (sec) sectionMap.set(sec, a);
+  function update() {
+    const y = window.scrollY + 120; // offset for sticky navbar
+    let current = anchors[0];
+    for (const a of anchors) {
+      if (a.el.offsetTop <= y) current = a; else break;
     }
-  });
+    setActive(current.link);
+  }
 
-  const spy = new IntersectionObserver((entries) => {
-    // Pick the section whose top is closest to the navbar (most "current")
-    let best = null;
-    let bestTop = Infinity;
-    entries.forEach(e => {
-      if (e.isIntersecting) {
-        const top = Math.abs(e.boundingClientRect.top - 80);
-        if (top < bestTop) { bestTop = top; best = e.target; }
-      }
-    });
-    if (best && sectionMap.has(best)) setActive(sectionMap.get(best));
-  }, { rootMargin: '-80px 0px -55% 0px', threshold: [0, 0.25, 0.5, 1] });
-
-  sectionMap.forEach((_link, sec) => spy.observe(sec));
-
-  // Reposition pill on window resize
-  window.addEventListener('resize', () => movePill(activeLink));
-
-  // Initial position once fonts are settled
-  requestAnimationFrame(() => {
-    setActive(links[0]);
-    // After layout has settled, snap into place
-    setTimeout(() => movePill(activeLink), 60);
-  });
+  window.addEventListener('scroll', update, { passive: true });
+  window.addEventListener('resize', update);
+  update();
 })();
 
-// ─── L2 nav: layer-flow tabs sliding pill ──────────────────────
+// ─── L2 nav: layer-flow tabs underline slider ──────────────────
 (function setupL2Nav() {
   const tabsEl = document.getElementById('lflowTabs');
   const pill = document.getElementById('lflowTabsPill');
@@ -1328,8 +1287,7 @@ applyLang(currentLang);
     if (!target) return;
     const wrap = tabsEl.getBoundingClientRect();
     const r = target.getBoundingClientRect();
-    const x = r.left - wrap.left;
-    pill.style.transform = `translate3d(${x - 6}px, 0, 0)`;
+    pill.style.transform = `translate3d(${r.left - wrap.left}px, 0, 0)`;
     pill.style.width = r.width + 'px';
     pill.classList.add('is-ready');
   }
@@ -1341,11 +1299,7 @@ applyLang(currentLang);
   tabs.forEach(t => {
     t.addEventListener('mouseenter', () => movePill(t));
     t.addEventListener('focus', () => movePill(t));
-    t.addEventListener('click', () => {
-      // The existing click handler in this file already toggles .active
-      // and switches the visible panel. We just chase it.
-      setTimeout(() => movePill(activeTab()), 0);
-    });
+    t.addEventListener('click', () => setTimeout(() => movePill(activeTab()), 0));
   });
   tabsEl.addEventListener('mouseleave', () => movePill(activeTab()));
 

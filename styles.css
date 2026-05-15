@@ -149,12 +149,13 @@ body {
 .nav-inner {
   max-width: 1100px;
   margin: 0 auto;
-  padding: 14px 28px;
+  padding: 12px 28px;
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: 24px;
+  gap: 32px;
 }
+
+.nav-links { flex: 1; justify-content: center; }
 
 .nav-logo {
   display: flex;
@@ -188,51 +189,47 @@ body {
   list-style: none;
   display: flex;
   gap: 4px;
-  position: relative;
-  padding: 4px;
+  align-items: center;
 }
 
-.nav-links li { position: relative; z-index: 1; }
+.nav-links li { position: relative; }
 
 .nav-links a {
-  display: block;
+  position: relative;
+  display: inline-block;
   color: var(--ink-2);
   text-decoration: none;
-  font-size: 13px;
+  font-size: 13.5px;
   font-weight: 500;
   letter-spacing: -0.005em;
-  padding: 8px 12px;
-  border-radius: 999px;
-  transition: color 0.25s ease;
-  position: relative;
+  padding: 8px 14px;
+  transition: color 0.2s ease;
+}
+
+.nav-links a::after {
+  content: '';
+  position: absolute;
+  left: 14px;
+  right: 14px;
+  bottom: 4px;
+  height: 1.5px;
+  background: var(--coral-deep);
+  border-radius: 2px;
+  transform: scaleX(0);
+  transform-origin: center;
+  transition: transform 0.35s var(--ease-out);
 }
 
 .nav-links a:hover { color: var(--ink); }
+.nav-links a:hover::after { transform: scaleX(0.4); }
 
 .nav-links a.is-active {
   color: var(--coral-deep);
-  font-weight: 600;
 }
 
-/* Sliding pill — Framer-Motion-style shared element */
-.nav-pill {
-  position: absolute;
-  top: 4px;
-  left: 0;
-  height: calc(100% - 8px);
-  width: 0;
-  background: var(--coral-bg);
-  border-radius: 999px;
-  z-index: 0;
-  pointer-events: none;
-  opacity: 0;
-  transition:
-    transform 0.55s var(--spring),
-    width 0.55s var(--spring),
-    opacity 0.2s ease;
+.nav-links a.is-active::after {
+  transform: scaleX(1);
 }
-
-.nav-pill.is-ready { opacity: 1; }
 
 /* ─── Mobile hamburger ─── */
 .nav-toggle {
@@ -338,12 +335,12 @@ body {
 /* ─── HERO ─── */
 .hero {
   position: relative;
-  min-height: 100vh;
+  min-height: 88vh;
   display: flex;
   align-items: center;
   justify-content: center;
   text-align: center;
-  padding: 100px 28px 60px;
+  padding: 88px 28px 56px;
   overflow: hidden;
 }
 
@@ -370,12 +367,12 @@ body {
 }
 
 .hero-rate {
-  font-family: var(--font-serif);
-  font-size: clamp(96px, 14vw, 168px);
-  font-weight: 400;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+  font-size: clamp(72px, 11vw, 132px);
+  font-weight: 700;
   line-height: 1;
   color: var(--coral-deep);
-  letter-spacing: -0.04em;
+  letter-spacing: -0.045em;
   font-feature-settings: 'tnum';
 }
 
@@ -448,7 +445,7 @@ body {
 
 /* ─── SECTIONS ─── */
 .section {
-  padding: 110px 0;
+  padding: 88px 0;
   position: relative;
 }
 
@@ -2596,33 +2593,28 @@ body {
 }
 
 .lflow-tabs {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 4px;
-  margin-bottom: 24px;
-  padding: 6px;
-  background: var(--bg-soft);
-  border-radius: var(--radius-lg);
+  display: flex;
+  gap: 0;
+  margin-bottom: 28px;
+  border-bottom: 1px solid var(--line);
   position: relative;
 }
 
-/* Shared-element pill that animates between tabs */
+/* Single underline that slides between tabs */
 .lflow-tabs-pill {
   position: absolute;
-  top: 6px;
-  left: 6px;
-  height: calc(100% - 12px);
+  bottom: -1px;
+  left: 0;
+  height: 2px;
   width: 0;
-  background: white;
-  border-radius: var(--radius-md);
-  box-shadow: var(--shadow-sm);
-  z-index: 0;
+  background: var(--coral-deep);
+  border-radius: 1px;
   pointer-events: none;
   opacity: 0;
   transition:
-    transform 0.6s var(--spring),
-    width 0.6s var(--spring),
-    opacity 0.25s ease;
+    transform 0.45s var(--spring),
+    width 0.45s var(--spring),
+    opacity 0.2s ease;
 }
 
 .lflow-tabs-pill.is-ready { opacity: 1; }
@@ -2632,26 +2624,25 @@ body {
 }
 
 .lflow-tab {
-  display: flex;
+  display: inline-flex;
   align-items: center;
-  gap: 12px;
-  padding: 14px 18px;
+  gap: 10px;
+  padding: 14px 20px;
   background: transparent;
   border: none;
-  border-radius: var(--radius-md);
+  border-bottom: 2px solid transparent;
   cursor: pointer;
   font-family: inherit;
   text-align: left;
-  transition: color 0.25s ease, transform 0.2s var(--spring);
-  color: var(--ink-2);
-  position: relative;
-  z-index: 1;
+  transition: color 0.2s ease;
+  color: var(--ink-3);
+  font-size: 14px;
+  font-weight: 500;
 }
 
-.lflow-tab:hover { color: var(--ink); transform: translateY(-1px); }
-.lflow-tab:active { transform: translateY(0) scale(0.98); }
+.lflow-tab:hover { color: var(--ink); }
 
-.lflow-tab.active { color: var(--ink); }
+.lflow-tab.active { color: var(--coral-deep); }
 
 .lflow-tab-num {
   font-family: var(--font-serif);
@@ -2678,13 +2669,7 @@ body {
   position: relative;
 }
 
-.lflow-panel {
-  display: none;
-  background: white;
-  border: 1px solid var(--line);
-  border-radius: var(--radius-lg);
-  padding: 28px;
-}
+.lflow-panel { display: none; padding: 0; }
 
 .lflow-panel.active {
   display: block;
