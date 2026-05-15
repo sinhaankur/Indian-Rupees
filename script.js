@@ -1205,15 +1205,23 @@ function rgChrome(slide, progress) {
 
 function rgTitle(slide, yTop) {
   const W = reelCanvas.width;
-  // Title
+  const safeW = W - 80;
+
+  // Title with auto-shrink so long lines never overflow
   reelCtx.fillStyle = slide.accent;
-  reelCtx.font = '700 42px Inter, sans-serif';
+  let titleSize = 40;
+  reelCtx.font = `700 ${titleSize}px Inter, sans-serif`;
+  while (reelCtx.measureText(slide.title).width > safeW && titleSize > 26) {
+    titleSize -= 2;
+    reelCtx.font = `700 ${titleSize}px Inter, sans-serif`;
+  }
   reelCtx.textAlign = 'center';
   reelCtx.fillText(slide.title, W / 2, yTop);
+
   // Subtitle
   reelCtx.fillStyle = 'rgba(255,255,255,0.78)';
-  reelCtx.font = '500 20px Inter, sans-serif';
-  rgWrap(slide.sub, W / 2, yTop + 38, W - 80, 26);
+  reelCtx.font = '500 18px Inter, sans-serif';
+  rgWrap(slide.sub, W / 2, yTop + titleSize * 0.85 + 6, safeW, 24);
 }
 
 function rgWrap(text, x, y, maxWidth, lineHeight) {
@@ -1323,7 +1331,7 @@ function rgRenderPuzzle(slide, p) {
 
 function rgRenderLineChart(slide, p) {
   const W = reelCanvas.width;
-  rgTitle(slide, 200);
+  rgTitle(slide, 180);
   const chartX = 50, chartY = 320, chartW = W - 100, chartH = 380;
 
   // Frame
@@ -1415,8 +1423,8 @@ function rgRenderLineChart(slide, p) {
 
 function rgRenderBigStats(slide, p) {
   const W = reelCanvas.width;
-  rgTitle(slide, 200);
-  const startY = 340, cellH = 120, gap = 16;
+  rgTitle(slide, 180);
+  const startY = 310, cellH = 100, gap = 12;
   const items = slide.data.items;
   for (let i = 0; i < items.length; i++) {
     const it = items[i];
@@ -1429,20 +1437,20 @@ function rgRenderBigStats(slide, p) {
     // value left side
     reelCtx.textAlign = 'left';
     reelCtx.fillStyle = '#fff';
-    reelCtx.font = '700 50px Inter, sans-serif';
-    reelCtx.fillText(it.val, 60, y + 76);
+    reelCtx.font = '700 42px Inter, sans-serif';
+    reelCtx.fillText(it.val, 60, y + 64);
     // label right side
     reelCtx.textAlign = 'right';
     reelCtx.fillStyle = 'rgba(255,255,255,0.75)';
-    reelCtx.font = '500 16px Inter, sans-serif';
-    reelCtx.fillText(it.sub, W - 60, y + 76);
+    reelCtx.font = '500 14px Inter, sans-serif';
+    reelCtx.fillText(it.sub, W - 60, y + 64);
   }
   reelCtx.globalAlpha = 1;
 }
 
 function rgRenderLayer1(slide, p) {
   const W = reelCanvas.width;
-  rgTitle(slide, 200);
+  rgTitle(slide, 180);
   const cx = W / 2, cy = 540;
 
   // Surrounding facts in a 2x2 grid below the hub
@@ -1506,7 +1514,7 @@ function rgRenderLayer1(slide, p) {
 
 function rgRenderLoop(slide, p) {
   const W = reelCanvas.width, H = reelCanvas.height;
-  rgTitle(slide, 200);
+  rgTitle(slide, 180);
   // 2x2 grid of nodes
   const cx = W / 2, cy = 540;
   const dx = 150, dy = 130;
@@ -1565,7 +1573,7 @@ function rgRenderLoop(slide, p) {
 
 function rgRenderPressure(slide, p) {
   const W = reelCanvas.width;
-  rgTitle(slide, 200);
+  rgTitle(slide, 180);
   // 2x2 grid of force tiles
   const items = slide.data.items;
   const cellW = (W - 100) / 2;
@@ -1603,7 +1611,7 @@ function rgRenderPressure(slide, p) {
 
 function rgRenderCascade(slide, p) {
   const W = reelCanvas.width;
-  rgTitle(slide, 200);
+  rgTitle(slide, 180);
   const rows = slide.data.rows;
   const rowH = 110, gap = 14, startY = 360;
   for (let i = 0; i < rows.length; i++) {
@@ -1645,7 +1653,7 @@ function rgRenderCascade(slide, p) {
 
 function rgRenderCurrencies(slide, p) {
   const W = reelCanvas.width;
-  rgTitle(slide, 200);
+  rgTitle(slide, 180);
   const rows = slide.data.rows;
   const startY = 340, rowH = 50;
   // determine scale: max abs value
@@ -1694,9 +1702,9 @@ function rgRenderCurrencies(slide, p) {
 
 function rgRenderWorld(slide, p) {
   const W = reelCanvas.width;
-  rgTitle(slide, 200);
+  rgTitle(slide, 180);
   const items = slide.data.items;
-  const startY = 380, cardH = 130, gap = 18;
+  const startY = 340, cardH = 110, gap = 14;
   for (let i = 0; i < items.length; i++) {
     const y = startY + i * (cardH + gap);
     const reveal = Math.max(0, Math.min(1, p * 2 - i * 0.15));
@@ -1709,16 +1717,16 @@ function rgRenderWorld(slide, p) {
 
     // Big number
     reelCtx.fillStyle = '#c4b5fd';
-    reelCtx.font = '700 56px Inter, sans-serif';
+    reelCtx.font = '700 44px Inter, sans-serif';
     reelCtx.textAlign = 'left';
-    reelCtx.fillText(items[i].tag, 60, y + 75);
+    reelCtx.fillText(items[i].tag, 56, y + 70);
 
     reelCtx.fillStyle = '#fff';
-    reelCtx.font = '700 22px Inter, sans-serif';
-    reelCtx.fillText(items[i].head, 170, y + 56);
+    reelCtx.font = '700 19px Inter, sans-serif';
+    reelCtx.fillText(items[i].head, 148, y + 50);
     reelCtx.fillStyle = 'rgba(255,255,255,0.72)';
-    reelCtx.font = '500 14px Inter, sans-serif';
-    reelCtx.fillText(items[i].sub, 170, y + 86);
+    reelCtx.font = '500 12.5px Inter, sans-serif';
+    reelCtx.fillText(items[i].sub, 148, y + 76);
   }
   reelCtx.globalAlpha = 1;
 }
