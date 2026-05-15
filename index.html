@@ -553,6 +553,25 @@
               <!-- Counter-flow: oil (coral) -->
               <line class="lflow-line lflow-counter" x1="510" y1="146" x2="510" y2="294" stroke="#D85A30" stroke-width="2" stroke-dasharray="4 4" marker-end="url(#arrCoralL2)"/>
               <text x="490" y="220" text-anchor="end" font-size="10" font-style="italic" fill="#993C1D" font-family="Inter, sans-serif">oil →</text>
+
+              <!-- Travelling dots around the loop (teal $) -->
+              <circle r="5" fill="#0F6E56">
+                <animateMotion dur="6.5s" repeatCount="indefinite" rotate="auto"
+                  path="M210,110 L510,110 L600,200 L600,294 L510,330 L210,330 L120,238 L120,150 Z"/>
+              </circle>
+              <circle r="5" fill="#0F6E56" opacity="0.6">
+                <animateMotion dur="6.5s" begin="-2.2s" repeatCount="indefinite"
+                  path="M210,110 L510,110 L600,200 L600,294 L510,330 L210,330 L120,238 L120,150 Z"/>
+              </circle>
+              <circle r="5" fill="#0F6E56" opacity="0.6">
+                <animateMotion dur="6.5s" begin="-4.4s" repeatCount="indefinite"
+                  path="M210,110 L510,110 L600,200 L600,294 L510,330 L210,330 L120,238 L120,150 Z"/>
+              </circle>
+
+              <!-- Counter-flow oil dots (coral) -->
+              <circle r="4" fill="#D85A30">
+                <animateMotion dur="2.5s" repeatCount="indefinite" path="M510,146 L510,294"/>
+              </circle>
             </svg>
           </div>
           <div class="lflow-narrative">

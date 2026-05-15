@@ -2538,8 +2538,16 @@ body {
    so CSS transform/animation on the group itself would replace it and
    collapse the node to (0,0). The "ring" lives inside the group as a
    plain circle and IS safe to animate via CSS. */
-.lflow-center,
-.lflow-center--rupee { /* positioning only — no CSS transform here */ }
+.lflow-center { /* positioning only — no CSS transform here */ }
+.lflow-center--rupee {
+  /* opacity-only stress pulse: safe, doesn't replace SVG positioning transform */
+  animation: lflowRupeePulse 2.4s ease-in-out infinite;
+}
+
+@keyframes lflowRupeePulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.78; }
+}
 
 .lflow-ring {
   transform-origin: center;
