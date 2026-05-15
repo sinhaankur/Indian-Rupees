@@ -833,3 +833,371 @@ if (backTop) {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   });
 }
+
+// ─── WORLD ORDER MATH ─────────────────────────────────────────
+const WO_BASE = { oil: 5, reserves: 42, rails: 8, horizon: 10 };
+const WO_COEF = { oil: 0.45, reserves: 0.30, rails: 0.40 };
+// Time multiplier — more years allows shifts to compound (range 0.5–1.4)
+function woTimeMult(h) { return 0.5 + (h / 30) * 0.9; }
+
+function calcWorldOrder() {
+  const oil = +document.getElementById('woOil').value;
+  const res = +document.getElementById('woReserves').value;
+  const rails = +document.getElementById('woRails').value;
+  const horizon = +document.getElementById('woHorizon').value;
+
+  document.getElementById('woOilVal').textContent = oil;
+  document.getElementById('woReservesVal').textContent = res;
+  document.getElementById('woRailsVal').textContent = rails;
+  document.getElementById('woHorizonVal').textContent = horizon;
+
+  const t = woTimeMult(horizon);
+  const drag =
+    Math.max(0, oil - WO_BASE.oil) * WO_COEF.oil +
+    Math.max(0, res - WO_BASE.reserves) * WO_COEF.reserves +
+    Math.max(0, rails - WO_BASE.rails) * WO_COEF.rails;
+  const gain =
+    Math.min(0, oil - WO_BASE.oil) * WO_COEF.oil +
+    Math.min(0, res - WO_BASE.reserves) * WO_COEF.reserves +
+    Math.min(0, rails - WO_BASE.rails) * WO_COEF.rails;
+
+  const dominance = Math.max(20, Math.min(120, 100 - drag * t - gain * t * 0.5));
+  // Map dominance → INR: full-dominance 100 = ₹95.96; lower dominance = stronger rupee
+  const inrShift = (100 - dominance) * 0.08; // each point of dominance off-base ≈ ₹0.08 stronger
+  const inr = Math.max(40, 95.96 - inrShift);
+
+  // Years to below 50% — extrapolate based on current drag rate
+  let years = '∞';
+  if (drag > 0) {
+    const yrsToHalf = ((100 - 50) / drag) | 0;
+    years = yrsToHalf > 100 ? '> 100' : yrsToHalf + ' yrs';
+  }
+
+  // Winner logic — whichever input is highest above its baseline
+  const shifts = [
+    { name: 'Status quo', sub: 'No major shift in flows', amount: 0 },
+    { name: 'Yuan / RMB', sub: 'Oil priced more in yuan + reserves shift to CNY', amount: (oil - WO_BASE.oil) * 0.6 + (res - WO_BASE.reserves) * 0.3 },
+    { name: 'Gold', sub: 'Central banks moving reserves into bullion', amount: (res - WO_BASE.reserves) * 0.7 },
+    { name: 'BRICS rail / multipolar', sub: 'Alternative payment networks gain share', amount: (rails - WO_BASE.rails) * 0.9 },
+    { name: 'Indian rupee', sub: 'Bilateral rupee trade with Russia, UAE grows', amount: (rails - WO_BASE.rails) * 0.4 + (oil - WO_BASE.oil) * 0.2 },
+  ];
+  const winner = shifts.reduce((a, b) => b.amount > a.amount ? b : a, shifts[0]);
+
+  document.getElementById('woDom').textContent = dominance.toFixed(0);
+  const change = (100 - dominance);
+  document.getElementById('woDomSub').textContent =
+    Math.abs(change) < 0.5
+      ? 'No change from baseline (100 = today)'
+      : (change > 0 ? '−' : '+') + Math.abs(change).toFixed(1) + ' pts vs today';
+
+  // Bar fill (100 = today = right end; 0 = collapse = left end). Width grows from left.
+  const barPct = Math.max(8, dominance);
+  document.getElementById('woBar').style.width = barPct + '%';
+
+  document.getElementById('woInr').textContent = '₹' + inr.toFixed(2);
+  const inrDelta = 95.96 - inr;
+  document.getElementById('woInrDelta').textContent =
+    Math.abs(inrDelta) < 0.05
+      ? 'no change'
+      : (inrDelta > 0 ? '−₹' + inrDelta.toFixed(2) + ' stronger' : '+₹' + Math.abs(inrDelta).toFixed(2) + ' weaker');
+
+  document.getElementById('woYears').textContent = years;
+  document.getElementById('woWinner').textContent = winner.name;
+  document.getElementById('woWinnerSub').textContent = winner.sub;
+
+  // Verdict
+  const vText = document.getElementById('woVerdictText');
+  if (dominance > 95) {
+    vText.textContent = "Today's system. The dollar remains the world's plumbing. Each marginal shift takes decades because the network effect of $7.5T daily FX is hard to dislodge.";
+  } else if (dominance > 80) {
+    vText.textContent = "A meaningful but gradual shift. The dollar is still dominant, but no longer unchallenged. Reserve diversification accelerates as confidence in single-currency hegemony fades.";
+  } else if (dominance > 60) {
+    vText.textContent = "Multipolar by default. Multiple reserve currencies coexist. India, China, and Brazil settle a meaningful share of trade outside the dollar. The rupee benefits from less FX volatility.";
+  } else if (dominance > 40) {
+    vText.textContent = "Post-dominance. The dollar is one of three or four major rails, not the only one. Most central banks split reserves. Petrostates accept multiple currencies for oil. The petrodollar era ends.";
+  } else {
+    vText.textContent = "Crisis transition. A fast unwinding of dollar dominance would create FX dislocations few economies are prepared for. Historically these reorderings come with wars, defaults, or new institutional frameworks.";
+  }
+}
+
+['woOil', 'woReserves', 'woRails', 'woHorizon'].forEach(id => {
+  const el = document.getElementById(id);
+  if (el) el.addEventListener('input', calcWorldOrder);
+});
+
+if (document.getElementById('woOil')) calcWorldOrder();
+
+// ─── REEL GENERATOR ───────────────────────────────────────────
+const REEL_SLIDES_BY_LANG = {
+  en: [
+    { title: '₹95.96 = $1', sub: 'All-time low against the dollar', narration: 'The Indian rupee just hit an all-time low. Ninety-five rupees ninety-six paise per dollar.', color: '#712B13', accent: '#FAECE7' },
+    { title: 'The puzzle', sub: 'The US printed trillions. The rupee fell anyway.', narration: 'The US printed trillions of dollars. So why is the rupee falling, not the dollar?', color: '#412402', accent: '#FAEEDA' },
+    { title: 'Layer 1', sub: "The dollar = world's plumbing.", narration: 'Ninety percent of global trades involve the dollar. Fifty-eight percent of central bank reserves are dollars. Demand is structural.', color: '#3C3489', accent: '#EEEDFE' },
+    { title: 'Layer 2', sub: 'Oil locks in dollar demand.', narration: 'Oil is priced in dollars, always. India earns rupees but must buy dollars for every barrel of crude.', color: '#04342C', accent: '#E1F5EE' },
+    { title: 'Layer 3', sub: 'India sits downstream.', narration: 'Eighty-five percent imported oil. Twenty-one billion dollars in capital outflows. A strong dollar globally. The rupee has nowhere to hide.', color: '#4A1B0C', accent: '#FAECE7' },
+    { title: 'The bottom line', sub: "Not just a currency. It's the world's plumbing.", narration: "The dollar isn't just a currency. It's the world's plumbing. And India sits downstream.", color: '#0a0a0a', accent: '#FAECE7' },
+  ],
+  hi: [
+    { title: '₹95.96 = $1', sub: 'डॉलर के मुकाबले अब तक का सबसे कम', narration: 'भारतीय रुपया अब तक के सबसे कम स्तर पर है। एक डॉलर के लिए पंचानवे रुपये छियानवे पैसे।', color: '#712B13', accent: '#FAECE7' },
+    { title: 'पहेली', sub: 'अमेरिका ने खरबों छापे। रुपया फिर भी गिरा।', narration: 'अमेरिका ने खरबों डॉलर छापे। तो रुपया क्यों गिर रहा है, डॉलर क्यों नहीं?', color: '#412402', accent: '#FAEEDA' },
+    { title: 'परत एक', sub: 'डॉलर दुनिया की पाइपलाइन है', narration: 'दुनिया के नब्बे प्रतिशत व्यापार में डॉलर शामिल है। केंद्रीय बैंकों के अट्ठावन प्रतिशत भंडार डॉलर में हैं।', color: '#3C3489', accent: '#EEEDFE' },
+    { title: 'परत दो', sub: 'तेल डॉलर की माँग को बाँधे रखता है', narration: 'तेल हमेशा डॉलर में बिकता है। भारत रुपये कमाता है पर हर बैरल तेल के लिए डॉलर खरीदना पड़ता है।', color: '#04342C', accent: '#E1F5EE' },
+    { title: 'परत तीन', sub: 'भारत पाइप के दूसरे छोर पर बैठा है', narration: 'पचासी प्रतिशत आयातित तेल। इक्कीस अरब डॉलर का पूँजी बहिर्वाह। डॉलर की वैश्विक मज़बूती। रुपये के पास छुपने की जगह नहीं।', color: '#4A1B0C', accent: '#FAECE7' },
+    { title: 'निष्कर्ष', sub: 'डॉलर सिर्फ़ मुद्रा नहीं है। यह दुनिया की पाइपलाइन है।', narration: 'डॉलर सिर्फ़ एक मुद्रा नहीं है। यह दुनिया की पाइपलाइन है। और भारत उसके निचले छोर पर है।', color: '#0a0a0a', accent: '#FAECE7' },
+  ],
+};
+
+const REEL_BCP47 = {
+  en: 'en-IN', hi: 'hi-IN', bn: 'bn-IN', ta: 'ta-IN', te: 'te-IN',
+  mr: 'mr-IN', gu: 'gu-IN', kn: 'kn-IN', ml: 'ml-IN', pa: 'pa-IN', ur: 'ur-IN',
+};
+
+const REEL_NAMES = {
+  en: 'English', hi: 'हिन्दी (Hindi)', bn: 'বাংলা (Bengali)', ta: 'தமிழ் (Tamil)',
+  te: 'తెలుగు (Telugu)', mr: 'मराठी (Marathi)', gu: 'ગુજરાતી (Gujarati)',
+  kn: 'ಕನ್ನಡ (Kannada)', ml: 'മലയാളം (Malayalam)', pa: 'ਪੰਜਾਬੀ (Punjabi)', ur: 'اردو (Urdu)',
+};
+
+const reelCanvas = document.getElementById('reelCanvas');
+const reelCtx = reelCanvas && reelCanvas.getContext('2d');
+const reelStatus = document.getElementById('reelStatus');
+const reelPlayBtn = document.getElementById('reelPlayBtn');
+const reelDlBtn = document.getElementById('reelDownloadBtn');
+const reelStopBtn = document.getElementById('reelStopBtn');
+const reelLangName = document.getElementById('reelLangName');
+const reelVoiceStatus = document.getElementById('reelVoiceStatus');
+
+let rgPlaying = false;
+let rgCancel = false;
+let rgRecorder = null;
+
+function rgLang() { return currentLang || 'en'; }
+
+function rgSlides() {
+  const slides = REEL_SLIDES_BY_LANG[rgLang()];
+  return slides || REEL_SLIDES_BY_LANG.en;
+}
+
+function checkVoice() {
+  if (!('speechSynthesis' in window)) {
+    if (reelVoiceStatus) reelVoiceStatus.textContent = 'Not supported in this browser';
+    return null;
+  }
+  const target = REEL_BCP47[rgLang()] || 'en-US';
+  const voices = speechSynthesis.getVoices();
+  const match = voices.find(v => v.lang.toLowerCase().startsWith(target.toLowerCase().split('-')[0]));
+  if (reelVoiceStatus) {
+    reelVoiceStatus.textContent = match
+      ? `${match.name} (${match.lang})`
+      : `Default (no ${target} voice installed)`;
+  }
+  return match;
+}
+
+if ('speechSynthesis' in window) {
+  speechSynthesis.onvoiceschanged = checkVoice;
+  checkVoice();
+}
+
+function drawRgFrame(slide, progress) {
+  if (!reelCtx) return;
+  const W = reelCanvas.width;
+  const H = reelCanvas.height;
+
+  // Background
+  const grad = reelCtx.createLinearGradient(0, 0, 0, H);
+  grad.addColorStop(0, slide.color);
+  grad.addColorStop(1, '#050505');
+  reelCtx.fillStyle = grad;
+  reelCtx.fillRect(0, 0, W, H);
+
+  // Accent bar at top
+  reelCtx.fillStyle = slide.accent;
+  reelCtx.fillRect(0, 0, W * Math.min(1, progress * 1.4), 8);
+
+  // Top label
+  reelCtx.fillStyle = 'rgba(255,255,255,0.6)';
+  reelCtx.font = '600 18px Inter, sans-serif';
+  reelCtx.textAlign = 'left';
+  reelCtx.fillText('THE PETRODOLLAR PARADOX', 36, 70);
+  reelCtx.fillStyle = 'rgba(255,255,255,0.4)';
+  reelCtx.font = '500 14px monospace';
+  reelCtx.fillText('₹/$ · May 2026', 36, 96);
+
+  // Title (large)
+  reelCtx.fillStyle = slide.accent;
+  const titleFontSize = Math.min(96, Math.max(64, 1100 / Math.max(8, slide.title.length)));
+  reelCtx.font = `600 ${titleFontSize}px Inter, sans-serif`;
+  reelCtx.textAlign = 'center';
+  wrapText(reelCtx, slide.title, W / 2, H / 2 - 80, W - 80, titleFontSize * 1.1);
+
+  // Subtitle
+  reelCtx.fillStyle = 'rgba(255,255,255,0.85)';
+  reelCtx.font = '500 30px Inter, sans-serif';
+  reelCtx.textAlign = 'center';
+  wrapText(reelCtx, slide.sub, W / 2, H / 2 + 100, W - 100, 38);
+
+  // Bottom watermark
+  reelCtx.fillStyle = 'rgba(255,255,255,0.5)';
+  reelCtx.font = '500 16px Inter, sans-serif';
+  reelCtx.textAlign = 'center';
+  reelCtx.fillText('sinhaankur.github.io/Indian-Rupees', W / 2, H - 60);
+
+  // Progress dots
+  const slides = rgSlides();
+  const totalDots = slides.length;
+  const dotY = H - 110;
+  const dotGap = 20;
+  const dotsW = (totalDots - 1) * dotGap;
+  const startX = W / 2 - dotsW / 2;
+  const currentIdx = slides.indexOf(slide);
+  for (let i = 0; i < totalDots; i++) {
+    reelCtx.fillStyle = i <= currentIdx ? slide.accent : 'rgba(255,255,255,0.2)';
+    reelCtx.beginPath();
+    reelCtx.arc(startX + i * dotGap, dotY, 4, 0, Math.PI * 2);
+    reelCtx.fill();
+  }
+}
+
+function wrapText(ctx, text, x, y, maxWidth, lineHeight) {
+  const words = text.split(' ');
+  const lines = [];
+  let line = '';
+  words.forEach(word => {
+    const test = line ? line + ' ' + word : word;
+    if (ctx.measureText(test).width > maxWidth && line) {
+      lines.push(line);
+      line = word;
+    } else line = test;
+  });
+  if (line) lines.push(line);
+  const totalH = lines.length * lineHeight;
+  let startY = y - totalH / 2 + lineHeight / 2;
+  lines.forEach(l => { ctx.fillText(l, x, startY); startY += lineHeight; });
+}
+
+function speak(text, lang) {
+  if (!('speechSynthesis' in window)) return Promise.resolve();
+  return new Promise(resolve => {
+    const u = new SpeechSynthesisUtterance(text);
+    u.lang = REEL_BCP47[lang] || 'en-US';
+    u.rate = 0.95;
+    u.onend = resolve;
+    u.onerror = resolve;
+    speechSynthesis.speak(u);
+  });
+}
+
+async function playRg(record = false) {
+  if (rgPlaying) return;
+  rgPlaying = true;
+  rgCancel = false;
+  reelPlayBtn.disabled = true;
+  reelDlBtn.disabled = true;
+  reelStopBtn.disabled = false;
+  reelStatus.className = 'reel-status is-recording';
+
+  let chunks = [];
+  if (record) {
+    try {
+      const stream = reelCanvas.captureStream(30);
+      const types = ['video/webm;codecs=vp9', 'video/webm;codecs=vp8', 'video/webm'];
+      const mime = types.find(t => MediaRecorder.isTypeSupported(t));
+      if (!mime) throw new Error('No supported video format');
+      rgRecorder = new MediaRecorder(stream, { mimeType: mime });
+      rgRecorder.ondataavailable = e => { if (e.data.size > 0) chunks.push(e.data); };
+      rgRecorder.start();
+      reelStatus.textContent = '● Recording…';
+    } catch (e) {
+      reelStatus.className = 'reel-status is-error';
+      reelStatus.textContent = 'Recording failed: ' + e.message;
+      reelPlayBtn.disabled = false;
+      reelDlBtn.disabled = false;
+      reelStopBtn.disabled = true;
+      rgPlaying = false;
+      return;
+    }
+  } else {
+    reelStatus.textContent = '▶ Playing preview with narration…';
+  }
+
+  const slides = rgSlides();
+  const lang = rgLang();
+  const slideDuration = 4500;
+  const frameMs = 1000 / 30;
+
+  for (let i = 0; i < slides.length; i++) {
+    if (rgCancel) break;
+    const slide = slides[i];
+
+    if (!record) {
+      speak(slide.narration, lang);
+    }
+
+    const startTime = performance.now();
+    while (performance.now() - startTime < slideDuration) {
+      if (rgCancel) break;
+      const p = (performance.now() - startTime) / slideDuration;
+      drawRgFrame(slide, p);
+      await new Promise(r => setTimeout(r, frameMs));
+    }
+  }
+
+  if (record && rgRecorder) {
+    rgRecorder.stop();
+    await new Promise(r => rgRecorder.onstop = r);
+    if (!rgCancel && chunks.length) {
+      const blob = new Blob(chunks, { type: 'video/webm' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `rupee-story-${lang}.webm`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      setTimeout(() => URL.revokeObjectURL(url), 1000);
+      reelStatus.className = 'reel-status is-done';
+      reelStatus.textContent = '✓ Reel downloaded as .webm — open it in Photos, Reels, or your editor.';
+    } else {
+      reelStatus.className = 'reel-status';
+      reelStatus.textContent = 'Cancelled.';
+    }
+  } else if (!rgCancel) {
+    reelStatus.className = 'reel-status is-done';
+    reelStatus.textContent = '✓ Preview finished. Hit Generate to download as a video.';
+  }
+
+  if ('speechSynthesis' in window) speechSynthesis.cancel();
+
+  reelPlayBtn.disabled = false;
+  reelDlBtn.disabled = false;
+  reelStopBtn.disabled = true;
+  rgPlaying = false;
+  rgRecorder = null;
+}
+
+function stopRg() {
+  rgCancel = true;
+  if (rgRecorder && rgRecorder.state === 'recording') rgRecorder.stop();
+  if ('speechSynthesis' in window) speechSynthesis.cancel();
+}
+
+if (reelPlayBtn) reelPlayBtn.addEventListener('click', () => playRg(false));
+if (reelDlBtn) reelDlBtn.addEventListener('click', () => playRg(true));
+if (reelStopBtn) reelStopBtn.addEventListener('click', stopRg);
+
+// Initialise first frame
+if (reelCtx) {
+  drawRgFrame(rgSlides()[0], 0);
+}
+
+// Update language name when language changes
+const origApplyLang = applyLang;
+applyLang = function(lang) {
+  origApplyLang(lang);
+  if (reelLangName) reelLangName.textContent = REEL_NAMES[lang] || lang.toUpperCase();
+  checkVoice();
+  if (reelCtx && !rgPlaying) drawRgFrame(rgSlides()[0], 0);
+};
+// Re-apply so name shows correctly on load
+applyLang(currentLang);

@@ -34,6 +34,8 @@
       <li><a href="#simulator" data-i18n="nav.simulator">Simulator</a></li>
       <li><a href="#currencies" data-i18n="nav.currencies">Currencies</a></li>
       <li><a href="#impact" data-i18n="nav.impact">Impact</a></li>
+      <li><a href="#worldorder" data-i18n="nav.worldorder">World Order</a></li>
+      <li><a href="#reel" data-i18n="nav.reel">Reel</a></li>
       <li><a href="#references" data-i18n="nav.data">Data</a></li>
     </ul>
     <div class="lang-picker">
@@ -405,11 +407,42 @@
 
               <!-- Center node: USD -->
               <g class="lflow-center" transform="translate(360, 220)">
-                <circle r="62" fill="#EEEDFE" stroke="#534AB7" stroke-width="2"/>
-                <circle r="62" fill="none" stroke="#534AB7" stroke-width="2" opacity="0.4" class="lflow-ring"/>
+                <circle r="62" fill="#EEEDFE" stroke="#534AB7" stroke-width="2">
+                  <animate attributeName="r" values="62;67;62" dur="2.6s" repeatCount="indefinite"/>
+                </circle>
+                <circle r="62" fill="none" stroke="#534AB7" stroke-width="2" opacity="0.4">
+                  <animate attributeName="r" values="62;94;62" dur="3s" repeatCount="indefinite"/>
+                  <animate attributeName="opacity" values="0.55;0;0.55" dur="3s" repeatCount="indefinite"/>
+                </circle>
                 <text text-anchor="middle" y="-4" font-size="22" font-weight="700" fill="#3C3489" font-family="Inter, sans-serif">USD</text>
                 <text text-anchor="middle" y="18" font-size="11" fill="#534AB7" font-family="Inter, sans-serif">Federal Reserve</text>
               </g>
+
+              <!-- Flow dots travelling outward and back along each axis -->
+              <circle r="4" fill="#534AB7">
+                <animateMotion dur="2.2s" repeatCount="indefinite" path="M360,158 L360,94"/>
+              </circle>
+              <circle r="3" fill="#534AB7" opacity="0.7">
+                <animateMotion dur="2.6s" repeatCount="indefinite" path="M360,94 L360,158"/>
+              </circle>
+              <circle r="4" fill="#534AB7">
+                <animateMotion dur="2.2s" repeatCount="indefinite" path="M422,220 L530,220"/>
+              </circle>
+              <circle r="3" fill="#534AB7" opacity="0.7">
+                <animateMotion dur="2.6s" repeatCount="indefinite" path="M530,220 L422,220"/>
+              </circle>
+              <circle r="4" fill="#534AB7">
+                <animateMotion dur="2.2s" repeatCount="indefinite" path="M360,282 L360,346"/>
+              </circle>
+              <circle r="3" fill="#534AB7" opacity="0.7">
+                <animateMotion dur="2.6s" repeatCount="indefinite" path="M360,346 L360,282"/>
+              </circle>
+              <circle r="4" fill="#534AB7">
+                <animateMotion dur="2.2s" repeatCount="indefinite" path="M298,220 L190,220"/>
+              </circle>
+              <circle r="3" fill="#534AB7" opacity="0.7">
+                <animateMotion dur="2.6s" repeatCount="indefinite" path="M190,220 L298,220"/>
+              </circle>
 
               <!-- Satellite: FX (top) -->
               <g class="lflow-node lflow-fade d1" transform="translate(360, 60)">
@@ -1107,6 +1140,186 @@
       <div class="ccy-grid">
         <div class="ccy-grid-head">SCOREBOARD · YTD VS USD</div>
         <div class="ccy-grid-rows" id="ccyScoreboard"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="worldorder" class="section">
+  <div class="container">
+    <div class="section-label" data-i18n="wo.label">CHANGING THE WORLD ORDER</div>
+    <h2 class="section-title" data-i18n="wo.title">If the petrodollar shifts, what does the math look like?</h2>
+    <p class="section-lede" data-i18n="wo.lede">Three slow-moving forces are chipping at dollar dominance. Move the sliders to see how the system would respond — and what it would mean for the rupee.</p>
+
+    <div class="wo">
+      <div class="wo-controls">
+        <div class="wo-control">
+          <div class="wo-control-head">
+            <label for="woOil">Oil priced in non-USD</label>
+            <span class="wo-val"><span id="woOilVal">5</span>%</span>
+          </div>
+          <input type="range" id="woOil" min="0" max="100" step="1" value="5">
+          <div class="wo-scale"><span>0%</span><span class="wo-anchor">5% today</span><span>100%</span></div>
+          <p class="wo-note">Today: rupee–ruble, yuan–real, yuan–riyal trade deals. ~5% of global oil settled outside the dollar.</p>
+        </div>
+
+        <div class="wo-control">
+          <div class="wo-control-head">
+            <label for="woReserves">Reserve diversification</label>
+            <span class="wo-val"><span id="woReservesVal">42</span>%</span>
+          </div>
+          <input type="range" id="woReserves" min="20" max="80" step="1" value="42">
+          <div class="wo-scale"><span>20%</span><span class="wo-anchor">42% today</span><span>80%</span></div>
+          <p class="wo-note">Share of central-bank reserves NOT held in USD. Gold, yuan, and euro have been quietly absorbing the difference for a decade.</p>
+        </div>
+
+        <div class="wo-control">
+          <div class="wo-control-head">
+            <label for="woRails">Non-USD payment rails</label>
+            <span class="wo-val"><span id="woRailsVal">8</span>%</span>
+          </div>
+          <input type="range" id="woRails" min="0" max="100" step="1" value="8">
+          <div class="wo-scale"><span>0%</span><span class="wo-anchor">8% today</span><span>100%</span></div>
+          <p class="wo-note">CIPS, INSTEX, BRICS Pay, CBDC bridges, India's UPI cross-border pilots. Replaces the SWIFT+correspondent-bank rail.</p>
+        </div>
+
+        <div class="wo-control">
+          <div class="wo-control-head">
+            <label for="woHorizon">Time horizon (years)</label>
+            <span class="wo-val"><span id="woHorizonVal">10</span> yrs</span>
+          </div>
+          <input type="range" id="woHorizon" min="1" max="30" step="1" value="10">
+          <div class="wo-scale"><span>1</span><span class="wo-anchor">10 years</span><span>30</span></div>
+          <p class="wo-note">How fast change happens matters. Reserve composition moves at the pace of a glacier; oil pricing can shift in a few years.</p>
+        </div>
+      </div>
+
+      <div class="wo-result">
+        <div class="wo-result-card">
+          <div class="wo-result-label">PROJECTED USD DOMINANCE INDEX</div>
+          <div class="wo-result-big" id="woDom">100</div>
+          <div class="wo-result-sub" id="woDomSub">No change from baseline (100 = today)</div>
+
+          <div class="wo-bar-wrap">
+            <div class="wo-bar"><div class="wo-bar-fill" id="woBar"></div></div>
+            <div class="wo-bar-labels"><span>Collapse</span><span>Today</span></div>
+          </div>
+        </div>
+
+        <div class="wo-result-grid">
+          <div class="wo-rg-cell">
+            <div class="wo-rg-label">PROJECTED ₹/$</div>
+            <div class="wo-rg-val" id="woInr">₹95.96</div>
+            <div class="wo-rg-delta" id="woInrDelta">no change</div>
+          </div>
+          <div class="wo-rg-cell">
+            <div class="wo-rg-label">YEARS TO BELOW 50%</div>
+            <div class="wo-rg-val" id="woYears">∞</div>
+            <div class="wo-rg-delta">Below 50% = no longer hegemonic</div>
+          </div>
+          <div class="wo-rg-cell">
+            <div class="wo-rg-label">BIGGEST BENEFICIARY</div>
+            <div class="wo-rg-val wo-rg-val-text" id="woWinner">Status quo</div>
+            <div class="wo-rg-delta" id="woWinnerSub">No major shift in flows</div>
+          </div>
+        </div>
+
+        <div class="wo-verdict" id="woVerdict">
+          <div class="wo-verdict-label">VERDICT</div>
+          <div class="wo-verdict-text" id="woVerdictText">Today's system. The dollar remains the world's plumbing. Each marginal shift takes decades because the network effect of $7.5T daily FX is hard to dislodge.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="wo-real">
+      <div class="wo-real-head">
+        <div class="section-label" style="margin-bottom:8px" data-i18n="wo.realLabel">REAL-WORLD PROGRESS</div>
+        <h3 class="wo-real-title" data-i18n="wo.realTitle">What's already happening on the ground.</h3>
+      </div>
+      <div class="wo-real-grid">
+        <article class="wo-real-card">
+          <div class="wo-real-num">A</div>
+          <h4>India–Russia rupee–ruble trade</h4>
+          <p>Since 2022, India has been settling crude purchases from Russia partly in rupees and rubles. Volumes are small (~$5–8B annually) but the rail exists.</p>
+          <div class="wo-real-tag">Bilateral · slow but real</div>
+        </article>
+        <article class="wo-real-card">
+          <div class="wo-real-num">B</div>
+          <h4>Yuan oil deals (Saudi, Iran)</h4>
+          <p>Saudi Aramco accepts yuan for select Chinese-bound shipments. Iran sells most of its crude in yuan and rupees. ~10% of global oil trade settles outside USD.</p>
+          <div class="wo-real-tag">Material · expanding</div>
+        </article>
+        <article class="wo-real-card">
+          <div class="wo-real-num">C</div>
+          <h4>Central banks bought gold</h4>
+          <p>Net official-sector gold purchases hit record levels in 2022–2025. Russia, China, India, Turkey, and Poland all added meaningful tonnage. Gold is the silent reserve diversifier.</p>
+          <div class="wo-real-tag">Steady · cumulative</div>
+        </article>
+        <article class="wo-real-card">
+          <div class="wo-real-num">D</div>
+          <h4>BRICS Pay &amp; CBDC bridges</h4>
+          <p>Brazil, Russia, India, China, South Africa, plus new members are piloting a cross-border payment system. mBridge (BIS) connects CBDCs from China, HK, UAE, and Thailand.</p>
+          <div class="wo-real-tag">Early · could compound</div>
+        </article>
+        <article class="wo-real-card">
+          <div class="wo-real-num">E</div>
+          <h4>India's UPI goes cross-border</h4>
+          <p>UPI is live with Singapore (PayNow), UAE, Bhutan, Nepal, Sri Lanka, France, Mauritius. A retail rupee rail outside the dollar system, growing transaction-by-transaction.</p>
+          <div class="wo-real-tag">Retail · grassroots</div>
+        </article>
+        <article class="wo-real-card">
+          <div class="wo-real-num">F</div>
+          <h4>The euro and yuan as side reserves</h4>
+          <p>EUR is ~20% of central-bank reserves. CNY is rising slowly (~3%). Neither replaces the dollar alone — but combined with gold, they make 42% of reserves non-USD already.</p>
+          <div class="wo-real-tag">Structural · permanent</div>
+        </article>
+      </div>
+    </div>
+
+    <div class="wo-disclaimer">
+      <strong>How the math works.</strong> Dominance index = 100 at today's mix. Each input applies a calibrated drag: oil non-USD pricing (×0.45/pp), reserve diversification (×0.30/pp above today's 42%), and alternative rails (×0.40/pp). The horizon multiplier rewards patience — most shifts compound over 10+ years. Rupee projection assumes a roughly 8% INR appreciation per 10-point dominance fall. Real-world dynamics are nonlinear; treat this as intuition-building, not prediction.
+    </div>
+  </div>
+</section>
+
+<section id="reel" class="section section--soft">
+  <div class="container">
+    <div class="section-label" data-i18n="reel.label">SHARE AS A REEL</div>
+    <h2 class="section-title" data-i18n="reel.title">Generate a video clip in your language.</h2>
+    <p class="section-lede" data-i18n="reel.lede">An auto-built 30-second portrait video summarising the story, with narration in the language you picked above. Generated in your browser — nothing leaves your device.</p>
+
+    <div class="reel">
+      <div class="reel-stage">
+        <canvas id="reelCanvas" width="540" height="960" aria-label="Reel preview canvas"></canvas>
+      </div>
+
+      <div class="reel-panel">
+        <div class="reel-meta">
+          <div class="reel-meta-row">
+            <span class="reel-meta-key" data-i18n="reel.language">Language</span>
+            <span class="reel-meta-val" id="reelLangName">English</span>
+          </div>
+          <div class="reel-meta-row">
+            <span class="reel-meta-key" data-i18n="reel.format">Format</span>
+            <span class="reel-meta-val">9:16 · 30s · .webm</span>
+          </div>
+          <div class="reel-meta-row">
+            <span class="reel-meta-key" data-i18n="reel.voice">Voice</span>
+            <span class="reel-meta-val" id="reelVoiceStatus">Detecting…</span>
+          </div>
+        </div>
+
+        <div class="reel-actions">
+          <button class="btn btn--primary" id="reelPlayBtn" data-i18n="reel.preview">▶ Preview with narration</button>
+          <button class="btn btn--secondary" id="reelDownloadBtn" data-i18n="reel.generate">⬇ Generate &amp; download</button>
+          <button class="btn btn--ghost" id="reelStopBtn" disabled data-i18n="reel.stop">Stop</button>
+        </div>
+
+        <div class="reel-status" id="reelStatus" data-i18n="reel.ready">Ready. Pick a language above, hit preview to hear the narration, then generate to download.</div>
+
+        <div class="reel-tip">
+          <strong data-i18n="reel.tipLabel">A note on audio.</strong> <span data-i18n="reel.tip">Browsers won't let JavaScript bake speech-synthesis audio into a video file. The downloaded reel has slides only. For voice, play the preview while screen-recording on your phone, or use Reels' built-in voice-over.</span>
+        </div>
       </div>
     </div>
   </div>
