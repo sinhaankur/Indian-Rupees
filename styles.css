@@ -234,6 +234,103 @@ body {
 
 .nav-pill.is-ready { opacity: 1; }
 
+/* ─── Mobile hamburger ─── */
+.nav-toggle {
+  display: none;
+  width: 44px;
+  height: 44px;
+  border: 1px solid var(--line-strong);
+  background: white;
+  border-radius: 10px;
+  padding: 0;
+  cursor: pointer;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 4px;
+  transition: background 0.2s;
+}
+
+.nav-toggle:hover { background: var(--bg-soft); }
+
+.nav-toggle-bar {
+  display: block;
+  width: 18px;
+  height: 2px;
+  background: var(--ink);
+  border-radius: 2px;
+  transition: transform 0.3s var(--ease-out, ease), opacity 0.2s ease;
+}
+
+.nav-toggle[aria-expanded="true"] .nav-toggle-bar:nth-child(1) {
+  transform: translateY(6px) rotate(45deg);
+}
+.nav-toggle[aria-expanded="true"] .nav-toggle-bar:nth-child(2) { opacity: 0; }
+.nav-toggle[aria-expanded="true"] .nav-toggle-bar:nth-child(3) {
+  transform: translateY(-6px) rotate(-45deg);
+}
+
+@media (max-width: 880px) {
+  .nav-toggle { display: inline-flex; order: 3; margin-left: auto; }
+  .lang-picker { order: 2; }
+
+  .nav-inner {
+    gap: 12px;
+    flex-wrap: nowrap;
+    padding: 12px 20px;
+  }
+
+  .logo-text { display: none; }
+
+  .nav-links {
+    position: fixed;
+    top: 64px;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(251, 249, 244, 0.98);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    flex-direction: column;
+    gap: 4px;
+    padding: 24px 28px 80px;
+    overflow-y: auto;
+    transform: translateY(-8px);
+    opacity: 0;
+    pointer-events: none;
+    transition: transform 0.35s var(--spring), opacity 0.25s ease;
+    z-index: 95;
+    align-items: stretch;
+  }
+
+  .nav-links.is-open {
+    transform: translateY(0);
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .nav-links li { width: 100%; }
+
+  .nav-links a {
+    display: block;
+    font-size: 17px;
+    padding: 14px 18px;
+    border-bottom: 1px solid var(--line);
+    border-radius: 0;
+  }
+
+  .nav-links a.is-active {
+    background: var(--coral-bg);
+    color: var(--coral-deep);
+  }
+
+  /* The desktop pill is irrelevant in this layout */
+  .nav-pill { display: none; }
+}
+
+/* Logo / brand never wraps */
+.logo-text { white-space: nowrap; }
+
 @media (max-width: 720px) {
   .nav-links { display: none; }
 }
@@ -296,12 +393,13 @@ body {
 }
 
 .hero-puzzle {
-  margin-top: 56px;
-  display: inline-block;
+  margin: 56px auto 0;
+  display: block;
   padding: 22px 32px;
   background: var(--amber-bg);
   border-radius: var(--radius-lg);
-  max-width: 520px;
+  max-width: 540px;
+  width: 100%;
 }
 
 .puzzle-label {
@@ -2610,7 +2708,17 @@ body {
   height: auto;
   max-width: 100%;
   display: block;
-  min-width: 600px;
+  min-width: 0;
+}
+
+/* On desktop, give the SVG a comfortable minimum width so labels don't
+   crowd. On mobile, let it scale fully to the container. */
+@media (min-width: 720px) {
+  .lflow-svg { min-width: 560px; }
+}
+
+@media (max-width: 720px) {
+  .lflow-svgwrap { overflow-x: visible; padding: 0; }
 }
 
 .lflow-narrative {
@@ -3221,3 +3329,85 @@ body {
 }
 
 .reel-tip strong { font-weight: 600; }
+
+/* ─── Mobile polish (≤720px) ─── */
+@media (max-width: 720px) {
+  /* Tighter section rhythm so the page doesn't feel sparse */
+  .section { padding: 64px 0; }
+  .hero { padding: 96px 20px 48px; min-height: auto; }
+  .hero-rate { font-size: clamp(64px, 18vw, 110px); }
+  .hero-puzzle { padding: 18px 22px; margin-top: 36px; }
+  .hero-scroll { margin-top: 28px; }
+
+  .section-title { font-size: clamp(26px, 6vw, 34px); }
+  .section-lede { font-size: 15px; margin-top: 14px; }
+
+  /* L2 layer tabs — vertical stack with pill that becomes horizontal */
+  .lflow-tabs { grid-template-columns: 1fr; gap: 6px; }
+  .lflow-tabs-pill { display: none; }
+  .lflow-tab.active {
+    background: white;
+    box-shadow: var(--shadow-sm);
+  }
+  .lflow-tab { padding: 14px 16px; min-height: 56px; }
+
+  /* Sticky result panels stop being sticky when stacked */
+  .sim-result, .wo-result, .reel-panel { position: static !important; }
+
+  /* Sliders need bigger thumbs for touch */
+  input[type="range"] { height: 30px; padding: 0; }
+  input[type="range"]::-webkit-slider-thumb { width: 26px; height: 26px; }
+  input[type="range"]::-moz-range-thumb { width: 26px; height: 26px; }
+
+  /* Reel canvas: full mobile width, comfortable size */
+  #reelCanvas { max-width: 100%; }
+  .reel-stage { padding: 10px; }
+
+  /* Ensure tap targets are at least 44px tall on key controls */
+  .btn, .preset-btn, .lflow-tab, .lang-picker, .nav-toggle {
+    min-height: 44px;
+  }
+
+  /* Layer flow impact cards stack cleanly */
+  .lflow-impact-grid { grid-template-columns: 1fr; gap: 10px; }
+  .lflow-impact-card { padding: 16px 18px; }
+
+  /* Force-grid 2×2 → 1 column at very small */
+  .force-grid, .compare-grid, .timeline-stats, .ref-grid,
+  .printing-grid, .ref-sources-grid, .wo-result-grid,
+  .ccy-metrics, .math-coef-row, .math-out-grid {
+    grid-template-columns: 1fr !important;
+  }
+  .math-out-grid { gap: 6px; }
+  .wo-rg-cell:nth-child(3) { grid-column: span 1; }
+
+  /* Tables: full width, smaller spacing */
+  .ref-table .ref-src { display: none; }
+
+  /* Currency picker row — drop the bar column */
+  .ccy-row { grid-template-columns: 28px 1fr 70px; gap: 8px; }
+
+  /* Footer */
+  .footer-inner { flex-direction: column; align-items: flex-start; gap: 16px; }
+  .footer-meta { text-align: left; }
+
+  /* Reading progress slightly thicker for visibility */
+  .read-progress { height: 4px; }
+
+  /* Back-to-top stays out of thumb zone */
+  .back-to-top { bottom: 24px; right: 24px; }
+}
+
+/* Ultra-small (≤420px) */
+@media (max-width: 420px) {
+  .container { padding: 0 16px; }
+  .section { padding: 56px 0; }
+  .hero-rate { font-size: 64px; }
+  .nav-inner { padding: 10px 16px; }
+  .reel-actions .btn { flex: 1 1 100%; justify-content: center; }
+  .sim-preset-buttons { gap: 6px; }
+  .preset-btn { flex: 1 1 calc(50% - 3px); text-align: center; }
+}
+
+/* Prevent overflow from any wide child */
+html, body { overflow-x: hidden; }

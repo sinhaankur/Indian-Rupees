@@ -1202,6 +1202,48 @@ applyLang = function(lang) {
 // Re-apply so name shows correctly on load
 applyLang(currentLang);
 
+// ─── Mobile nav hamburger ──────────────────────────────────────
+(function setupMobileNav() {
+  const btn = document.getElementById('navToggle');
+  const list = document.getElementById('navL1');
+  if (!btn || !list) return;
+
+  function close() {
+    list.classList.remove('is-open');
+    btn.setAttribute('aria-expanded', 'false');
+    btn.setAttribute('aria-label', 'Open navigation');
+    document.body.style.overflow = '';
+  }
+  function open() {
+    list.classList.add('is-open');
+    btn.setAttribute('aria-expanded', 'true');
+    btn.setAttribute('aria-label', 'Close navigation');
+    document.body.style.overflow = 'hidden';
+  }
+
+  btn.addEventListener('click', () => {
+    if (list.classList.contains('is-open')) close();
+    else open();
+  });
+
+  // Tapping a link should close the menu
+  list.querySelectorAll('a').forEach(a => {
+    a.addEventListener('click', () => {
+      if (window.matchMedia('(max-width: 880px)').matches) close();
+    });
+  });
+
+  // Restore scrolling if the user resizes back to desktop while open
+  window.addEventListener('resize', () => {
+    if (!window.matchMedia('(max-width: 880px)').matches) close();
+  });
+
+  // Escape closes
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && list.classList.contains('is-open')) close();
+  });
+})();
+
 // ─── L1 nav: sliding pill + active-section tracking ────────────
 (function setupL1Nav() {
   const list = document.getElementById('navL1');
