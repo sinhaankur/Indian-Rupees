@@ -44,7 +44,10 @@
   --radius-xl: 24px;
 
   --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-  --font-serif: 'Instrument Serif', Georgia, serif;
+  --font-serif: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  --spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
 
   --shadow-sm: 0 1px 2px rgba(26, 22, 20, 0.04);
   --shadow-md: 0 4px 16px rgba(26, 22, 20, 0.06);
@@ -67,7 +70,61 @@ body {
   color: var(--ink);
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
-  font-feature-settings: 'cv11', 'ss01';
+  -moz-osx-font-smoothing: grayscale;
+  font-feature-settings: 'cv11', 'ss01', 'cv02', 'cv03';
+  font-variation-settings: normal;
+  text-rendering: optimizeLegibility;
+}
+
+/* Inter-driven display headings (Unhosted-style: heavy weight, tight tracking) */
+.hero-rate,
+.section-title,
+.layer-card h3,
+.force-card h3,
+.printing-card h3,
+.upside h3,
+.factors-title,
+.layer-foot-rate,
+.reel-year,
+.layer-stat-value,
+.stat-final,
+.stat-delta,
+.force-stat-value,
+.chain-value,
+.layer-foot-rate,
+.compare-formula,
+.closer-title,
+.kicker-title {
+  font-family: var(--font-sans);
+  font-weight: 700;
+  letter-spacing: -0.025em;
+}
+
+.hero-rate, .closer-title, .kicker-title { font-weight: 800; letter-spacing: -0.035em; }
+.section-title { font-weight: 700; letter-spacing: -0.028em; }
+
+/* Mono used for technical labels, kept consistent */
+.section-label,
+.compare-tag,
+.stat-label,
+.reel-fig-label,
+.reel-event-tag,
+.printing-step,
+.force-tag,
+.factor-direction,
+.chain-label,
+.layer-number,
+.upside-tag,
+.ref-block-tag,
+.closer-label,
+.layer-foot-text,
+.footer-title,
+.footer-meta,
+.hero-tag,
+.hero-sub {
+  font-family: var(--font-mono);
+  font-weight: 500;
+  letter-spacing: 0.06em;
 }
 
 .container {
@@ -130,20 +187,52 @@ body {
 .nav-links {
   list-style: none;
   display: flex;
-  gap: 28px;
+  gap: 4px;
+  position: relative;
+  padding: 4px;
 }
 
+.nav-links li { position: relative; z-index: 1; }
+
 .nav-links a {
+  display: block;
   color: var(--ink-2);
   text-decoration: none;
   font-size: 13px;
   font-weight: 500;
-  transition: color 0.2s;
+  letter-spacing: -0.005em;
+  padding: 8px 12px;
+  border-radius: 999px;
+  transition: color 0.25s ease;
+  position: relative;
 }
 
-.nav-links a:hover {
-  color: var(--ink);
+.nav-links a:hover { color: var(--ink); }
+
+.nav-links a.is-active {
+  color: var(--coral-deep);
+  font-weight: 600;
 }
+
+/* Sliding pill — Framer-Motion-style shared element */
+.nav-pill {
+  position: absolute;
+  top: 4px;
+  left: 0;
+  height: calc(100% - 8px);
+  width: 0;
+  background: var(--coral-bg);
+  border-radius: 999px;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0;
+  transition:
+    transform 0.55s var(--spring),
+    width 0.55s var(--spring),
+    opacity 0.2s ease;
+}
+
+.nav-pill.is-ready { opacity: 1; }
 
 @media (max-width: 720px) {
   .nav-links { display: none; }
@@ -2411,12 +2500,34 @@ body {
 .lflow-tabs {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 8px;
+  gap: 4px;
   margin-bottom: 24px;
   padding: 6px;
   background: var(--bg-soft);
   border-radius: var(--radius-lg);
+  position: relative;
 }
+
+/* Shared-element pill that animates between tabs */
+.lflow-tabs-pill {
+  position: absolute;
+  top: 6px;
+  left: 6px;
+  height: calc(100% - 12px);
+  width: 0;
+  background: white;
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0;
+  transition:
+    transform 0.6s var(--spring),
+    width 0.6s var(--spring),
+    opacity 0.25s ease;
+}
+
+.lflow-tabs-pill.is-ready { opacity: 1; }
 
 @media (max-width: 720px) {
   .lflow-tabs { grid-template-columns: 1fr; }
@@ -2433,17 +2544,16 @@ body {
   cursor: pointer;
   font-family: inherit;
   text-align: left;
-  transition: all 0.2s;
+  transition: color 0.25s ease, transform 0.2s var(--spring);
   color: var(--ink-2);
+  position: relative;
+  z-index: 1;
 }
 
-.lflow-tab:hover { background: white; color: var(--ink); }
+.lflow-tab:hover { color: var(--ink); transform: translateY(-1px); }
+.lflow-tab:active { transform: translateY(0) scale(0.98); }
 
-.lflow-tab.active {
-  background: white;
-  box-shadow: var(--shadow-sm);
-  color: var(--ink);
-}
+.lflow-tab.active { color: var(--ink); }
 
 .lflow-tab-num {
   font-family: var(--font-serif);
@@ -2480,12 +2590,13 @@ body {
 
 .lflow-panel.active {
   display: block;
-  animation: lflowFadeIn 0.5s ease both;
+  animation: lflowFadeIn 0.7s var(--spring) both;
 }
 
 @keyframes lflowFadeIn {
-  from { opacity: 0; transform: translateY(8px); }
-  to { opacity: 1; transform: translateY(0); }
+  0% { opacity: 0; transform: translateY(14px) scale(0.985); }
+  60% { opacity: 1; }
+  100% { opacity: 1; transform: translateY(0) scale(1); }
 }
 
 .lflow-svgwrap {

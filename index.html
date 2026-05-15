@@ -7,7 +7,7 @@
 <meta name="description" content="An interactive explainer on why the Indian rupee keeps falling even as the US prints trillions of dollars. The petrodollar system, the four forces, and the impact on India.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -25,7 +25,8 @@
       <span class="logo-mark">₹/$</span>
       <span class="logo-text">The Petrodollar Paradox</span>
     </a>
-    <ul class="nav-links">
+    <ul class="nav-links" id="navL1" role="tablist" aria-label="Primary">
+      <span class="nav-pill" id="navL1Pill" aria-hidden="true"></span>
       <li><a href="#puzzle" data-i18n="nav.puzzle">Puzzle</a></li>
       <li><a href="#timeline" data-i18n="nav.timeline">Timeline</a></li>
       <li><a href="#printing" data-i18n="nav.printing">USD Printing</a></li>
@@ -376,7 +377,8 @@
         <p class="lflow-lede" data-i18n="lflow.lede">Dollars don't sit still. They circulate through specific channels that lock in their dominance. Pick a layer to see the flows.</p>
       </div>
 
-      <div class="lflow-tabs" role="tablist">
+      <div class="lflow-tabs" role="tablist" id="lflowTabs">
+        <span class="lflow-tabs-pill" id="lflowTabsPill" aria-hidden="true"></span>
         <button class="lflow-tab active" data-layer="1" role="tab" aria-selected="true">
           <span class="lflow-tab-num">01</span>
           <span class="lflow-tab-name" data-i18n="lflow.tab1">Dollar as plumbing</span>

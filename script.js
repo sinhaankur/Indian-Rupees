@@ -1201,3 +1201,112 @@ applyLang = function(lang) {
 };
 // Re-apply so name shows correctly on load
 applyLang(currentLang);
+
+// ─── L1 nav: sliding pill + active-section tracking ────────────
+(function setupL1Nav() {
+  const list = document.getElementById('navL1');
+  const pill = document.getElementById('navL1Pill');
+  if (!list || !pill) return;
+
+  const links = Array.from(list.querySelectorAll('a'));
+  let activeLink = null;
+
+  function movePill(targetLink) {
+    if (!targetLink) {
+      pill.classList.remove('is-ready');
+      return;
+    }
+    const listRect = list.getBoundingClientRect();
+    const r = targetLink.getBoundingClientRect();
+    const x = r.left - listRect.left;
+    const w = r.width;
+    pill.style.transform = `translate3d(${x}px, 0, 0)`;
+    pill.style.width = w + 'px';
+    pill.classList.add('is-ready');
+  }
+
+  function setActive(link) {
+    if (link === activeLink) return;
+    activeLink = link;
+    links.forEach(a => a.classList.toggle('is-active', a === link));
+    movePill(link);
+  }
+
+  // Hover preview — pill follows hover, snaps back to active on leave
+  links.forEach(a => {
+    a.addEventListener('mouseenter', () => movePill(a));
+    a.addEventListener('focus', () => movePill(a));
+  });
+  list.addEventListener('mouseleave', () => movePill(activeLink));
+
+  // Scroll-spy: highlight nav item for whichever section is in view
+  const sectionMap = new Map();
+  links.forEach(a => {
+    const id = a.getAttribute('href');
+    if (id && id.startsWith('#')) {
+      const sec = document.querySelector(id);
+      if (sec) sectionMap.set(sec, a);
+    }
+  });
+
+  const spy = new IntersectionObserver((entries) => {
+    // Pick the section whose top is closest to the navbar (most "current")
+    let best = null;
+    let bestTop = Infinity;
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        const top = Math.abs(e.boundingClientRect.top - 80);
+        if (top < bestTop) { bestTop = top; best = e.target; }
+      }
+    });
+    if (best && sectionMap.has(best)) setActive(sectionMap.get(best));
+  }, { rootMargin: '-80px 0px -55% 0px', threshold: [0, 0.25, 0.5, 1] });
+
+  sectionMap.forEach((_link, sec) => spy.observe(sec));
+
+  // Reposition pill on window resize
+  window.addEventListener('resize', () => movePill(activeLink));
+
+  // Initial position once fonts are settled
+  requestAnimationFrame(() => {
+    setActive(links[0]);
+    // After layout has settled, snap into place
+    setTimeout(() => movePill(activeLink), 60);
+  });
+})();
+
+// ─── L2 nav: layer-flow tabs sliding pill ──────────────────────
+(function setupL2Nav() {
+  const tabsEl = document.getElementById('lflowTabs');
+  const pill = document.getElementById('lflowTabsPill');
+  if (!tabsEl || !pill) return;
+  const tabs = Array.from(tabsEl.querySelectorAll('.lflow-tab'));
+
+  function movePill(target) {
+    if (!target) return;
+    const wrap = tabsEl.getBoundingClientRect();
+    const r = target.getBoundingClientRect();
+    const x = r.left - wrap.left;
+    pill.style.transform = `translate3d(${x - 6}px, 0, 0)`;
+    pill.style.width = r.width + 'px';
+    pill.classList.add('is-ready');
+  }
+
+  function activeTab() {
+    return tabs.find(t => t.classList.contains('active')) || tabs[0];
+  }
+
+  tabs.forEach(t => {
+    t.addEventListener('mouseenter', () => movePill(t));
+    t.addEventListener('focus', () => movePill(t));
+    t.addEventListener('click', () => {
+      // The existing click handler in this file already toggles .active
+      // and switches the visible panel. We just chase it.
+      setTimeout(() => movePill(activeTab()), 0);
+    });
+  });
+  tabsEl.addEventListener('mouseleave', () => movePill(activeTab()));
+
+  window.addEventListener('resize', () => movePill(activeTab()));
+  requestAnimationFrame(() => setTimeout(() => movePill(activeTab()), 60));
+})();
